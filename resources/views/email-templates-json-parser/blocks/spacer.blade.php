@@ -1,1 +1,0 @@
-<div style="height:{{ $props['height'] ?? '0'}}px"></div>

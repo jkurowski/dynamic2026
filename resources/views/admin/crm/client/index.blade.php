@@ -19,8 +19,6 @@
                     href="{{ route('admin.crm.clients.index') }}"><span class="fe-home"></span>Klienci</a>
                 <a class="nav-link {{ Request::routeIs('admin.crm.funnel.*') ? ' active' : '' }}"
                     href="{{ route('admin.crm.funnel.index') }}"><span class="fe-filter"></span>Lejek sprzedaży</a>
-                <a class="nav-link {{ Request::routeIs('admin.crm.offer.*') ? ' active' : '' }}"
-                    href="{{ route('admin.crm.offer.index') }}"><span class="fe-file"></span>Oferty</a>
             </nav>
         </div>
 

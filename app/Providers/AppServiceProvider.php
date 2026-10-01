@@ -10,8 +10,6 @@ use App\Models\Client;
 use App\Models\ClientFile;
 use App\Models\ClientNote;
 use App\Models\ClientStatusHistory;
-use App\Models\EmailTemplate;
-use App\Models\EmailTemplateSection;
 use App\Models\Event;
 use App\Models\File;
 use App\Models\Floor;
@@ -20,7 +18,6 @@ use App\Models\Image;
 use App\Models\Investment;
 use App\Models\InvestmentArticles;
 use App\Models\InvestmentPage;
-use App\Models\IssueFile;
 use App\Models\Page;
 use App\Models\Property;
 use App\Models\RodoRules;
@@ -37,7 +34,6 @@ use App\Observers\CityObserver;
 use App\Observers\ClientFileObserver;
 use App\Observers\ClientObserver;
 use App\Observers\ClientStatusObserver;
-use App\Observers\EmailTemplateObserver;
 use App\Observers\FileObserver;
 use App\Observers\FloorObserver;
 use App\Observers\GalleryObserver;
@@ -45,8 +41,6 @@ use App\Observers\ImageObserver;
 use App\Observers\InvestmentArticleObserver;
 use App\Observers\InvestmentObserver;
 use App\Observers\InvestmentPageObserver;
-use App\Observers\IssueFileObserver;
-use App\Observers\MailTemplateObserver;
 use App\Observers\PageObserver;
 use App\Observers\PropertyObserver;
 use App\Observers\SliderObserver;
@@ -195,7 +189,7 @@ class AppServiceProvider extends ServiceProvider
 //            $view->with('current_investment', Investment::where('status', 1)->with('city')->get(['slug', 'name', 'file_thumb', 'file_logo', 'date_end', 'city_id', 'gradient_thumb', 'entry_content']));
 //        });
 
-        view()->composer(['admin.crm.offer.form', 'admin.crm.inbox.index'], function ($view) {
+        view()->composer(['admin.crm.inbox.index'], function ($view) {
             $view->with('investments', Investment::all()->pluck('name', 'id'));
         });
 
@@ -223,9 +217,6 @@ class AppServiceProvider extends ServiceProvider
         Board::observe(BoardObserver::class);
 
 
-        IssueFile::observe(IssueFileObserver::class);
-        // EmailTemplateSection::observe(EmailTemplateObserver::class);
-        // EmailTemplate::observe(MailTemplateObserver::class);
 
         /*
         |--------------------------------------------------------------------------

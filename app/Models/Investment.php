@@ -65,7 +65,6 @@ class Investment extends Model
         'popup_timeout',
         'popup_text',
         'supervisors',
-        'template_id',
         'iframe_css',
         'file_brochure',
         'inv_province',
@@ -346,10 +345,5 @@ class Investment extends Model
         $logOptions->logFillable();
 
         return $logOptions;
-    }
-
-    public function investmentTemplates():HasOne
-    {
-        return $this->hasOne(InvestmentTemplates::class);
     }
 }

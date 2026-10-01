@@ -1,1 +1,0 @@
-<div class="email-node" data-uuid="{{ $uuid }}" data-type="title"><div style="padding-top:15px"><h2>Przykładowy tytuł</h2></div></div>

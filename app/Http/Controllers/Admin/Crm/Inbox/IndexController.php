@@ -14,7 +14,6 @@ use App\Models\ClientMessage;
 use App\Models\Investment;
 use App\Models\Greylist;
 use App\Models\Floor;
-use App\Models\Offer;
 use App\Models\Event;
 
 use App\Models\Client;
@@ -160,9 +159,6 @@ class IndexController extends Controller
 
         //Remove all events with client_id
         Event::where('client_id', $message->client_id)->delete();
-
-        //Remove all offers with client_id
-        Offer::where('client_id', $message->client_id)->delete();
 
         //Remove client
         Client::where('id', $message->client_id)->delete();

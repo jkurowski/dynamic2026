@@ -38,11 +38,6 @@ class Client extends Authenticatable
         'budget'
     ];
 
-    public function offers()
-    {
-        return $this->hasMany(Offer::class, 'client_id', 'id');
-    }
-
     public function properties()
     {
         return $this->hasMany(Property::class, 'client_id', 'id');

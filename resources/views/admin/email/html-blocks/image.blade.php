@@ -1,1 +1,0 @@
-<div class="email-node" data-uuid="{{ $uuid }}" data-type="image"><div style="padding-top:15px;padding-bottom:15px"><img src="https://placehold.co/600x450" alt=""></div></div>

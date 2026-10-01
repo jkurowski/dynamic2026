@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\Front\EmailTemplatePreviewController;
-use App\Http\Controllers\Front\IframePageController;
 use App\Http\Controllers\SMSController;
-use App\Http\Middleware\IframeContactMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -129,7 +126,6 @@ Route::middleware(['restrictIp'])->group(function () {
         //            Route::get('client/area/calendar', 'Client\Calendar\IndexController@index')->name('client.area.calendar');
         //            Route::get('client/area/calendar/events', 'Client\Calendar\IndexController@show')->name('client.area.calendar.events.show');
         //
-        //            Route::get('client/area/offer', 'Client\Offer\IndexController@index')->name('client.area.offer');
         //
         //            Route::get('client/area/special', 'Client\Special\IndexController@index')->name('client.area.special');
         //

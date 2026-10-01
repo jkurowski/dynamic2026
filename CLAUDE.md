@@ -37,6 +37,24 @@
 - Usunięte z górnej belki: Kalendarz, Nowy klient, Nowa oferta + `#modalNewUser` i skrypt modala nowego klienta (`btn-add-user`, `initModal`).
 - Menu teraz: CMS (Strony, Aktualności, Slider, Galeria, Użytkownicy, Blokada dostępu, Ustawienia), DeveloCRM (Miasta, Inwestycje, Leads).
 
+## Usunięte widoki starego frontu (2026-10-01, ręcznie)
+- 45 widoków: `components/*` (formularze kontaktowe, karty lokali/inwestycji, iframes), `email-templates-json-parser/blocks/*`, `front/email-template-preview`, `front/howtobuy`, `front/offer`, `layouts/iframe`, `layouts/partials/*` (poza header/footer/inline/page-header), `shared/forms/form-note`.
+- Panel bez nowych błędów. Do kodu, który nadal wskazuje na usunięte widoki (zadziała dopiero po wpięciu nowego frontu albo do usunięcia):
+  front: `Front/HowToBuyController`, `Front/Offer/IndexController`, `Front/EmailTemplatePreviewController`, `front/iframe/*` + `app/View/Components/Iframes/*`, `front/developro/*`, `front/clipboard`, `front/gallery/show`, `front/menupage/kariera`, `layouts/homepage` (cta);
+  panel: `app/Helpers/EmailTemplatesJsonParser/Blocks/*` i podgląd w `admin/email/generator/form` (generator i tak bez tabeli email_templates), `admin/crm/issue/show` (shared.forms.form-note; tabela issues nie istnieje);
+  `Page::mainmenu()` / `Page::sidemenu()` — nieużywane.
+
+## Usunięte moduły — etap 2 (2026-10-01)
+- **Oferty CRM** (`Admin/Crm/Offer`, `Offer`, `OfferRepository`, `OfferService`, `OfferStatus`, `OfferSend`, job `OffersSmsReminder` + wpis w harmonogramie, widok `emails/offer`, panel klienta `Front/Client/Offer`, zakładka „Oferty” w CRM, relacja `Client::offers()`).
+- **Zgłoszenia** (`Admin/Crm/Issue`, `Issue`, `IssueFile`, `IssueFileObserver`, `IssueRepository`, `IssueService`, `IssueStatus`, modal `crm/modal/issue`).
+- **Generator maili i Mass-mail** (`Admin/Email/GeneratorController`, `Admin/MassMail`, `EmailTemplate(Section)`, observery, repozytorium, `EmailGeneratorService`, cały `app/Helpers/EmailTemplatesJsonParser`, widoki `admin/email`, `admin/mass-mail`, `emails/mass-mail`, `public/js/template-generator*.js`).
+- **Szablony maili inwestycji** (`InvestmentTemplates`, widok `investment/templates`, trasy get/update-templates — metod i tak nie było, `template_id` z `$fillable` Investment).
+- **Iframe inwestycji** (`Admin/Developro/Iframe`, `Front/IframePageController`, `IframeContactMiddleware`, `IframesRoutesTrait`, `app/View/Components/Iframes/*`, widoki `front/iframe`).
+- Front: `HowToBuyController`, `Front/Offer`, `EmailTemplatePreviewController`, `front/menupage/kariera.blade.php`.
+- Migracje usuniętych tabel (offers, issues*, issue_files, email_templates*, investment_templates, template_id w investments). W bazie tych tabel i tak nie było.
+- `createIframeFromButton()` (app/Helpers/CreateIframeFromButton.php) ZOSTAJE — to osadzanie modelu 3D lokalu, nie moduł iframe.
+- Panel po zmianach: 534 trasy, brak nowych błędów.
+
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).
 - Pliki `.less` w `public/css` kompilowane są poza Mixem (watcher w IDE) do par `.css` / `.min.css` (+ `.map`). Skrypty CMS też mają pary `x.js` / `x.min.js`.

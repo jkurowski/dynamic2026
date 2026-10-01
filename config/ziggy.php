@@ -7,10 +7,7 @@ return [
         'board' => ['admin.crm.board.*'],
         'payments' => ['admin.crm.clients.payments.*'],
         'users' => ['admin.user.*'],
-        'issue' => ['admin.crm.issue.*'],
         'client_file' => ['admin.crm.clients.file.*'],
-        'issue_file' => ['admin.crm.issue.file.*'],
-        'offer_file' => ['admin.crm.offer.file.*'],
         'notes_api' => ['admin.notes.*'],
         'property' => ['admin.developro.investment.property.*'],
         'client_area_calendar' => ['front.client.area.calendar.*']

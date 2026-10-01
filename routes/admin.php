@@ -86,26 +86,6 @@ Route::group([
         ]);
     });
 
-    Route::post('/get-template', 'Email\GeneratorController@getTemplate')->name('email.generator.get-template');
-    Route::post('/get-settings', 'Email\GeneratorController@getSettings')->name('email.generator.get-settings');
-    Route::post('/update-settings', 'Email\GeneratorController@updateSettings')->name('email.generator.update-settings');
-    Route::post('/update-order', 'Email\GeneratorController@updateOrder')->name('email.generator.update-order');
-    Route::post('/remove-block', 'Email\GeneratorController@destroyBlock')->name('email.generator.remove-block');
-    Route::post('/upload-image', 'Email\GeneratorController@uploadImage')->name('email.generator.upload-image');
-    Route::get('/copy/{email}', 'Email\GeneratorController@copy')->name('email.generator.copy');
-
-
-
-    // Email`s
-    Route::group(['namespace' => 'Email', 'prefix' => '/email', 'as' => 'email.'], function () {
-
-        Route::resources([
-            'generator' => 'GeneratorController',
-        ]);
-    });
-    Route::post('email/template/update', 'Email\GeneratorController@updateTemplate')->name('email.generator.update-template');
-    Route::post('email/template/assign-attachment', 'Email\GeneratorController@assignAttachment')->name('email.generator.assignAttachment');
-    Route::post('email/template/unlink-attachment', 'Email\GeneratorController@unlinkAttachment')->name('email.generator.unlinkAttachment');
 
     Route::get('logs', 'Log\IndexController@index')->name('log.index');
     Route::get('logs/datatable', 'Log\IndexController@datatable')->name('log.datatable');
@@ -150,27 +130,6 @@ Route::group([
             Route::get('/', 'IndexController@index')->name('index');
         });
 
-        Route::get('issue/datatable', 'Issue\IndexController@datatable')->name('issue.datatable');
-        Route::post('issue/{issue}/file', 'Issue\FileController@upload')->name('issue.file.upload');
-        Route::delete('issue/{issue}/file/{issueFile}', 'Issue\FileController@destroy')->name('issue.file.destroy');
-        Route::post('issue/{issue}/update-status', 'Issue\IndexController@updateStatus')->name('issue.update-status');
-        Route::get('offer/datatable', 'Offer\IndexController@datatable')->name('offer.datatable');
-        Route::get('offer/{offer}/AjaxSearch', 'Offer\IndexController@offerAjaxSearch')->name('offer.ajax.search');
-
-        Route::post('offers/search-by-name', 'Offer\IndexController@searchByName')->name('offer.search-by-name');
-
-        Route::get('offer/create/{id?}', 'Offer\IndexController@create')->name('offer.create');
-        Route::get('offer', 'Offer\IndexController@index')->name('offer.index');
-
-        Route::put('offer/{offer}', 'Offer\IndexController@update')->name('offer.update');
-        Route::post('offer/{issue}/file', 'Offer\FileController@upload')->name('offer.file.upload');
-        Route::delete('offer/{offer}/file/{id}', 'Offer\FileController@destroy')->name('offer.file.destroy');
-        Route::post('offer/{offer}/property/{id}', 'Offer\IndexController@property')->name('offer.property');
-
-        Route::resources([
-            'issue' => 'Issue\IndexController',
-            //'offer' => 'Offer\IndexController'
-        ]);
 
 
 
@@ -309,9 +268,6 @@ Route::group([
             'investment-company' => 'Company\IndexController',
             'investment-sale-point' => 'Investment\SalePointController',
         ]);
-        Route::post('investment/get-templates', 'Investment\IndexController@getTemplates')->name('investment.getTemplates');
-        Route::post('investment/update-templates', 'Investment\IndexController@updateTemplates')->name('investment.updateTemplates');
-        Route::get('investment/{investment}/templates', 'Investment\IndexController@templates')->name('investment.templates');
 
         Route::group(['middleware' => 'check.investment.permission', 'prefix' => '/investment', 'as' => 'investment.'], function () {
             Route::resources([
@@ -333,10 +289,6 @@ Route::group([
 
             Route::get('{investment}/popup', 'Popup\IndexController@index')->name('popup.index');
             Route::post('{investment}/popup', 'Popup\IndexController@update')->name('popup.update');
-
-            // Iframes
-            Route::get('{investment}/iframe', 'Iframe\IndexController@index')->name('iframe.index');
-            Route::post('{investment}/iframe', 'Iframe\IndexController@store')->name('iframe.store');
 
 
 
@@ -384,12 +336,6 @@ Route::group([
         Route::put('notes/{note}/update', 'IndexController@update')->name('notes.update');
     });
 
-
-    // Mass mail
-    Route::group(['namespace' => 'MassMail', 'prefix' => '/mass-mail', 'as' => 'mass-mail.'], function () {
-        Route::get('/', 'IndexController@index')->name('index');
-        Route::post('/send', 'IndexController@send')->name('send');
-    });
 
 });
 
