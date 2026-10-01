@@ -20,3 +20,4 @@ config/tracker.php
 /resources/views/form-elements/tintmce.blade.php
 .DS_Store
 /public/remove/
+*.bak
