@@ -54,12 +54,6 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span> Slider</a>
                             </li>
-                            <li {{ Request::routeIs('admin.map.*') ? 'class=active' : '' }}>
-                                <a href="{{ route('admin.map.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span> Mapa</a>
-                            </li>
                             <li {{ Request::routeIs('admin.gallery.*') ? 'class=active' : '' }}>
                                 <a href="{{ route('admin.gallery.index') }}">
                                     <span class="menu-bullet">
@@ -84,18 +78,6 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span> Ustawienia</a>
                             </li>
-                            <li {{ Request::routeIs('admin.job.*') ? 'class=active' : '' }}>
-                                <a href="{{ route('admin.job.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span> Oferty pracy</a>
-                            </li>
-                            <li class="d-none">
-                                <a href="">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span> Boksy</a>
-                            </li>
                         </ul>
                     </li>
                     <li class="active">
@@ -119,18 +101,6 @@
                                     </span> Inwestycje
                                 </a>
                             </li>
-                            <li {{ Request::routeIs('admin.crm.contact.*') ? 'class=active' : '' }}>
-                                <a href="{{ route('admin.crm.contact.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span> Kontakty</a>
-                            </li>
-                            <li {{ Request::routeIs('admin.crm.statistics.*') ? 'class=active' : '' }}>
-                                <a href="{{ route('admin.crm.statistics.index') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span> Statystyki</a>
-                            </li>
                             <li {{ Request::routeIs('admin.crm.inbox.*') ? 'class=active' : '' }}>
                                 <a href="{{ route('admin.crm.inbox.index') }}">
                                     <span class="menu-bullet">
@@ -143,20 +113,13 @@
             </div>
             <div class="clearfix"></div>
         </div>
-        <div id="modalNewUser"></div>
         <div id="content">
             <header id="header-navbar">
-                <h1><a href="" class="logo"><span>kCMS v4.2</span></a></h1>
+                <h1><a href="" class="logo"><span>DeveloPRO</span></a></h1>
 
                 <a href="#" id="togglemenu"><span class="fe-menu"></span></a>
                 <div class="user">
                     <ul>
-                        <li class="pt-0 pb-0"><a href="{{ route('admin.crm.calendar.index') }}"
-                                class="header-btn"><i class="fe-calendar"></i> Kalendarz</a></li>
-                        <li class="pt-0 pb-0"><a href="#" class="header-btn btn-add-user"><i
-                                    class="fe-plus-square"></i> Nowy klient</a></li>
-                        <li class="pt-0 pb-0"><a href="{{ route('admin.crm.offer.create') }}" class="header-btn"><i
-                                    class="fe-plus-square"></i> Nowa oferta</a></li>
                         <li><span class="fe-calendar"></span> <span id="livedate"><?= date('d-m-Y') ?></span></li>
                         <li><span class="fe-clock"></span> <span id="liveclock"></span></li>
                         <li><span class="fe-user"></span> Witaj: <b>{{ Auth::user()->name }}</b></li>
@@ -190,102 +153,6 @@
     <script src="{{ asset('/js/bootstrap.bundle.min.js') }}" charset="utf-8"></script>
     <script src="{{ asset('/js/jquery-ui.min.js') }}" charset="utf-8"></script>
     <script src="{{ asset('/js/cms.min.js') }}" charset="utf-8"></script>
-    <script>
-        $(document).ready(function() {
-            $(".btn-add-user").click((d) => {
-                d.preventDefault();
-                const modalHolder = $('#modalNewUser');
-                modalHolder.empty();
-
-                jQuery.ajax({
-                    url: '{{ route('admin.crm.clients.create') }}',
-                    success: function(response) {
-                        if (response) {
-                            modalHolder.append(response);
-                            initModal('store');
-                        } else {
-                            alert('Error');
-                        }
-                    }
-                });
-            });
-
-            const token = '{{ csrf_token() }}';
-
-            function initModal(action = 'update') {
-                const modal = document.getElementById('portletModal'),
-                    bootstrapModal = new bootstrap.Modal(modal),
-                    form = document.getElementById('modalForm'),
-                    inputName = $('#inputName'),
-                    inputSurname = $('#inputSurname'),
-                    inputEmail = $('#inputEmail'),
-                    inputPhone = $('#inputPhone'),
-                    inputInvestment = $('#inputInvestment');
-
-                bootstrapModal.show();
-
-                modal.addEventListener('shown.bs.modal', function() {
-                    const tooltipTriggerList = [].slice.call(document.querySelectorAll(
-                        '[data-bs-toggle="tooltip"]'));
-                    tooltipTriggerList.map(function(tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl, {
-                            trigger: 'hover'
-                        })
-                    });
-                })
-
-                modal.addEventListener('hidden.bs.modal', function() {
-                    $('#portletModal').remove();
-                })
-
-                const alert = $('.alert-danger');
-
-                const url = action === 'update' ? '' : '{{ route('admin.crm.clients.store') }}';
-                const method = action === 'update' ? 'PUT' : 'POST';
-
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-
-                    const rules = {};
-                    $('input[type=checkbox][name^=rule]').each(function() {
-                        rules[$(this).attr('name')] = $(this).is(':checked') ? 1 : 0;
-                    });
-
-                    jQuery.ajax({
-                        url: url,
-                        method: method,
-                        data: {
-                            '_token': token,
-                            'name': inputName.val(),
-                            'lastname': inputSurname.val(),
-                            'email': inputEmail.val(),
-                            //'phone': inputPhone.val(),
-                            'status': 1,
-                            'source': 1,
-                            ...rules
-                        },
-                        success: function() {
-                            bootstrapModal.hide();
-                            toastr.options = {
-                                "closeButton": true,
-                                "progressBar": true
-                            }
-                            toastr.success("Wpis został zaktualizowany");
-                        },
-                        error: function(result) {
-                            if (result.responseJSON.data) {
-                                alert.html('');
-                                $.each(result.responseJSON.data, function(key, value) {
-                                    alert.show();
-                                    alert.append('<span>' + value + '</span>');
-                                });
-                            }
-                        }
-                    });
-                });
-            }
-        });
-    </script>
     @stack('scripts')
 </body>
 

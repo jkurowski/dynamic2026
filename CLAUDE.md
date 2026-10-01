@@ -4,6 +4,33 @@
 - `origin` = https://github.com/jkurowski/dynamic2026.git (od 2026-10-01). Historia zaczyna się od nowa — pierwszy commit `Start projektu dynamic-cms`. Historia Kaltera (kalter2024) tylko lokalnie na gałęzi `kalter-history`, nie wypychać jej do origin.
 - `public/remove/` jest w .gitignore (pliki do ręcznego usunięcia).
 
+## Baza danych
+- MySQL (Laragon, root bez hasła), baza **`lar_dynamic`** — kopia bazy Kaltera, wyczyszczona z danych i nieużywanych tabel (2026-10-01). 60 tabel.
+- Settings (`App\Models\Settings`) to nie tabela, tylko plik `storage/app/settings.json` (Spatie Valuestore).
+- Modele, których tabel NIE MA w `lar_dynamic` (moduły wyłączone / do decyzji — wejście w te ekrany panelu da błąd SQL):
+  `Board` (boards), `Contact`, `Contract`, `ContractTemplate`, `EmailTemplate`, `EmailTemplateSection`, `Event` (kalendarz CRM),
+  `FacebookPage`, `File` (files — ~45 odwołań), `InvestmentTemplates`, `Issue`, `IssueFile`, `Map`, `Note`, `Offer`,
+  `Payment`, `PaymentSchedule`, `Recipient`, `Section`, `Template`.
+
+## Środowisko lokalne
+- URL: **https**://dynamic-cms.test (Laragon, Apache, PHP 8.2, Laravel 10.48). Vhost `C:/laragon/etc/apache2/sites-enabled/auto.dynamic-cms.test.conf` → ROOT musi wskazywać `.../dynamic-cms/public` (Laragon domyślnie ustawił katalog projektu — wtedy widać listing plików i `.env`).
+- Logowanie działa TYLKO po https: `config/session.php` ma `secure=true` i `same_site=none`, po http ciasteczko sesji nie wraca (419 przy logowaniu).
+- `.env` lokalny (nie w repo): APP_URL=https://dynamic-cms.test, DB_DATABASE=lar_dynamic, MAIL_MAILER=log.
+- `public/.htaccess` jest w .gitignore — lokalnie standardowy plik Laravela.
+- Tabela `migrations` w `lar_dynamic` jest pusta (71 migracji „Pending”) — NIE uruchamiać `php artisan migrate`, bo będzie tworzyć istniejące tabele.
+- `config/broadcasting.php`: dodane połączenia `log` i `null` (bez nich `package:discover` się wywracał przy BROADCAST_DRIVER=log).
+
+## Stan panelu (test 2026-10-01, wszystkie GET /admin/* bez parametrów jako Administrator)
+- Działa (200): strony, galeria, slider, użytkownicy, role, artykuły, boksy, miasta, ustawienia/SEO/social/popup, logi, RODO, external-leads, CRM (klienci, kontakty, zgłoszenia, inbox, statystyki, lejek, kalendarz, oferty), DeveloPro (inwestycje, składniki ceny, firmy, punkty sprzedaży).
+- 500 przez brak tabel w `lar_dynamic`: `/admin/file` (files), `/admin/map` (maps), `/admin/contract` (contracts), `/admin/job` (jobofferts), `/admin/settings/facebook` (facebook_pages), `/admin/email/generator` i `/admin/mass-mail` (email_templates), `/admin/crm/jobs` (jobs), `/admin/crm/board` (boards), oraz tabele danych w CRM: kontakty (contacts), zgłoszenia (issues), oferty (offers), kalendarz (events) — sam ekran się otwiera, tabela/kalendarz rzuca błąd.
+- 500 bez znaczenia: `*/convert` i `floor/updateids` (konwersja ze starej bazy `old_mysql`), oraz `index`/`create` z `Route::resource` bez tych metod w kontrolerze.
+- Zostawione `dd()` w kodzie: `Admin/User/IndexController.php:206` (trasa `admin/user/roles`), `Admin/Crm/Client/IndexController.php:56`, `Facebook/IndexController.php:51`.
+
+## Menu panelu (`admin/layout.blade.php`)
+- Usunięte z menu (2026-10-01, decyzja: moduły do usunięcia): Mapa, Oferty pracy, Boksy, Kontakty, Statystyki. Kod modułów (trasy, kontrolery, widoki, modele) jeszcze jest.
+- Usunięte z górnej belki: Kalendarz, Nowy klient, Nowa oferta + `#modalNewUser` i skrypt modala nowego klienta (`btn-add-user`, `initModal`).
+- Menu teraz: CMS (Strony, Aktualności, Slider, Galeria, Użytkownicy, Blokada dostępu, Ustawienia), DeveloCRM (Miasta, Inwestycje, Leads).
+
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).
 - Pliki `.less` w `public/css` kompilowane są poza Mixem (watcher w IDE) do par `.css` / `.min.css` (+ `.map`). Skrypty CMS też mają pary `x.js` / `x.min.js`.
