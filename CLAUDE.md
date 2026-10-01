@@ -1,7 +1,8 @@
 # dynamic-cms — notatki projektu
 
 ## Repozytorium
-- `origin` = https://github.com/jkurowski/dynamic2026.git (od 2026-10-01; wcześniej projekt był klonem https://github.com/jkurowski/kalter2024.git).
+- `origin` = https://github.com/jkurowski/dynamic2026.git (od 2026-10-01). Historia zaczyna się od nowa — pierwszy commit `Start projektu dynamic-cms`. Historia Kaltera (kalter2024) tylko lokalnie na gałęzi `kalter-history`, nie wypychać jej do origin.
+- `public/remove/` jest w .gitignore (pliki do ręcznego usunięcia).
 
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).
