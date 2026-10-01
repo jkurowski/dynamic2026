@@ -19,28 +19,28 @@ class ArticleService
         }
 
         $slug = Str::slug($title);
-        $name = date('His') . '_' . $slug . '.' . $file->getClientOriginalExtension();
+        $base = date('His') . '_' . $slug;
 
-        $file_path = public_path('uploads/articles/' . $name);
-        $file_thumb_path = public_path('uploads/articles/thumbs/' . $name);
+        // Plik "normalny" zawsze jako JPG (niezależnie od formatu wgranego) + kopia WebP, w dwóch rozmiarach:
+        // big - strona wpisu, thumb - karty (lista aktualności i karuzela na stronie głównej).
+        $name = $base . '.jpg';
+        $name_webp = $base . '.webp';
 
-        $image = Image::make($file->getRealPath());
-        $image->fit(config('images.article.big_width'), config('images.article.big_height'))
-            ->save($file_path)
-            ->fit(config('images.article.thumb_width'), config('images.article.thumb_height'))
-            ->save($file_thumb_path);
+        // orientate() - zdjęcia z telefonu mają obrót zapisany w EXIF, bez tego lądują "na boku"
+        $source = Image::make($file->getRealPath())->orientate();
 
-        // WebP
-        $name_webp = date('His') . '_' . $slug . '.webp';
+        $sizes = [
+            ['uploads/articles/', config('images.article.big_width'), config('images.article.big_height')],
+            ['uploads/articles/thumbs/', config('images.article.thumb_width'), config('images.article.thumb_height')],
+        ];
 
-        $file_path_webp = public_path('uploads/articles/webp/' . $name_webp);
-        $file_thumb_path_webp = public_path('uploads/articles/thumbs/webp/' . $name_webp);
+        foreach ($sizes as [$dir, $width, $height]) {
+            File::ensureDirectoryExists(public_path($dir . 'webp'));
 
-        $image_webp = Image::make($file_path)->encode('webp', 75);
-        $image_thumb_webp = Image::make($file_thumb_path)->encode('webp', 75);
-
-        $image_webp->save($file_path_webp);
-        $image_thumb_webp->save($file_thumb_path_webp);
+            $image = (clone $source)->fit($width, $height);
+            $image->save(public_path($dir . $name), 85, 'jpg');
+            $image->save(public_path($dir . 'webp/' . $name_webp), 80, 'webp');
+        }
 
         $model->update([
             'file' => $name,

@@ -30,6 +30,7 @@ class ArticleFormRequest extends FormRequest
             'content' => 'required|string|min:5',
             'posted_at' => 'nullable|date|date_format:Y-m-d',
             'status' => 'boolean',
+            'category' => 'nullable|string|in:' . implode(',', \App\Models\Article::KATEGORIE),
             'file_alt' => '',
             'meta_title' => '',
             'meta_description' => '',

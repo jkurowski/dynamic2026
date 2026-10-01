@@ -4,170 +4,114 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactFormRequest;
-use App\Models\City;
-use App\Models\Inline;
+use App\Mail\ChatSend;
 use App\Models\Investment;
-use Http;
+use App\Models\Page;
+use App\Models\Property;
+use App\Models\User;
+use App\Notifications\ContactNotification;
+use App\Notifications\PropertyNotification;
+use App\Repositories\Client\ClientRepository;
+use App\Services\Mail\NotificationRecipients;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Notification;
 
-//CMS
-use App\Mail\ChatSend;
-use App\Models\Page;
-use App\Models\Property;
-use App\Models\RodoRules;
-use App\Notifications\PropertyNotification;
-use App\Repositories\Client\ClientRepository;
-
+/**
+ * Formularz kontaktowy frontu - jeden dla wszystkich kontekstów (wzorzec: poligonowa).
+ *
+ * Kontekst przychodzi w polach ukrytych: `page` (nazwa strony), `investment_id`, `property_id`,
+ * `back` ("Wyślij i wróć": po wysyłce powrót na stronę formularza zamiast na /kontakt).
+ * Każde zgłoszenie zakłada / aktualizuje klienta, jego wiadomość i zgody RODO (ClientObserver).
+ */
 class ContactController extends Controller
 {
+    private const SENT_MESSAGE = 'Twoja wiadomość została wysłana. W najbliższym czasie skontaktujemy się z Państwem celem omówienia szczegółów!';
 
-    private $repository;
+    private ClientRepository $repository;
+    private NotificationRecipients $recipients;
 
-    public function __construct(ClientRepository $repository)
+    public function __construct(ClientRepository $repository, NotificationRecipients $recipients)
     {
         $this->repository = $repository;
+        $this->recipients = $recipients;
     }
 
-    function index()
+    public function index()
     {
-        $page = Page::where('id', 1)->first();
-        $inline = Inline::whereIdPlace(2)->get()->toArray();
-
         return view('front.contact.index', [
-            'rules' => RodoRules::orderBy('sort')->whereActive(1)->get(),
-            'page' => $page,
-            'array' => $inline
+            'page' => Page::where('uri', 'kontakt')->first(),
         ]);
     }
 
-    function send(ContactFormRequest $request)
+    public function send(ContactFormRequest $request)
     {
-        try {
-            $client = $this->repository->createClient($request);
+        $property = $request->filled('property_id') ? Property::find($request->input('property_id')) : null;
 
-            $emailsData = settings()->get("page_email");
+        $this->store($request, $property);
 
-            if (!is_array($emailsData)) {
-                $emailsData = json_decode($emailsData, true); // Decode JSON if necessary
-            }
-
-            $emails = collect($emailsData)
-                ->map(function ($item) {
-                    return isset($item['value']) ? trim($item['value']) : null; // Ensure 'value' exists and is not null
-                })
-                ->filter() // Remove null or empty values
-                ->toArray();
-
-// Initialize office emails as empty
-            $officeEmails = [];
-
-            if ($request->has('investment_id')) {
-                $investment = Investment::find($request->input('investment_id'));
-
-                if ($investment && !is_array($investment->office_emails)) {
-                    $officeEmailsData = json_decode($investment->office_emails, true);
-                } else {
-                    $officeEmailsData = $investment->office_emails ?? [];
-                }
-
-                $officeEmails = collect($officeEmailsData)
-                    ->map(fn($item) => isset($item['value']) ? trim($item['value']) : null)
-                    ->filter()
-                    ->values()
-                    ->toArray();
-            }
-
-// ✅ Merge both email arrays and remove duplicates
-            $allEmails = array_unique(array_merge($emails, $officeEmails));
-
-// ✅ Send mail if we have any recipients
-            if (!empty($allEmails)) {
-                Mail::to($allEmails)->send(new ChatSend($request, $client));
-            } else {
-                Log::error('No valid emails found in settings()->get("page_email")');
-            }
-
-            // Clear cookies if mail is sent successfully
-            $cookie_name = 'dp_';
-            foreach ($_COOKIE as $name => $value) {
-                if (stripos($name, $cookie_name) === 0) {
-                    Cookie::queue(Cookie::forget($name));
-                }
-            }
-        } catch (\Throwable $exception) {
-            Log::channel('email')->error('Email sending failed', [
-                'message' => $exception->getMessage(),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-                'trace' => $exception->getTraceAsString(),
-            ]);
+        if ($request->boolean('back')) {
+            return redirect()->back()->with('success', self::SENT_MESSAGE);
         }
 
-        return $request->has('back') && $request->get('back') == true
-            ? redirect()->back()->with(
-                'success',
-                'Twoja wiadomość została wysłana. W najbliższym czasie skontaktujemy się z Państwem celem omówienia szczegółów!'
-            )
-            : redirect()->route('contact')->with(
-                'success',
-                'Twoja wiadomość została wysłana. W najbliższym czasie skontaktujemy się z Państwem celem omówienia szczegółów!'
-            );
+        return redirect()->route('contact')->with('success', self::SENT_MESSAGE);
     }
 
-    function property(ContactFormRequest $request, $id)
+    /**
+     * Stara trasa formularza lokalu (POST /kontakt/{property}) - zostawiona dla zgodności,
+     * nowe formularze wysyłają `property_id` na contact.send.
+     */
+    public function property(ContactFormRequest $request, $id)
     {
-        try {
-            $property = Property::find($id);
+        $this->store($request, Property::findOrFail($id));
 
+        return redirect()->back()->with('success', self::SENT_MESSAGE);
+    }
+
+    private function store(Request $request, ?Property $property = null): void
+    {
+        $investment = $property?->investment ?? ($request->filled('investment_id') ? Investment::find($request->input('investment_id')) : null);
+
+        try {
             $client = $this->repository->createClient($request, $property);
 
-            $property->notify(new PropertyNotification($request, $property));
+            // Adresy biura inwestycji, a gdy ich brak - adres główny z ustawień
+            $emailAddresses = $this->recipients->for($investment);
 
-            $emailsData = $property->investment->office_emails;
-
-            if (!is_array($emailsData)) {
-                $emailsData = json_decode($emailsData, true); // Decode JSON if necessary
-            }
-
-            $emails = collect($emailsData)
-                ->map(function ($item) {
-                    return isset($item['value']) ? trim($item['value']) : null; // Ensure 'value' exists and is not null
-                })
-                ->filter() // Remove null or empty values
-                ->toArray();
-
-            if (!empty($emails)) {
-                Mail::to($emails)->send(new ChatSend($request, $client, $property));
-            } else {
-                Log::error('No valid emails found in settings()->get("page_email")');
-            }
-
-            // Clear cookies if mail is sent successfully
-            $cookie_name = 'dp_';
-            foreach ($_COOKIE as $name => $value) {
-                if (stripos($name, $cookie_name) === 0) {
-                    Cookie::queue(Cookie::forget($name));
-                }
+            if ($client && $emailAddresses) {
+                Mail::to($emailAddresses)->send(new ChatSend($request, $client, $property));
+            } elseif (!$emailAddresses) {
+                Log::channel('email')->error('Formularz kontaktowy: brak poprawnych adresów odbiorców (page_email / office_emails).');
             }
         } catch (\Throwable $exception) {
             Log::channel('email')->error('Email sending failed', [
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
-                'trace' => $exception->getTraceAsString(),
             ]);
         }
 
-        return redirect()->back()->with(
-            'success',
-            'Twoja wiadomość została wysłana. W najbliższym czasie skontaktujemy się z Państwem celem omówienia szczegółów!'
-        );
+        $this->notifyPanel($request, $property, $investment);
     }
 
-    public function showToken() {
-        echo csrf_token();
+    /**
+     * Powiadomienie w panelu: lokal -> lokal, inwestycja -> inwestycja, inaczej administratorzy.
+     */
+    private function notifyPanel(Request $request, ?Property $property, ?Investment $investment): void
+    {
+        try {
+            if ($property) {
+                $property->notify(new PropertyNotification($request, $property));
+            } elseif ($investment) {
+                $investment->notify(new ContactNotification($request, $investment));
+            } else {
+                Notification::send(User::role('Administrator')->get(), new ContactNotification($request));
+            }
+        } catch (\Throwable $exception) {
+            Log::error('Formularz kontaktowy: nie udało się zapisać powiadomienia w panelu', [
+                'message' => $exception->getMessage(),
+            ]);
+        }
     }
 }

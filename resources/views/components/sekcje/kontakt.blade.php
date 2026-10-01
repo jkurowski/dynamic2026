@@ -1,4 +1,7 @@
-{{-- Sekcja kontaktu z formularzem - wspólna dla 6 podstron szablonu (index, finansowanie, inwestycja, lokal, poznaj-nas, wykończenie). --}}
+{{-- Sekcja kontaktu z formularzem - wspólna dla 6 podstron szablonu (index, finansowanie, inwestycja, lokal, poznaj-nas, wykończenie).
+     Propsy przekazywane do <x-formularz-kontaktowy>. back=true domyślnie: sekcja stoi na innej stronie,
+     więc po wysyłce wracamy na nią ("Wyślij i wróć"), zamiast przenosić na /kontakt. --}}
+@props(['strona' => 'Kontakt', 'investmentId' => null, 'propertyId' => null, 'back' => true])
 <section class="kontakt sekcja-karta" id="kontakt">
 
 	<div class="kontakt-lewa pojawia-sie">
@@ -74,49 +77,6 @@
 		</div>
 	</div>
 
-	<div class="karta-formularza pojawia-sie opoznienie-1">
-		<h3>Wyślij wiadomość</h3>
-
-		<form id="formularzKontaktowy" action="{{ route('contact.send') }}" method="post" novalidate>
-			@csrf
-			<div class="pole">
-				<input type="text" name="imie" placeholder="Imię i nazwisko*" required>
-				<img src="{{ asset('img/ikona-uzytkownik.svg') }}" width="31" height="31" alt="">
-				<span class="blad">Podaj imię i nazwisko.</span>
-			</div>
-			<div class="pole">
-				<input type="tel" name="telefon" placeholder="Telefon*" required>
-				<img src="{{ asset('img/ikona-telefon-form.svg') }}" width="31" height="31" alt="">
-				<span class="blad">Podaj numer telefonu (min. 9 cyfr).</span>
-			</div>
-			<div class="pole">
-				<input type="email" name="email" placeholder="E-mail">
-				<img src="{{ asset('img/ikona-koperta.svg') }}" width="31" height="31" alt="">
-				<span class="blad">Podaj poprawny adres e-mail.</span>
-			</div>
-			<div class="pole">
-				<textarea name="wiadomosc" placeholder="Wiadomość*" required></textarea>
-				<img src="{{ asset('img/ikona-olowek.svg') }}" width="31" height="31" alt="">
-				<span class="blad">Napisz wiadomość.</span>
-			</div>
-
-			<label class="zgoda">
-				<input type="checkbox" name="zgoda-rodo" required>
-				<span>Zapoznałem się z <a href="#" data-strona="polityka-prywatnosci">Polityką prywatności</a> i zawartą w niej Informacją na temat przetwarzania danych osobowych</span>
-			</label>
-
-			<label class="zgoda">
-				<input type="checkbox" name="zgoda-marketing">
-				<span>Wyrażam zgodę na otrzymywanie od Dynamic Development sp. z o.o. informacji marketingowych, przekazywanych za pomocą telekomunikacyjnych urządzeń końcowych oraz tzw. automatycznych systemów wywołujących drogą elektroniczną na podany powyżej adres e-mail</span>
-			</label>
-
-			<button type="submit" class="formularz-przycisk">
-				Wyślij wiadomość
-				<x-ikona.strzalka />
-			</button>
-
-			<p class="komunikat-formularza" role="status"></p>
-		</form>
-	</div>
+	<x-formularz-kontaktowy :strona="$strona" :investment-id="$investmentId" :property-id="$propertyId" :back="$back" />
 
 </section>

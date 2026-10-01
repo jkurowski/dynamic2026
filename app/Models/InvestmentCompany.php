@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvestmentCompany extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'name',
         'legal_form',
@@ -26,4 +30,13 @@ class InvestmentCompany extends Model
         'apartment_number',
         'postal_code',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Firmy inwestycji')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 }

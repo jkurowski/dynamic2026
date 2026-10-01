@@ -118,21 +118,39 @@ class InvestmentRepository extends BaseRepository
 
         $list = $query->get();
 
+        // Dziennik inwestycji potrafi zawierać wpisy **bez sprawcy** (zadania w tle, konsola,
+        // konto usunięte po fakcie) oraz wpisy zapisane przez inny mechanizm niż podgląd
+        // żądań — te nie mają w `properties` kluczy `methodType`, `route`, `referer`
+        // ani `ipAddress`. Odwołania wprost dawały „Attempt to read property on null”
+        // i „Undefined array key” przy każdym takim wierszu (znalezione 2026-08-09 przez
+        // `panel:smoke`). Brak danych pokazujemy kreską, a nie ostrzeżeniem PHP.
         return Datatables::of($list)
             ->editColumn('name', function ($row){
-                return '<span data-filter="'. $row->causer->email.'">'.$row->causer->name.'<br>'.$row->causer->email.'</span>';
+                $causer = $row->causer;
+
+                if (!$causer) {
+                    return '<span data-filter="">System</span>';
+                }
+
+                return '<span data-filter="'. $causer->email.'">'.$causer->name.'<br>'.$causer->email.'</span>';
             })
             ->editColumn('method', function ($row){
-                return '<span data-filter="'. $row->properties['methodType'].'"><div class="badge badge-method badge-method-'.strtolower($row->properties['methodType']).'">'. $row->properties['methodType'].'</div></span>';
+                $method = data_get($row->properties, 'methodType');
+
+                if (!$method) {
+                    return '';
+                }
+
+                return '<span data-filter="'. $method.'"><div class="badge badge-method badge-method-'.strtolower($method).'">'. $method.'</div></span>';
             })
             ->editColumn('route', function ($row){
-                return $row->properties['route'];
+                return data_get($row->properties, 'route', '');
             })
             ->editColumn('referer', function ($row){
-                return $row->properties['referer'];
+                return data_get($row->properties, 'referer', '');
             })
             ->editColumn('ip', function ($row){
-                return $row->properties['ipAddress'];
+                return data_get($row->properties, 'ipAddress', '');
             })
             ->editColumn('created_at', function ($row){
                 $date = Carbon::parse($row->created_at)->format('Y-m-d');

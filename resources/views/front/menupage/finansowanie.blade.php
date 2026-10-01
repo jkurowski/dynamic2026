@@ -145,7 +145,7 @@
 
 	</section>
 
-	<x-sekcje.kontakt />
+	<x-sekcje.kontakt :strona="$page->title" />
 @endsection
 
 @push('scripts')

@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Translatable\HasTranslations;
+use App\Services\Activity\ActivityChangeDescriber;
 
 class Property extends Model
 {
@@ -137,14 +138,6 @@ class Property extends Model
         )->where('notifiable_type', 'App\Models\Property')->latest();
     }
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        $logOptions = new LogOptions();
-        $logOptions->useLogName('Powierzchnia');
-        $logOptions->logFillable();
-
-        return $logOptions;
-    }
 
     public function investment()
     {
@@ -338,5 +331,15 @@ class Property extends Model
                 event('property.status.changed', $property);
             }
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Powierzchnia')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => ActivityChangeDescriber::describe($this, $eventName));
     }
 }

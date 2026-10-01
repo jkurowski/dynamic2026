@@ -1,9 +1,9 @@
-{{-- Karta aktualności w karuzeli na stronie głównej. --}}
-@props(['tytul', 'zajawka' => '', 'data', 'link', 'kategoria' => null, 'obrazek', 'webp' => null])
+{{-- Karta aktualności w karuzeli na stronie głównej. Zdjęcie: miniatura wpisu 896x504 (kadr karty 896x504, object-fit: cover). --}}
+@props(['tytul', 'zajawka' => '', 'data', 'link', 'kategoria' => null, 'obrazek', 'webp' => null, 'alt' => ''])
 <article class="karta-aktualnosci">
 	<picture>
 		<source type="image/webp" srcset="{{ $webp }}">
-		<img src="{{ $obrazek }}" width="547" height="309" alt="" loading="lazy">
+		<img src="{{ $obrazek }}" width="547" height="309" alt="{{ $alt }}" loading="lazy">
 	</picture>
 	@if($kategoria)
 	<span class="plakietka-karty">{{ $kategoria }}</span>

@@ -119,10 +119,10 @@ class Event extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        $logOptions = new LogOptions();
-        $logOptions->useLogName('Kalendarz');
-        $logOptions->logFillable();
-
-        return $logOptions;
+        return LogOptions::defaults()
+            ->useLogName('Kalendarz')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

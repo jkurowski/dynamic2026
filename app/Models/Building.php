@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Building extends Model
 {
-    use HasTranslations;
+    use HasTranslations, LogsActivity;
     public array $translatable = ['name', 'meta_title', 'meta_description'];
 
     /**
@@ -98,5 +100,14 @@ class Building extends Model
                 $floor->delete();
             });
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Budynki')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

@@ -10,6 +10,8 @@ use App\Models\ClientRules;
 use App\Models\Property;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 
@@ -101,85 +103,74 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
             ->get(['id', 'user_id', 'name', 'description', 'file', 'mime', 'size', 'created_at', 'updated_at']);
     }
 
+    /**
+     * Zakłada albo aktualizuje klienta (po e-mailu) i zapisuje jego wiadomość.
+     *
+     * Wołane z: formularza na stronie (Request), panelu (Request), API oraz zadania ProcessLeads (tablica).
+     * Zgody RODO zapisuje ClientObserver na podstawie pól `rule_{id}` z bieżącego żądania.
+     *
+     * Wzorzec: poligonowa (2026-08) - bez UTM, ścieżki kampanii i przypisywania handlowca.
+     */
     public function createClient($attributes, $property = null, $status = 1, $source = null)
     {
-        Log::info('Call createClient');
+        $email = trim((string) ($attributes['email'] ?? $attributes['mail'] ?? ''));
+        $lastname = $attributes['lastname'] ?? $attributes['surname'] ?? null;
 
-        $utm_array = []; // Initialize as an empty array
-
-        if (isset($attributes['cookie']) && is_array($attributes['cookie'])) {
-            $utm_array = array_filter($attributes->cookie()); // Set only if cookies exist
-            unset($utm_array['XSRF-TOKEN'], $utm_array['laravel_session']);
+        // Formularz nie wymaga e-maila (wymagany jest telefon), a clients.mail jest NOT NULL i służy do
+        // rozpoznania klienta. Bez e-maila - adres zastępczy, oznaczony flagą, na który niczego nie wysyłamy.
+        $isRandomEmail = $email === '';
+        if ($isRandomEmail) {
+            $email = 'noemail_' . Str::uuid() . '@example.com';
         }
 
-        Log::info('Request: ' . $attributes['email']);
-        Log::info('Request: ' . $attributes['phone']);
-        Log::info('Request: ' . $attributes['name']);
-        Log::info('Request: ' . $status);
+        $client = null;
 
         try {
-            // Additional logging before updateOrCreate
-            Log::info('Attempting to updateOrCreate client');
+            $client = $this->model->firstOrNew(['mail' => $email]);
 
-            //            $client = $this->model->updateOrCreate(
-            //                ['mail' => $attributes['email']],
-            //                [
-            //                    'phone' => $attributes['phone'] ?? NULL,
-            //                    'name' => $attributes['name'],
-            //                    'status' => $status,
-            //                    'updated_at' => now()
-            //                ]
-            //            );
-
-            // Find the record by email or create a new instance
-            $client = $this->model->firstOrNew(['mail' => $attributes['email']]);
-
-            // Check if the client already exists
-            if ($client->exists) {
-                // Client exists, update attributes
-                $client->phone = $attributes['phone'] ?? null;
-                $client->name = $attributes['name'];
-                $client->status = $status;
-                $client->updated_at = now();
-
-                // Save and trigger the 'updated' event
-                $client->save();
-            } else {
-                // Client does not exist, set attributes
-                $client->phone = $attributes['phone'] ?? null;
-                $client->name = $attributes['name'];
-                $client->status = $status;
-                $client->created_at = now(); // Optional: set created_at manually if needed
-                $client->updated_at = now();
-
-                // Save and trigger the 'created' event
-                $client->save();
+            $client->phone = $attributes['phone'] ?? $client->phone;
+            $client->name = $attributes['name'];
+            if ($lastname) {
+                $client->lastname = $lastname;
             }
-
-            if ($client->wasRecentlyCreated) {
-                Log::info('Client was created: ' . $client->id);
-            } else {
-                Log::info('Client was updated: ' . $client->id);
+            $client->status = $status;
+            $client->is_random_email = $isRandomEmail;
+            if (!$client->exists) {
+                $client->created_at = now();
             }
+            $client->updated_at = now();
+
+            // save() odpala ClientObserver (created / updated) - tam zapis zgód RODO
+            $client->save();
+
+            Log::info(($client->wasRecentlyCreated ? 'Client was created: ' : 'Client was updated: ') . $client->id);
         } catch (\Exception $e) {
-            Log::error('Error during updateOrCreate: ' . $e->getMessage());
-            Log::error('Error during updateOrCreate: ' . $e->getTraceAsString());
+            Log::error('Error during createClient: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return null;
         }
 
-        if (isset($attributes['message']) && $client->id) {
-
-            //$source = strtok($attributes->headers->get('referer'), '?');
+        if (!empty($attributes['message'])) {
+            $ip = $attributes['ip'] ?? null;
+            if (!$ip && $attributes instanceof Request) {
+                $ip = $attributes->ip();
+            }
 
             $msg = ClientMessage::create([
                 'client_id' => $client->id,
+                // 0, nie NULL - Skrzynka leadów szuka wiadomości bez opiekuna po user_id = 0
+                'user_id' => 0,
                 'message' => $attributes['message'],
-                'ip' => $attributes['ip'] ?   $attributes['ip'] : $attributes->ip(),
-                'source' => $source ?? $attributes['page'],
+                'ip' => $ip ?? '127.0.0.1',
+                'source' => $source ?? ($attributes['page'] ?? 'Formularz kontaktowy'),
             ]);
 
             $arguments = [];
+
+            // Formularz przy lokalu: dane bierzemy z modelu, nie z formularza (nie da się ich podmienić w przeglądarce)
             if ($property) {
-                $propertyMappings = [
+                $arguments = [
                     'investment_id' => $property->investment_id,
                     'building_id' => $property->building_id,
                     'floor_id' => $property->floor_id,
@@ -187,39 +178,36 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
                     'rooms' => $property->rooms,
                     'area' => $property->area,
                 ];
-                $arguments = array_merge($propertyMappings, $utm_array);
             }
 
+            // Formularz przy inwestycji (bez lokalu)
+            if (!isset($arguments['investment_id']) && !empty($attributes['investment_id'])) {
+                $arguments['investment_id'] = (int) $attributes['investment_id'];
+            }
+
+            // Leady z portali (ProcessLeads)
             if ($source && isset($attributes['is_external_source'])) {
                 $arguments['is_external'] = $attributes['is_external_source'];
             }
-
-            if (isset($attributes['investment_id']) && isset($attributes['investment_name'])) {
-                $arguments = array_merge(
-                    $arguments,
-                    ['investment_id' => $attributes['investment_id']],
-                    ['investment_name' => $attributes['investment_name']]
-                );
+            if (!empty($attributes['investment_name'])) {
+                $arguments['investment_name'] = $attributes['investment_name'];
             }
-
-            if (isset($attributes['property_name'])) {
-                $arguments = array_merge($arguments, ['property_name' => $attributes['property_name']]);
+            if (!empty($attributes['property_name'])) {
+                $arguments['property_name'] = $attributes['property_name'];
             }
 
             if (!empty($arguments)) {
                 $msg->arguments = json_encode($arguments);
+                $msg->save();
             }
-
-            $msg->save();
         } else {
-            $msg = ClientMessage::create([
+            ClientMessage::create([
                 'client_id' => $client->id,
+                'user_id' => 0,
                 'message' => 'Klient dodany w systemie',
                 'ip' => '127.0.0.1',
                 'source' => 'Formularz w systemie',
             ]);
-
-            $msg->save();
         }
 
         return $client;

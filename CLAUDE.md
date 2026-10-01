@@ -1,5 +1,9 @@
 # dynamic-cms — notatki projektu
 
+## ZASADA: zmiany w bazie
+- NIE używamy migracji Laravela. Zmiany struktury i danych → pliki `.sql` w `database/sql/` (nazwa `RRRR_MM_DD_NN_opis.sql`), puszczane ręcznie: `mysql -uroot --default-character-set=utf8mb4 lar_dynamic < database/sql/plik.sql`.
+- Wykonane lokalnie (2026-10-01): `01_rodo_rules_zawezanie`, `02_clients_is_random_email`, `03_rodo_rules_teksty_dynamic`, `04_pages_front`, `05_aktualnosci` (articles.category + pages id 5), `06_articles_old_id_default` (naprawa 500 przy dodawaniu artykułu), `07_activity_log_nazwa_inwestycji`.
+
 ## Repozytorium
 - `origin` = https://github.com/jkurowski/dynamic2026.git (od 2026-10-01). Historia zaczyna się od nowa — pierwszy commit `Start projektu dynamic-cms`. Historia Kaltera (kalter2024) tylko lokalnie na gałęzi `kalter-history`, nie wypychać jej do origin.
 - `public/remove/` jest w .gitignore (pliki do ręcznego usunięcia).
@@ -114,6 +118,51 @@ Zasada: sekcje powtarzające się na kilku podstronach → komponenty Blade `x-.
 - Strona główna: desktop — karuzela ze strzałkami (wpisów może być więcej niż 3); mobile (09.08) — tylko 1 wpis.
 - Klient przewiduje rzadkie publikacje, więc sekcja musi dobrze wyglądać przy 1–3 wpisach. Treści dostarcza klient, obecne teksty to draft.
 - NIE ustalono w mailach: kategorii/plakietek, pól wpisu, paginacji, filtrów, SEO. Źródło: Figma (desktop 9tV8G3SpEvQRq4vmZG3osH, podstrona Aktualności node 802-175; mobile 6hOLzQF6peoLxnX9C8i59d) albo szablon `dynamic-front/aktualnosci.html` — lub dopytać klienta.
+
+## Formularze kontaktowe — wzorzec z C:\laragon\www\poligonowa (analiza 2026-10-01)
+Uwaga: w poligonowa poprawki formularzy są NIEZACOMMITOWANE (git log ich nie pokazuje) — źródłem jest drzewo robocze.
+- Jeden formularz dla wszystkich kontekstów (kontakt, inwestycja, lokal, schowek) → `POST /kontakt` (`contact.send`), throttle 10/min. Kontroler `Front/Contact/IndexController@send` → `store()`.
+- Różnice kontekstów = ukryte pola: `page` (nazwa strony → client_msg.source), `investment_id`, `property_id`, `back`, `clipboard`. Budynek/piętro/lokal backend bierze z modelu Property (nie z formularza).
+- „Wyślij i wróć” = ukryte pole `back=1` → `redirect()->back()->with('success')`; bez niego → `redirect()->route('contact')`.
+- Klient: `ClientRepository::createClient` — `firstOrNew` po e-mailu (brak e-maila → `noemail_{uuid}@example.com`, `is_random_email`), `ClientMessage` z `user_id=0` (Skrzynka szuka 0), `arguments` (cast array): investment/building/floor/property_id, rooms, area + UTM.
+- RODO: `ClientObserver` czyta pola `rule_{id}` z żądania → `client_rules` (status 1/2, duration z `rodo_rules.time`, ip, referer, tekst klauzuli). Bez `rule_*` NIE tworzy zgód (w dynamic-cms obecny observer tworzy fałszywe zgody 1–3 — do naprawy). Klauzule w formularzu z `RodoRules::forFormAndInvestment()`, walidacja `requiredForFormAndInvestment()` (ten sam zestaw).
+- Mail do biura: `NotificationRecipients` (office_emails inwestycji, inaczej `page_email`), `ChatSend`. Powiadomienie w panelu: `PropertyNotification` / `ContactNotification` (trait `DescribesFormSubmission`).
+- reCAPTCHA v3 tylko gdy klucze w panelu (`ReCaptchaV3::isConfigured()`).
+- Pomijamy (zależne od usuniętych modułów / opcjonalne): `LeadAutoResponder` (EmailTemplate), RemarketingPayload, LeadAssigner, touchpoints, CampaignTracker.
+### Wdrożone w dynamic-cms (2026-10-01)
+- Decyzje: jedno pole „Imię i nazwisko” (`name`), telefon wymagany, e-mail opcjonalny (brak → `noemail_{uuid}@example.com` + `clients.is_random_email=1`), klauzule RODO z bazy. BEZ: auto-maila do klienta, remarketingu, przypisywania handlowca, UTM/ścieżki kampanii.
+- `Front\ContactController`: `index` (strona Kontakt, `pages.uri=kontakt`), `send` (wszystkie formularze), `property` (stara trasa, zgodność), `store` → `ClientRepository::createClient` + mail `ChatSend` (adresaci `Services\Mail\NotificationRecipients`: office_emails inwestycji, inaczej `page_email` z ustawień) + powiadomienie w panelu (lokal → `PropertyNotification`, inwestycja → `ContactNotification`, inaczej użytkownicy z rolą „Administrator”).
+- `ContactFormRequest`: name, phone, email (nullable), message, page, back, investment_id, property_id; reCAPTCHA tylko gdy klucze w panelu; `rule_{id}` wymagane = te same klauzule co w widoku (`RodoRules::requiredForFormAndInvestment`).
+- `ClientRepository::createClient`: `client_msg.user_id=0`, `source` = pole `page`, `arguments` (JSON jako tekst — panel czyta `json_decode`) z lokalu (investment/building/floor/property_id, rooms, area) albo `investment_id` z formularza; zgodność z ProcessLeads/API/panelem zachowana.
+- `ClientObserver` (z poligonowa): zgody tylko z pól `rule_*`; przy ponownym zgłoszeniu stare zgody → status 2 + canceled_at.
+- Widoki: `<x-formularz-kontaktowy strona="" :investment-id :property-id :back />` (karta formularza, jedna na stronę), `<x-sekcje.kontakt :strona="$page->title" />` (back=true domyślnie — „Wyślij i wróć”), strona `front/contact/index.blade.php` (main class `ma-pasek-boczny` przez `@section('main_class')`).
+- `public/js/formularz.js`: walidacja name/phone/email/message i zgód `[data-wymagana]`, prawdziwy POST, token reCAPTCHA v3 przed wysyłką (`data-recaptcha`), blokada podwójnej wysyłki, przewinięcie do komunikatu po powrocie.
+- Trasy POST /kontakt i /kontakt/{property}: `throttle:10,1`.
+- UWAGA: w ustawieniach panelu brak `page_email` — formularz bez inwestycji zapisze klienta, ale mail nie wyjdzie (błąd w logu `email`). Ustawić w Ustawienia → SEO.
+- Do zrobienia: podstrona Polityki prywatności (link w klauzuli ma href="#"); obowiązek informacyjny w `rodo_settings` to „Lorem ipsum”.
+
+## Aktualności (2026-10-01)
+- Panel (`admin/article`): pole Kategoria (`articles.category`, lista `Article::KATEGORIE`: NOWA INWESTYCJA, DZIENNIK INWESTYCJI, PORADNIK). Zdjęcie przycinane do 2 rozmiarów, każdy JPG (q85) + WebP (q80), z `orientate()` (EXIF z telefonu):
+  - big 1170×602 → `uploads/articles/` + `uploads/articles/webp/` (strona wpisu),
+  - thumb 896×504 → `uploads/articles/thumbs/` + `thumbs/webp/` (karuzela na stronie głównej: kadr 896×504; lista: kadr 350×320 / panorama 683×360 na telefonie, object-fit: cover).
+  Rozmiary: `config/images.php` → `article`. Kod: `ArticleService::upload`.
+- Front: `/aktualnosci` (lista, 6 na stronę, paginacja serwerowa `?strona=N` — komponent `<x-paginacja>`; `js/aktualnosci.js` z szablonu to atrapa paginacji, NIE dołączamy), `/aktualnosci/{slug}` (wpis; 404 dla ukrytych), karuzela na stronie głównej (9 najnowszych; sekcja znika, gdy brak wpisów). Trasy tylko index/show.
+- Model `Article`: `scopeOpublikowane()` (status 1, wg „Data wyświetlenia”, inaczej data dodania), `link()`, `dataPublikacji()`, `zdjecie($rozmiar, $webp)` (bez zdjęcia → obrazek z szablonu).
+- Komponenty: `<x-karta-wpisu :wpis>` (lista), `<x-karta-aktualnosci>` (karuzela).
+- Strona wpisu (`front/article/show`) NIE ma szablonu HTML (tylko Figma, node 802-175) — złożona z elementów szablonu + `resources/less/front/wpis.less` (typografia treści). Do porównania z Figmą.
+- LESS → CSS: `C:/laragon/www/dynamic-front/node_modules/.bin/lessc resources/less/front/style.less public/css/style.css` oraz `--clean-css ... public/css/style.min.css` (uruchamiać z katalogu dynamic-front). Kompilacja odtwarza style.css 1:1 (różnią się tylko końce linii).
+- Wpisy testowe `[TEST] ...` (id 1–3) dodane przez panel do sprawdzenia frontu — usunięcie: `php <scratchpad>/test_aktualnosci.php usun` albo z panelu.
+
+## Dziennik aktywności (LogsActivity, wzorzec poligonowa, 2026-10-01)
+- `AppServiceProvider`: `Activity::saving` robi `merge` danych żądania (wcześniej `collect` NADPISYWAŁ properties → ginęła lista zmian).
+- Modele z LogsActivity (logFillable + logOnlyDirty + dontSubmitEmptyLogs): Budynki, Piętra, Aktualności inwestycji, Firmy inwestycji, Podstrony inwestycji, Płatności inwestycji, Biura sprzedaży, Plany inwestycji, Składniki ceny, Kalendarz, Inwestycje (było „Investycje”), Powierzchnia, Klienci (bez password/remember_token), Użytkownicy (bez password/remember_token), Zgody RODO (tylko status/duration/months/canceled_at), Galerie, Strony, Slider, + spoza poligonowa: Aktualności, Miasta, Klauzule RODO.
+  Inwestycje/Powierzchnia/Klienci: opis zmian po polsku z `App\Services\Activity\ActivityChangeDescriber` (skopiowany z poligonowa, bez Offer/Issue). Galerie/Strony/Slider/Aktualności: polskie opisy + `subject_title` w properties.
+- Ekran `admin/logs`: `LogRepository` i widok z poligonowa — kolumny Nazwa, Akcja (DODANO/ZAKTUALIZOWANO/USUNIĘTO), Co się zmieniło; bez przycisków Excel/CSV (jak w poligonowa). Etykiety `badge-method-created/updated/deleted` w `admin.less` (+ dopisane na końcu `admin.min.css` — ten plik był minifikowany innym narzędziem, nie przebudowywać go lessc).
+- `InvestmentRepository::getDataTable` (log inwestycji): `data_get`, „System” bez sprawcy. `Crm/Client/RodoController`: historia zgód bez błędnego filtra `causer_id = client_id`.
+
+## Przeglądarka do testów
+- Do testów używać Chrome na **Windows** (ten sam komputer co Laragon). Podłączone są dwie przeglądarki: Windows i macOS — domyślnie sesja bywa podpięta pod macOS, który NIE widzi `*.test` (strona błędu).
+- Przed testem: `list_connected_browsers` → `select_browser` z przeglądarką `osPlatform: "Windows"` (2026-10-01: deviceId `930cfff7-d5f6-4563-bea9-c1d60da2f426`, „Browser 1”).
 
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).

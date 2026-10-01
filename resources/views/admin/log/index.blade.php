@@ -13,11 +13,17 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="form_date_from" class="form-label">Data od</label>
-                                    <input type="text" class="form-control" id="form_date_from" name="date_from">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="form_date_from" name="date_from">
+                                        <span class="input-group-text" data-focuses="form_date_from" aria-hidden="true"><i class="fe-calendar"></i></span>
+                                    </div>
                                 </div>
                                 <div class="col">
                                     <label for="form_date_to" class="form-label">Data do</label>
-                                    <input type="text" class="form-control" id="form_date_to" name="date_to">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="form_date_to" name="date_to">
+                                        <span class="input-group-text" data-focuses="form_date_to" aria-hidden="true"><i class="fe-calendar"></i></span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -33,14 +39,16 @@
                     <table class="table data-table mb-0 w-100">
                         <thead class="thead-default">
                         <tr>
-                            <th></th>
-                            <th>Użytkownik</th>
-                            <th class="text-center">Moduł</th>
-                            <th class="text-center">Metoda</th>
-                            <th>URL</th>
-                            <th>Referer</th>
-                            <th class="text-center">Adres IP</th>
-                            <th class="text-center">Data utworzenia</th>
+                            <th scope="col"></th>
+                            <th scope="col">Użytkownik</th>
+                            <th scope="col" class="text-center">Moduł</th>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col" class="text-center">Akcja</th>
+                            <th scope="col">Co się zmieniło</th>
+                            <th scope="col">URL</th>
+                            <th scope="col">Referer</th>
+                            <th scope="col" class="text-center">Adres IP</th>
+                            <th scope="col" class="text-center">Data utworzenia</th>
                         </tr>
                         </thead>
                         <tbody class="content"></tbody>
@@ -73,29 +81,15 @@
                     serverSide: false,
                     responsive: true,
                     dom: 'Brtip',
+                    /*
+                        Przyciski „Excel" i „CSV" zdjęte 2026-08-16 (decyzja usera — ze WSZYSTKICH list).
+                        Dziennik czynności to nie są dane osobowe klientów, ale zapis KTO CO ZROBIŁ
+                        w systemie — wynoszenie go bez śladu jest tym bardziej nie na miejscu,
+                        że dziennik ma być właśnie śladem.
+                        Eksport robimy na życzenie, po stronie serwera — wzór: lista klientów
+                        (`admin.crm.clients.export.xlsx`). Opis: `docs/analiza/39-eksport-tabel-zdjety.md`.
+                    */
                     "buttons": [
-                        {
-                            extend: 'excelHtml5',
-                            header: true,
-                            exportOptions: {
-                                modifier: {
-                                    order: 'index',  // 'current', 'applied', 'index',  'original'
-                                    page: 'all',      // 'all',     'current'
-                                    search: 'applied'     // 'none', 'applied', 'removed'
-                                }
-                            }
-                        },
-                        {
-                            extend: 'csv',
-                            header: true,
-                            exportOptions: {
-                                modifier: {
-                                    order: 'index',  // 'current', 'applied', 'index',  'original'
-                                    page: 'all',      // 'all',     'current'
-                                    search: 'applied'     // 'none', 'applied', 'removed'
-                                }
-                            }
-                        },
                         {
                             extend: 'colvis',
                             columns: function (idx, title, th) {
@@ -104,7 +98,7 @@
                         }
                     ],
                     language: {
-                        "url": "{{ asset('/js/polish.json') }}"
+                        "url": "{{ asset('/js/polish.json') }}?v={{ filemtime(public_path('js/polish.json')) }}"
                     },
                     iDisplayLength: 30,
                     ajax: {
@@ -116,19 +110,32 @@
                         }
                     },
                     columns: [
-                        /* 0 */ {data: 'id', name: 'id'},
-                        /* 1 */ {data: 'name', name: 'name'},
-                        /* 2 */ {data: 'log_name', name: 'log_name'},
-                        /* 3 */ {data: 'method', name: 'method'},
-                        /* 4 */ {data: 'route', name: 'route'},
-                        /* 5 */ {data: 'referer', name: 'referer'},
-                        /* 6 */ {data: 'ip', name: 'ip'},
-                        /* 7 */ {data: 'created_at', name: 'created_at'}
+                        {data: 'id', name: 'id'},
+                        {data: 'name', name: 'name'},
+                        {data: 'log_name', name: 'log_name'},
+                        {data: 'subject', name: 'subject'},
+                        {data: 'action', name: 'action'},
+                        {data: 'changes', name: 'changes', orderable: false, searchable: false},
+                        {data: 'route', name: 'route'},
+                        {data: 'referer', name: 'referer'},
+                        {data: 'ip', name: 'ip'},
+                        {data: 'created_at', name: 'created_at'}
                     ],
-                    bSort: false,
+                    /*
+                        Sortowanie włączone 2026-08-10 (wzorzec z listy ofert).
+
+                        `order: []` zostawia kolejność ustawioną przez kontroler — bez niego
+                        DataTables posortowałby listę po pierwszej kolumnie rosnąco.
+
+                        Sortowania NIE przyjmują: kolumna akcji (przyciski, nie dane) i kolumny
+                        z listą wyboru w nagłówku (`select-column`) — tam kliknięcie w filtr
+                        przestawiałoby przy okazji porządek.
+                    */
+                    order: [],
                     columnDefs: [
-                        {className: 'text-center', targets: [2, 3, 6, 7]},
-                        {className: 'select-column', targets: [1, 2, 3]}
+                        {className: 'text-center', targets: [2, 4, 8, 9]},
+                        {className: 'select-column', targets: [1, 2, 4]},
+                        { orderable: false, targets: [1, 2, 4] }
                     ],
                     initComplete: function () {
                         this.api().columns('.select-column').every(function () {
@@ -140,16 +147,18 @@
                                         $(this).val()
                                     );
                                     column
-                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .search(val ? val : '', true, false)
                                         .draw();
                                 });
                             column.data().unique().sort().each(function (value) {
 
-                                if (value.indexOf("span") >= 0) {
-                                    value = value.replace(/<[^>]+>/g, '');
+                                let text = $('<div>').html(value).find('[data-filter]').data('filter');
+
+                                if (!text) {
+                                    text = $('<div>').html(value).text().trim();
                                 }
 
-                                select.append('<option value="' + value + '">' + value + '</option>')
+                                select.append('<option value="' + text + '">' + text + '</option>')
                             });
                             $('.selectpicker').selectpicker();
                         });

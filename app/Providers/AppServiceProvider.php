@@ -97,11 +97,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        // Dane żądania dopisywane do KAŻDEGO wpisu dziennika. merge, nie nadpisanie - inaczej giną
+        // `attributes`/`old` (lista zmian z LogsActivity) i ręczne withProperties().
         Activity::saving(function (Activity $activity) {
-
-            //dd($activity->toArray());
-
-            $activity->properties = collect([
+            $activity->properties = $activity->properties->merge([
                 "route"         => Request::getPathInfo(),
                 "ipAddress"     => Request::ip(),
                 "userAgent"     => Request::header('user-agent'),

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
 
 use Spatie\Activitylog\LogOptions;
 use Spatie\Sluggable\HasSlug;
@@ -13,11 +14,12 @@ use Spatie\Sluggable\SlugOptions;
 
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Translatable\HasTranslations;
+use App\Services\Activity\ActivityChangeDescriber;
 
 class Investment extends Model
 {
 
-    use LogsActivity, HasSlug, HasTranslations;
+    use LogsActivity, HasSlug, HasTranslations, Notifiable;
     public array $translatable = ['name', 'entry_content', 'content', 'end_content', 'meta_title', 'meta_description', 'popup_text'];
 
     /**
@@ -340,10 +342,11 @@ class Investment extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        $logOptions = new LogOptions();
-        $logOptions->useLogName('Investycje');
-        $logOptions->logFillable();
-
-        return $logOptions;
+        return LogOptions::defaults()
+            ->useLogName('Inwestycje')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn (string $eventName) => ActivityChangeDescriber::describe($this, $eventName));
     }
 }

@@ -26,7 +26,7 @@
 
 @include('layouts.partials.header')
 
-<main id="tresc">
+<main id="tresc"@hasSection('main_class') class="@yield('main_class')"@endif>
     @yield('content')
 </main>
 

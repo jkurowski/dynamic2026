@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Client;
+use App\Models\Investment;
 use App\Models\Property;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -18,6 +19,8 @@ class ChatSend extends Mailable
      * @var Client
      */
     private $client;
+
+    private ?Property $property;
 
     /**
      * Create a new message instance.
@@ -38,12 +41,27 @@ class ChatSend extends Mailable
      */
     public function build()
     {
-        return $this->subject('DeveloPro - masz nową wiadomość ze strony: '.$this->request->page)->view('admin.crm.client.chat.mail-template',
+        return $this->subject('DeveloPro - masz nową wiadomość ze strony: '.$this->request['page'])->view('admin.crm.client.chat.mail-template',
             [
                 'request' => $this->request,
                 'client' => $this->client,
                 'property' => $this->property,
+                'investmentName' => $this->investmentName(),
                 'signature' => optional(Auth::user())->signature,
             ]);
+    }
+
+    /**
+     * Nazwa inwestycji: z lokalu, inaczej z `investment_id` formularza (formularz przy inwestycji bez lokalu).
+     */
+    private function investmentName(): ?string
+    {
+        if ($this->property?->investment?->name) {
+            return $this->property->investment->name;
+        }
+
+        $investmentId = $this->request['investment_id'] ?? null;
+
+        return $investmentId ? Investment::find($investmentId)?->name : null;
     }
 }

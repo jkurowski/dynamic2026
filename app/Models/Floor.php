@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Floor extends Model
 {
-    use HasTranslations;
+    use HasTranslations, LogsActivity;
     public array $translatable = ['name', 'meta_title', 'meta_description'];
 
     /**
@@ -98,5 +100,14 @@ class Floor extends Model
                 $property->delete();
             });
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Piętra')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

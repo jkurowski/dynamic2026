@@ -7,12 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification;
 
 use App\Models\Property;
+use App\Notifications\Concerns\DescribesFormSubmission;
 
+/**
+ * Powiadomienie w panelu o zapytaniu dotyczącym konkretnego mieszkania.
+ *
+ * Zgłoszenie BEZ lokalu (podstrona inwestycji, strona kontaktu) obsługuje
+ * `ContactNotification` — treść obu składa `DescribesFormSubmission`.
+ *
+ * Jak `ContactNotification` — kanał `database`, więc świadomie bez kolejki
+ * (patrz komentarz tam).
+ */
 class PropertyNotification extends Notification
 {
-    use Queueable;
+    use Queueable, DescribesFormSubmission;
 
-    private $request;
+    private Request $request;
+    private Property $property;
 
     /**
      * Create a new notification instance.
@@ -44,16 +55,6 @@ class PropertyNotification extends Notification
      */
     public function toDatabase($notifiable)
     {
-        return [
-            'page_name' => $this->request->input('form_page'),
-            'form_name' => $this->request->input('name'),
-            'form_email' => $this->request->input('email'),
-            'form_message' => $this->request->input('message'),
-            'form_phone' => $this->request->input('phone'),
-            'property_id' => $this->property->id,
-            'investment_id' => $this->property->investment_id,
-            'ip' => $this->request->ip(),
-            'url' => $this->request->headers->get('referer')
-        ];
+        return $this->submissionPayload($this->request, $this->property, $this->property->investment);
     }
 }

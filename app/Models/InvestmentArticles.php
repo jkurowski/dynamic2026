@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvestmentArticles extends Model
 {
-    use HasTranslations;
+    use HasTranslations, LogsActivity;
     public array $translatable = ['title', 'content_entry', 'content', 'meta_title', 'meta_description'];
 
 
@@ -29,4 +31,13 @@ class InvestmentArticles extends Model
         'file',
         'file_webp'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Aktualności inwestycji')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 }

@@ -94,19 +94,17 @@ Route::middleware(['restrictIp'])->group(function () {
         Route::get('/programy-wykonczeniowe', 'MenuController@wykonczeniowe')->name('programy-wykonczeniowe');
 
         Route::get('/kontakt', 'ContactController@index')->name('contact');
-        Route::post('/kontakt', 'ContactController@send')->name('contact.send');
+        Route::post('/kontakt', 'ContactController@send')->middleware('throttle:10,1')->name('contact.send');
 
-        Route::post('/kontakt/{property}', 'ContactController@property')->name('contact.property');
+        Route::post('/kontakt/{property}', 'ContactController@property')->middleware('throttle:10,1')->name('contact.property');
 
         Route::post('/clipboard', 'Clipboard\IndexController@store')->name('clipboard.store');
         Route::post('/clipboard/send', 'Clipboard\IndexController@send')->name('clipboard.send');
         Route::get('/schowek', 'Clipboard\IndexController@index')->name('clipboard.index');
         Route::delete('/clipboard', 'Clipboard\IndexController@destroy')->name('clipboard.destroy');
 
-        Route::resources([
-            '/aktualnosci' => 'ArticleController',
-            '/gallery' => 'GalleryController'
-        ]);
+        Route::resource('/aktualnosci', 'ArticleController')->only(['index', 'show']);
+        Route::resource('/gallery', 'GalleryController');
 
         //        // Client area
         //        Route::middleware('guest.client')->group(function () {

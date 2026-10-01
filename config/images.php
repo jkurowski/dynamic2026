@@ -104,11 +104,14 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    // big - zdjęcie na stronie wpisu, thumb - karta (karuzela na stronie głównej: kadr 896x504 16:9,
+    // lista aktualności: kadr 350x320 / panorama 683x360 na telefonie - object-fit: cover).
+    // Każdy rozmiar zapisywany jako JPG + WebP (ArticleService::upload).
     'article' => [
         'big_width' => 1170,
         'big_height' => 602,
-        'thumb_width' => 640,
-        'thumb_height' => 370,
+        'thumb_width' => 896,
+        'thumb_height' => 504,
         'file_path' => 'uploads/articles/',
         'thumb_file_path' => 'uploads/articles/thumbs/',
         'preview_file_path' => 'uploads/articles/thumbs/',

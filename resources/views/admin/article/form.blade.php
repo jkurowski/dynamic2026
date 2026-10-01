@@ -55,9 +55,12 @@
                                         @include('form-elements.html-input-date', ['label' => 'Data wyświetlenia', 'sublabel'=> '', 'name' => 'posted_at', 'value' => $entry->posted_at])
                                     </div>
                                     <div class="row w-100 form-group">
+                                        @include('form-elements.html-select', ['label' => 'Kategoria', 'sublabel'=> 'Etykieta na karcie wpisu', 'name' => 'category', 'selected' => $entry->category, 'select' => ['' => '--- brak ---'] + array_combine(\App\Models\Article::KATEGORIE, \App\Models\Article::KATEGORIE)])
+                                    </div>
+                                    <div class="row w-100 form-group">
                                         @include('form-elements.html-input-file', [
                                             'label' => 'Zdjęcie',
-                                            'sublabel' => '(wymiary: '.config('images.article.big_width').'px / '.config('images.article.big_height').'px)',
+                                            'sublabel' => '(przycinane do: wpis '.config('images.article.big_width').' x '.config('images.article.big_height').' px, miniatura '.config('images.article.thumb_width').' x '.config('images.article.thumb_height').' px; zapis JPG + WebP)',
                                             'name' => 'file',
                                             'file' => $entry->file,
                                             'file_preview' => config('images.article.preview_file_path')

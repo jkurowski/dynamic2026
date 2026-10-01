@@ -6576,6 +6576,126 @@ body.stopka-odslaniana main {
     margin-bottom: 1.14583vw;
   }
 }
+.karta-wpisu > picture img.zdjecie-cms {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+.naglowek-wpisu .data-wpisu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--tekst-na-ciemnym);
+  font-size: 14px;
+}
+.wpis {
+  width: 100%;
+  max-width: var(--kontener-maks, 1728px);
+  margin: 0 auto;
+  padding: 0 var(--kontener-wciecie, 24px);
+  padding-bottom: 80px;
+}
+.wpis .wpis-zdjecie {
+  display: block;
+  max-width: 1170px;
+  margin: 0 auto 50px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.wpis .wpis-zdjecie img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.wpis .wpis-tresc {
+  max-width: 860px;
+  margin: 0 auto;
+  color: var(--tekst-na-ciemnym);
+  font-size: 18px;
+  line-height: 1.7;
+}
+.wpis .wpis-tresc .wstep {
+  font-size: 22px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+.wpis .wpis-tresc h2,
+.wpis .wpis-tresc h3,
+.wpis .wpis-tresc h4 {
+  margin: 40px 0 16px;
+  color: var(--tekst-na-ciemnym);
+  font-weight: 700;
+  line-height: 1.3;
+}
+.wpis .wpis-tresc h2 {
+  font-size: 28px;
+}
+.wpis .wpis-tresc h3 {
+  font-size: 22px;
+}
+.wpis .wpis-tresc p,
+.wpis .wpis-tresc ul,
+.wpis .wpis-tresc ol {
+  margin: 0 0 20px;
+}
+.wpis .wpis-tresc ul,
+.wpis .wpis-tresc ol {
+  padding-left: 22px;
+}
+.wpis .wpis-tresc li + li {
+  margin-top: 6px;
+}
+.wpis .wpis-tresc a {
+  color: #F17A2C;
+  text-decoration: underline;
+}
+.wpis .wpis-tresc img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.wpis .wpis-tresc blockquote {
+  margin: 30px 0;
+  padding-left: 22px;
+  border-left: 3px solid #DC5C0C;
+  font-style: italic;
+}
+.wpis .wpis-powrot {
+  max-width: 860px;
+  margin: 40px auto 0;
+}
+@media (max-width: 1024px) {
+  .wpis {
+    padding-bottom: 50px;
+  }
+  .wpis .wpis-zdjecie {
+    margin-bottom: 30px;
+  }
+  .wpis .wpis-tresc {
+    font-size: 16px;
+  }
+  .wpis .wpis-tresc .wstep {
+    font-size: 18px;
+  }
+  .wpis .wpis-tresc h2 {
+    font-size: 22px;
+  }
+  .wpis .wpis-tresc h3 {
+    font-size: 19px;
+  }
+}
+.wpis-pozostale {
+  padding-bottom: 80px;
+}
+.wpis-pozostale > .tytul-sekcji {
+  margin-bottom: 40px;
+}
 .kontakt-gora {
   display: flex;
   align-items: flex-start;

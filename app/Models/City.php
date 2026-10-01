@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class City extends Model
 {
-    use HasTranslations;
+    use HasTranslations, LogsActivity;
     public array $translatable = ['name', 'footer', 'contact_title', 'contact_text'];
 
     /**
@@ -34,4 +36,13 @@ class City extends Model
         'completed',
         'sort'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Miasta')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 }

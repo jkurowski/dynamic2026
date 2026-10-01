@@ -1,0 +1,150 @@
+// Aktualności z CMS - dodatek do szablonu (nie ma go w dynamic-front).
+// 1) Zdjęcia wgrane w panelu w karcie listy: zamiast przesunięć kadru dobranych pod pliki z makiety
+//    (lista-aktualnosci.less) - całe zdjęcie przycięte do kadru przez object-fit: cover.
+// 2) Strona pojedynczego wpisu (front/article/show) - w projekcie Figma, poza szablonem HTML.
+//    Zbudowana z elementów szablonu (nagłówek podstrony, karty wpisów) + typografia treści. Do akceptacji.
+
+// --- 1. karta wpisu ze zdjęciem z CMS ---
+.karta-wpisu > picture img.zdjecie-cms {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+}
+
+// --- 2. strona wpisu ---
+.naglowek-wpisu {
+	.data-wpisu {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-drobny;
+	}
+}
+
+.wpis {
+	.kontener();
+	padding-bottom: 80px;
+
+	.wpis-zdjecie {
+		display: block;
+		max-width: 1170px;
+		margin: 0 auto 50px;
+		border-radius: 12px;
+		overflow: hidden;
+
+		img {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	.wpis-tresc {
+		max-width: 860px;
+		margin: 0 auto;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-podstawa;
+		line-height: 1.7;
+
+		.wstep {
+			font-size: @tekst-srodek;
+			line-height: 1.5;
+			margin-bottom: 30px;
+		}
+
+		h2,
+		h3,
+		h4 {
+			margin: 40px 0 16px;
+			color: var(--tekst-na-ciemnym);
+			font-weight: 700;
+			line-height: 1.3;
+		}
+
+		h2 {
+			font-size: @tekst-sekcja;
+		}
+
+		h3 {
+			font-size: @tekst-srodek;
+		}
+
+		p,
+		ul,
+		ol {
+			margin: 0 0 20px;
+		}
+
+		ul,
+		ol {
+			padding-left: 22px;
+		}
+
+		li + li {
+			margin-top: 6px;
+		}
+
+		a {
+			color: @pomaranczowy-jasny;
+			text-decoration: underline;
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+			border-radius: 8px;
+		}
+
+		blockquote {
+			margin: 30px 0;
+			padding-left: 22px;
+			border-left: 3px solid @pomaranczowy;
+			font-style: italic;
+		}
+	}
+
+	.wpis-powrot {
+		max-width: 860px;
+		margin: 40px auto 0;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-bottom: 50px;
+
+		.wpis-zdjecie {
+			margin-bottom: 30px;
+		}
+
+		.wpis-tresc {
+			font-size: 16px;
+
+			.wstep {
+				font-size: 18px;
+			}
+
+			h2 {
+				font-size: 22px;
+			}
+
+			h3 {
+				font-size: 19px;
+			}
+		}
+	}
+}
+
+// Pozostałe wpisy pod treścią - ta sama siatka co lista aktualności
+.wpis-pozostale {
+	padding-bottom: 80px;
+
+	> .tytul-sekcji {
+		margin-bottom: 40px;
+	}
+}

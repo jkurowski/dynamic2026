@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvestmentPage extends Model
 {
+    use LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -26,4 +30,13 @@ class InvestmentPage extends Model
         'cta_button',
         'cta_link'
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Podstrony inwestycji')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 }

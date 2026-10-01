@@ -1,14 +1,6 @@
 @extends('layouts.homepage')
 
 @section('content')
-@php
-    // Treść tymczasowa z makiety - do podpięcia pod moduł Aktualności (baza jest pusta).
-    $aktualnosci = [
-        ['tytul' => 'Lorem ipsum dolor', 'zajawka' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque laoreet.', 'data' => '2026-05-20', 'link' => route('aktualnosci.index'), 'kategoria' => 'NOWA INWESTYCJA'],
-        ['tytul' => 'Lorem ipsum dolor', 'zajawka' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque laoreet.', 'data' => '2026-05-20', 'link' => route('aktualnosci.index'), 'kategoria' => 'DZIENNIK INWESTYCJI'],
-        ['tytul' => 'Lorem ipsum dolor', 'zajawka' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, pellentesque laoreet.', 'data' => '2026-05-20', 'link' => route('aktualnosci.index'), 'kategoria' => 'NOWA INWESTYCJA'],
-    ];
-@endphp
 
 	<!-- ============ HERO ============ -->
 	<section class="hero" id="hero">
@@ -431,6 +423,7 @@
 	<!-- ============ KAFLE: FINANSOWANIE I WYKOŃCZENIE ============ -->
 	<x-sekcje.kafle />
 
+	@if($aktualnosci->isNotEmpty())
 	<!-- ============ AKTUALNOŚCI ============ -->
 	<section class="aktualnosci">
 
@@ -447,8 +440,8 @@
 			<div class="row kolejno">
 				@foreach($aktualnosci as $wpis)
 					<div class="col-12 col-sm-6 col-md-4">
-						<x-karta-aktualnosci :tytul="$wpis['tytul']" :zajawka="$wpis['zajawka']" :data="$wpis['data']" :link="$wpis['link']" :kategoria="$wpis['kategoria']"
-							:obrazek="asset('img/aktualnosc.jpg')" :webp="asset('img/aktualnosc.webp')" />
+						<x-karta-aktualnosci :tytul="$wpis->title" :zajawka="$wpis->content_entry" :data="$wpis->dataPublikacji()" :link="$wpis->link()" :kategoria="$wpis->category"
+							:obrazek="$wpis->zdjecie('thumb')" :webp="$wpis->zdjecie('thumb', true)" :alt="$wpis->file_alt" />
 					</div>
 				@endforeach
 			</div>
@@ -468,9 +461,10 @@
 		</div>
 
 	</section>
+	@endif
 
 	<!-- ============ KONTAKT ============ -->
-	<x-sekcje.kontakt />
+	<x-sekcje.kontakt strona="Strona główna" />
 @endsection
 
 @push('scripts')

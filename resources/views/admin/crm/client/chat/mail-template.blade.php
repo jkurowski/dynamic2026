@@ -24,14 +24,15 @@
                         <p style="text-align:center">{{ config('app.name') }}</p>
                         <p><b>Wiadomość wysłana: <?= date("d.m.Y - H:i:s"); ?> ze strony: {{ $request->page }}</b></p>
                         <hr style="border:0;border-bottom:1px solid #ececec" />
-                        <p><b>Imię:</b> {{ $request->name }}</p>
-                        <p><b>E-mail:</b> {{ $request->email }}</p>
+                        <p><b>Imię i nazwisko:</b> {{ $request->name }}</p>
+                        @if($request->email)<p style="margin:0"><b>E-mail:</b> {{ $request->email }}</p>@endif
                         @isset($request->phone)<p style="margin:0"><b>Telefon:</b> {{ $request->phone }}</p>@endisset
-                        @isset($property)
+                        @if(!empty($investmentName) || isset($property))
                         <hr style="border:0;border-bottom:1px solid #ececec" />
-                        <p><b>Mieszkanie:</b> {{ $property->name }}</p>
-                        <p><b>Inwestycja:</b> {{ $property->investment->name }}</p>
-                        @endisset
+                        @if(!empty($investmentName))<p style="margin:0"><b>Inwestycja:</b> {{ $investmentName }}</p>@endif
+                        @isset($property->building->name)<p style="margin:0"><b>Budynek:</b> {{ $property->building->name }}</p>@endisset
+                        @isset($property->name)<p style="margin:0"><b>Lokal:</b> {{ $property->name }}</p>@endisset
+                        @endif
                         <hr style="border:0;border-bottom:1px solid #ececec" />
                         <p>{{ $request->message }}</p>
                     </td>
