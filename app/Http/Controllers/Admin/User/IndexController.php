@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\CustomField;
 use App\Models\Department;
 use App\Notifications\PublicNotification;
 
@@ -58,7 +57,6 @@ class IndexController extends Controller
         return view('admin.user.form', [
             'cardTitle' => 'Nowy użytkownik',
             'roles' => $this->repository->getRoles(),
-            'cities' => CustomField::where('group_id', 1)->pluck('value', 'id')->prepend('--- brak ---', 0),
             'job_positions' => Department::all()->pluck('name', 'id'),
             'backButton' => route('admin.user.index'),
             'selected' => ''
@@ -88,7 +86,6 @@ class IndexController extends Controller
             return view('admin.user.form', [
                 'cardTitle' => $user->name .' '.$user->surname,
                 'roles' => $this->repository->getRoles(),
-                'cities' => CustomField::where('group_id', 1)->pluck('value', 'id')->prepend('--- brak ---', 0),
                 'job_positions' => Department::all()->pluck('name', 'id'),
                 'selected' => $userRole,
                 'backButton' => route('admin.user.index'),
@@ -101,7 +98,6 @@ class IndexController extends Controller
             return view('admin.user.form', [
                 'cardTitle' => $user->name .' '.$user->surname,
                 'roles' => $this->repository->getRoles(),
-                'cities' => CustomField::where('group_id', 1)->pluck('value', 'id')->prepend('--- brak ---', 0),
                 'job_positions' => Department::all()->pluck('name', 'id'),
                 'selected' => $userRole,
                 'backButton' => route('admin.user.index'),

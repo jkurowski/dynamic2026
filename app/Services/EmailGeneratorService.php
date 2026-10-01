@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 
 //CMS
-use App\Models\Boxes;
 
 class EmailGeneratorService
 {

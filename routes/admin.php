@@ -19,9 +19,7 @@ Route::group([
     Route::post('slider/set', 'Slider\IndexController@sort')->name('slider.sort');
     Route::post('gallery/set', 'Gallery\IndexController@sort')->name('gallery.sort');
     Route::post('image/set', 'Gallery\ImageController@sort')->name('image.sort');
-    Route::post('box/set', 'Box\IndexController@sort')->name('box.sort');
     Route::post('invest-page/set', 'Developro\Page\IndexController@sort')->name('investment_page.sort');
-    Route::post('job/set', 'Job\IndexController@sort')->name('job.sort');
     Route::post('section/set', 'Developro\Section\IndexController@sort')->name('section.sort');
     Route::post('ux/properties', 'UX\IndexController@properties')->name('ux.properties');
 
@@ -67,7 +65,6 @@ Route::group([
         'file-catalog' => 'File\CatalogController',
         'gallery' => 'Gallery\IndexController',
         'image' => 'Gallery\ImageController',
-        'map' => 'Map\IndexController',
         'slider' => 'Slider\IndexController',
         'user' => 'User\IndexController',
         'role' => 'Role\IndexController',
@@ -75,9 +72,7 @@ Route::group([
         'article' => 'Article\IndexController',
         'contract' => 'Contract\IndexController',
         'ux' => 'UX\IndexController',
-        'box' => 'Box\IndexController',
         'city'=> 'City\IndexController',
-        'job'=> 'Job\IndexController',
     ]);
 
     // Settings
@@ -88,7 +83,6 @@ Route::group([
             'seo' => 'Dashboard\SeoController',
             'social' => 'Dashboard\SocialController',
             'popup' => 'Dashboard\PopupController',
-            'facebook' => 'Dashboard\FacebookController'
         ]);
     });
 
@@ -156,7 +150,6 @@ Route::group([
             Route::get('/', 'IndexController@index')->name('index');
         });
 
-        Route::get('contact/datatable', 'Contact\IndexController@datatable')->name('contact.datatable');
         Route::get('issue/datatable', 'Issue\IndexController@datatable')->name('issue.datatable');
         Route::post('issue/{issue}/file', 'Issue\FileController@upload')->name('issue.file.upload');
         Route::delete('issue/{issue}/file/{issueFile}', 'Issue\FileController@destroy')->name('issue.file.destroy');
@@ -175,8 +168,6 @@ Route::group([
         Route::post('offer/{offer}/property/{id}', 'Offer\IndexController@property')->name('offer.property');
 
         Route::resources([
-            'custom-fields' => 'CustomField\IndexController',
-            'contact' => 'Contact\IndexController',
             'issue' => 'Issue\IndexController',
             //'offer' => 'Offer\IndexController'
         ]);
@@ -400,13 +391,6 @@ Route::group([
         Route::post('/send', 'IndexController@send')->name('send');
     });
 
-});
-
-Route::group(['namespace' => 'Facebook', 'prefix' => 'auth/facebook', 'middleware' => 'auth'], function () {
-    Route::get('/', 'IndexController@redirectToProvider')->name('redirectToProvider');
-    Route::get('/callback', 'IndexController@handleProviderCallback')->name('handleProviderCallback');
-    Route::get('/post', 'IndexController@post')->name('post');
-    Route::get('/delete/{access_token}', 'IndexController@delete')->name('facebook.page.delete');
 });
 
 Route::get('{uri}', [MenuController::class, 'index'])->where('uri', '([A-Za-z0-9\-\/]+)');

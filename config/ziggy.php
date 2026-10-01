@@ -5,7 +5,6 @@ return [
         'events' => ['admin.crm.clients.events.*', 'admin.crm.calendar.*', 'admin.rodo.clients.index'],
         'chat' => ['admin.crm.clients.chat.*'],
         'board' => ['admin.crm.board.*'],
-        'contact' => ['admin.crm.contact.*'],
         'payments' => ['admin.crm.clients.payments.*'],
         'users' => ['admin.user.*'],
         'issue' => ['admin.crm.issue.*'],

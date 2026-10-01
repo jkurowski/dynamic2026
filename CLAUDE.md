@@ -27,7 +27,13 @@
 - Zostawione `dd()` w kodzie: `Admin/User/IndexController.php:206` (trasa `admin/user/roles`), `Admin/Crm/Client/IndexController.php:56`, `Facebook/IndexController.php:51`.
 
 ## Menu panelu (`admin/layout.blade.php`)
-- Usunięte z menu (2026-10-01, decyzja: moduły do usunięcia): Mapa, Oferty pracy, Boksy, Kontakty, Statystyki. Kod modułów (trasy, kontrolery, widoki, modele) jeszcze jest.
+- Usunięte z menu (2026-10-01): Mapa, Oferty pracy, Boksy, Kontakty, Statystyki. Statystyki (`admin/crm/statistics`) — tylko z menu, kod modułu zostaje.
+- USUNIĘTE CAŁKOWICIE z kodu (2026-10-01): Mapa (`Map`), Oferty pracy (`Job`, tabela jobofferts), Boksy (`Boxes`), Kontakty CRM (`Contact`), Facebook (`/admin/settings/facebook` + OAuth `auth/facebook/*`, `FacebookPage`, helpery `FbAppInfo`/`FbGetPages`), Pola własne / Słowniki (`/admin/crm/custom-fields`, `CustomField`).
+  Razem z kontrolerami, modelami, repozytoriami, requestami, widokami, migracjami (contacts, custom_fields, facebook_pages), zakładkami w ustawieniach/RODO/CRM, grupą ziggy `contact`, wpisem `box` w config/images.php.
+  Front: martwe `Front/MapController`, `Front/LocationController` i widoki `front/map`, `front/location` usunięte; z `kariera.blade.php` usunięta sekcja ofert pracy; z homepage usunięte `$boxes`.
+  Formularz użytkownika: usunięte pole „Miasto” (lista z custom_fields); kolumna `users.city` w bazie zostaje.
+  UWAGA: `admin/crm/jobs` to kolejka zadań Laravela — NIE jest modułem ofert pracy, zostaje.
+  Baza: tabele `boxes` i `custom_fields` usunięte (DROP), uprawnienia `box-*` usunięte z `permissions` i `role_has_permissions`, tłumaczenia usunięte. `lar_dynamic` ma teraz 58 tabel.
 - Usunięte z górnej belki: Kalendarz, Nowy klient, Nowa oferta + `#modalNewUser` i skrypt modala nowego klienta (`btn-add-user`, `initModal`).
 - Menu teraz: CMS (Strony, Aktualności, Slider, Galeria, Użytkownicy, Blokada dostępu, Ustawienia), DeveloCRM (Miasta, Inwestycje, Leads).
 

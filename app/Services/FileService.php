@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 //CMS
-use App\Models\Boxes;
 
 class FileService
 {

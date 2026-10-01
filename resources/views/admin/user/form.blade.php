@@ -39,14 +39,6 @@
                                     @include('form-elements.html-input-text', ['label' => 'Nazwisko', 'name' => 'surname', 'value' => $entry->surname, 'required' => 1])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-select', [
-                                        'label' => 'Miasto',
-                                        'name' => 'city',
-                                        'selected' => $entry->city,
-                                        'select' => $cities
-                                    ])
-                                </div>
-                                <div class="row w-100 form-group">
                                     @isset($selected)
                                         @include('form-elements.html-select-multiple', ['label' => 'Role CRM', 'name' => 'roles', 'select' => $roles, 'selected' => $selected, 'required' => 1, 'readonly' =>  !Auth::user()->hasRole('Administrator')])
                                     @else

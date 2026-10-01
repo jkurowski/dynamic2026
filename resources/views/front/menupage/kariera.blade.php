@@ -41,59 +41,6 @@
             </div>
         </section>
 
-        <section class="s2">
-            <div class="container">
-                <div class="row row-gap-4 align-items-center mb-50">
-                    <div class="col-12">
-                        <div style="--translate-x: 0;"
-                            class="position-relative text-center d-flex flex-column justify-content-center align-items-center section-header text-secondary">
-                            <div class="position-absolute top-50 start-50 translate-middle z-2">
-                                <img src="{{ asset('img/sygnet_secondary.svg') }}" alt="" width="168"
-                                    height="168" loading="lazy" decoding="async" data-aos="fade">
-                            </div>
-                            <h2 class="fw-bold text-center text-uppercase">
-                                <span data-aos="fade-up" data-aos-delay="200">
-                                    Aktualnie
-                                </span>
-                                <span class="fw-900 fs-4 d-block text-center " data-aos="fade-up" data-aos-delay="400">
-                                    poszukujemy
-                                </span>
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row row-gap-4">
-                    <div class="col-12 col-lg-10 offset-lg-1">
-                        <div class="accordion" id="accordionPanelsStayOpenExample" data-aos="fade">
-                            @foreach($data['jobofferts'] as $offer)
-                            <div class="accordion-item shadow-post-article mb-30">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button fs-24" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#panelsStayOpen-collapse{{ $offer->id }}" aria-expanded="true"
-                                            aria-controls="panelsStayOpen-collapse{{ $offer->id }}">
-                                        {{ $offer->name }}
-                                    </button>
-                                </h2>
-                                <div id="panelsStayOpen-collapse{{ $offer->id }}" class="accordion-collapse collapse @if($loop->first)show @endif">
-                                    <div class="accordion-body">
-                                        {!! $offer->text !!}
-                                        <div class="pt-4 pt-md-40">
-                                            <a target="_blank" href="mailto:{{ $offer->email }}?subject=Dot. oferty {{ urlencode($offer->name) }}" title="Aplikuj na stanowisko: {{ $offer->name }}"
-                                               class="btn btn-primary btn-with-icon min-w-max-content flex-fill d-inline-flex align-items-center justify-content-center gap-1">
-                                                Aplikuj
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="6.073" height="11.062" viewBox="0 0 6.073 11.062"><path id="chevron_right_FILL0_wght100_GRAD0_opsz24" d="M360.989-678.469,356-683.458l.542-.542,5.531,5.531-5.531,5.531L356-673.48Z"  transform="translate(-356 684)" fill="currentColor"></path></svg>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="s3 d-none" id="aplikuj">
             <div class="container">

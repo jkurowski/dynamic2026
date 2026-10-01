@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\Article;
 use App\Models\Board;
-use App\Models\Boxes;
 use App\Models\Building;
 use App\Models\City;
 use App\Models\Client;
@@ -33,7 +32,6 @@ use App\Models\User;
 
 use App\Observers\ArticleObserver;
 use App\Observers\BoardObserver;
-use App\Observers\BoxObserver;
 use App\Observers\BuildingObserver;
 use App\Observers\CityObserver;
 use App\Observers\ClientFileObserver;
@@ -85,7 +83,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('App\Repositories\EloquentRepositoryInterface', 'App\Repositories\BaseRepository');
         $this->app->bind('App\Repositories\UserRepositoryInterface', 'App\Repositories\UserRepository');
         $this->app->bind('App\Repositories\SliderRepositoryInterface', 'App\Repositories\SliderRepository');
-        $this->app->bind('App\Repositories\BoxRepositoryInterface', 'App\Repositories\Client\ClientRepository');
         $this->app->bind('App\Repositories\ArticleRepositoryInterface', 'App\Repositories\ArticleRepository');
         $this->app->bind('App\Repositories\PageRepositoryInterface', 'App\Repositories\PageRepository');
         $this->app->bind('App\Repositories\UrlRepositoryInterface', 'App\Repositories\UrlRepository');
@@ -212,7 +209,6 @@ class AppServiceProvider extends ServiceProvider
         Client::observe(ClientObserver::class);
 
         Slider::observe(SliderObserver::class);
-        Boxes::observe(BoxObserver::class);
         Article::observe(ArticleObserver::class);
         Page::observe(PageObserver::class);
         Url::observe(UrlObserver::class);

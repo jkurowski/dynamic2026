@@ -25,11 +25,6 @@ class Issue extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function contact()
-    {
-        return $this->belongsTo(Contact::class);
-    }
-
     public function client()
     {
         return $this->belongsTo(Client::class, 'contact_id', 'id');

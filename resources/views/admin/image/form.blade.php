@@ -9,7 +9,7 @@
         <div class="card-head container">
             <div class="row">
                 <div class="col-12 pl-0">
-                    <h4 class="page-title"><i class="fe-grid"></i><a href="{{route('admin.box.index')}}" class="p-0">Edytuj zdjęcie</a><span class="d-inline-flex me-2 ms-2">/</span>{{ $cardTitle }}</h4>
+                    <h4 class="page-title"><i class="fe-grid"></i><a href="{{route('admin.gallery.index')}}" class="p-0">Edytuj zdjęcie</a><span class="d-inline-flex me-2 ms-2">/</span>{{ $cardTitle }}</h4>
                 </div>
             </div>
         </div>
