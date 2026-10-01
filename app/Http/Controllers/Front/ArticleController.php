@@ -20,7 +20,7 @@ class ArticleController extends Controller
         return view('front.article.index', ['page' => $page, 'articles' => $articles]);
     }
 
-    public function show($lang, $slug)
+    public function show($slug)
     {
 
         $article = Article::where('slug', $slug)->first();

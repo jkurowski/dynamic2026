@@ -70,7 +70,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 
 Route::middleware(['restrictIp'])->group(function () {
-    Route::group(['namespace' => 'Front', 'prefix' => '{locale?}', 'where' => ['locale' => '(?!admin)*[a-z]{2}'],], function () {
+    Route::group(['namespace' => 'Front'], function () {
 
         Route::get('/', 'IndexController@index')->name('index');
 
@@ -138,7 +138,7 @@ Route::middleware(['restrictIp'])->group(function () {
         // DeveloPro
         Route::group(['namespace' => 'Developro', 'as' => 'developro.'], function () {
 
-            Route::post('{property}/notifications', 'Property\NotificationController@store')->name('properties.notifications.store');
+            Route::post('{property}/notifications', 'Property\NotificationController@store')->where('property', '(?!admin(?:/|$))[^/]+')->name('properties.notifications.store');
             Route::get('/unsubscribe/{hash}', 'Property\NotificationController@unsubscribe')->name('properties.notifications.unsubscribe');
 
             Route::get('/oferta-mieszkan', 'IndexController@index')->name('index');
@@ -174,7 +174,7 @@ Route::middleware(['restrictIp'])->group(function () {
             Route::get('/i/{slug}/b/{building},{buildingSlug}/{floor},{floorSlug}/{property},{propertySlug},{propertyRooms},{propertyArea}', 'InvestmentBuildingPropertyController@index')->name('building.floor.property');
 
             // Inwestycja domkowa
-            Route::get('/{slug}/d/{property}', 'InvestmentHouseController@index')->name('house');
+            Route::get('/{slug}/d/{property}', 'InvestmentHouseController@index')->where('slug', '(?!admin(?:/|$))[^/]+')->name('house');
 
             //Historia cen
             Route::get('/historia/{property}', 'History\IndexController@show')->name('history');
@@ -183,7 +183,7 @@ Route::middleware(['restrictIp'])->group(function () {
             Route::get('/przynalezne/{property}/table', 'History\IndexController@otherTable')->name('others.table');
 
             //Pages
-            Route::get('/{slug}/{page}', 'Page\IndexController@index')->name('page');
+            Route::get('/{slug}/{page}', 'Page\IndexController@index')->where('slug', '(?!admin(?:/|$))[^/]+')->name('page');
 
             Route::get('/i/{slug}/json', 'Api\IndexController@json')->name('investment.json');
         });
@@ -196,7 +196,7 @@ Route::middleware(['restrictIp'])->group(function () {
         });
 
         Route::get('{uri}', 'MenuController@index')
-            ->where('uri', '([A-Za-z0-9\-\/]+)')
+            ->where('uri', '(?!admin(?:/|$))[A-Za-z0-9\-\/]+')
             ->name('menu.show');
     });
 });

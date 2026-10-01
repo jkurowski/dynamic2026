@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 class InvestmentBuildingController extends Controller
 {
 
-    public function index($lang, $slug, Building $building, Request $request)
+    public function index($slug, Building $building, Request $request)
     {
         $investment = Investment::findBySlug($slug);
 

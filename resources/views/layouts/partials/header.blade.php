@@ -1,10 +1,10 @@
 @php
     // Menu główne. Aktywna pozycja wyliczana z adresu (w makiecie była na sztywno przy "Inwestycjach").
     $menu = [
-        ['nazwa' => 'Inwestycje', 'link' => url('inwestycje'), 'wzorzec' => 'inwestycje*', 'daszek' => true],
-        ['nazwa' => 'Finansowanie', 'link' => url('finansowanie'), 'wzorzec' => 'finansowanie*'],
-        ['nazwa' => 'Wykończenie pod klucz', 'link' => url('wykonczenie-pod-klucz'), 'wzorzec' => 'wykonczenie-pod-klucz*'],
-        ['nazwa' => 'Poznaj nas', 'link' => url('poznaj-nas'), 'wzorzec' => 'poznaj-nas*'],
+        ['nazwa' => 'Inwestycje', 'link' => route('menu.show', ['uri' => 'inwestycje']), 'wzorzec' => 'inwestycje*', 'daszek' => true],
+        ['nazwa' => 'Finansowanie', 'link' => route('menu.show', ['uri' => 'finansowanie']), 'wzorzec' => 'finansowanie*'],
+        ['nazwa' => 'Wykończenie pod klucz', 'link' => route('menu.show', ['uri' => 'wykonczenie-pod-klucz']), 'wzorzec' => 'wykonczenie-pod-klucz*'],
+        ['nazwa' => 'Poznaj nas', 'link' => route('menu.show', ['uri' => 'poznaj-nas']), 'wzorzec' => 'poznaj-nas*'],
         ['nazwa' => 'Kontakt', 'link' => route('contact'), 'wzorzec' => 'kontakt*'],
     ];
     $telefon = '+48 576 786 666';
@@ -25,7 +25,7 @@
 		<nav class="menu-glowne" aria-label="Menu główne">
 			<ul>
 				@foreach($menu as $pozycja)
-					<li @class(['aktywna' => request()->is($pozycja['wzorzec'], '*/' . $pozycja['wzorzec'])])>
+					<li @class(['aktywna' => request()->is($pozycja['wzorzec'])])>
 						<a href="{{ $pozycja['link'] }}">
 							{{ $pozycja['nazwa'] }}
 							@if(!empty($pozycja['daszek']))<x-ikona.daszek />@endif

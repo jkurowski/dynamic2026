@@ -117,7 +117,7 @@ class ContactController extends Controller
             );
     }
 
-    function property(ContactFormRequest $request, $lang, $id)
+    function property(ContactFormRequest $request, $id)
     {
         try {
             $property = Property::find($id);

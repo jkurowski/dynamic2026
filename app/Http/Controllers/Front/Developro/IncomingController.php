@@ -27,7 +27,7 @@ class IncomingController extends Controller
         ]);
     }
 
-    public function show($lang, $slug)
+    public function show($slug)
     {
         $page = Page::find($this->pageId);
         $city = City::whereSlug($slug)->first();

@@ -1,3 +1,14 @@
+@php
+    // Menu stopki. Aktywna pozycja wyliczana z adresu (w szablonie klasa "aktywny" na bieżącej podstronie).
+    $menuStopki = [
+        ['nazwa' => 'Strona główna', 'link' => route('index'), 'aktywny' => request()->routeIs('index')],
+        ['nazwa' => 'Inwestycje', 'link' => route('menu.show', ['uri' => 'inwestycje']), 'aktywny' => request()->is('inwestycje*')],
+        ['nazwa' => 'Wybierz mieszkanie', 'link' => route('menu.show', ['uri' => 'wyszukiwarka']), 'aktywny' => request()->is('wyszukiwarka*')],
+        ['nazwa' => 'Poznaj nas', 'link' => route('menu.show', ['uri' => 'poznaj-nas']), 'aktywny' => request()->is('poznaj-nas*')],
+        ['nazwa' => 'Aktualności', 'link' => route('aktualnosci.index'), 'aktywny' => request()->is('aktualnosci*')],
+        ['nazwa' => 'Kontakt', 'link' => route('contact'), 'aktywny' => request()->is('kontakt*')],
+    ];
+@endphp
 <!-- ============ STOPKA ============ -->
 <footer class="stopka">
 	<div class="stopka-uklad">
@@ -18,22 +29,19 @@
 		<nav class="stopka-kolumna" aria-labelledby="stopka-menu">
 			<h2 id="stopka-menu"><img src="{{ asset('img/ikona-pinezka.svg') }}" width="12" height="19" alt=""> MENU</h2>
 			<ul>
-				<li><a @class(['aktywny' => request()->routeIs('index')]) href="{{ route('index') }}">Strona główna</a></li>
-				<li><a href="{{ url('inwestycje') }}">Inwestycje</a></li>
-				<li><a href="{{ url('wyszukiwarka') }}">Wybierz mieszkanie</a></li>
-				<li><a href="{{ url('poznaj-nas') }}">Poznaj nas</a></li>
-				<li><a href="{{ route('aktualnosci.index') }}">Aktualności</a></li>
-				<li><a href="{{ route('contact') }}">Kontakt</a></li>
+				@foreach($menuStopki as $pozycja)
+					<li><a @class(['aktywny' => $pozycja['aktywny']]) href="{{ $pozycja['link'] }}">{{ $pozycja['nazwa'] }}</a></li>
+				@endforeach
 			</ul>
 		</nav>
 
 		<nav class="stopka-kolumna" aria-labelledby="stopka-inwestycje">
 			<h2 id="stopka-inwestycje"><img src="{{ asset('img/ikona-pinezka.svg') }}" width="12" height="19" alt=""> INWESTYCJE</h2>
 			<ul>
-				<li><a href="{{ url('inwestycje') }}">Dom Hygge Twin</a></li>
-				<li><a href="{{ url('inwestycje') }}">Konstancin Riverside House</a></li>
-				<li><a href="{{ url('inwestycje') }}">Lake Village</a></li>
-				<li><a href="{{ url('inwestycje') }}">Zielona Polana</a></li>
+				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Dom Hygge Twin</a></li>
+				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Konstancin Riverside House</a></li>
+				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Lake Village</a></li>
+				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Zielona Polana</a></li>
 			</ul>
 		</nav>
 

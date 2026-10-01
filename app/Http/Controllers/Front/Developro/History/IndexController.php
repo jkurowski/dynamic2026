@@ -9,7 +9,7 @@ use App\Models\Property;
 
 class IndexController extends Controller
 {
-    public function show($lang, Property $property)
+    public function show(Property $property)
     {
 //        if (!request()->ajax()) {
 //            abort(403, 'Tylko AJAX');
@@ -18,7 +18,7 @@ class IndexController extends Controller
         return view('front.developro.investment_shared.pricehistory', compact('property'))->render();
     }
 
-    public function others($lang, Property $property)
+    public function others(Property $property)
     {
 //        if (!request()->ajax()) {
 //            abort(403, 'Tylko AJAX');
@@ -45,7 +45,7 @@ class IndexController extends Controller
         return view('front.developro.investment_shared.others', compact('others'))->render();
     }
 
-    public function other($lang, Property $property)
+    public function other(Property $property)
     {
 //        if (!request()->ajax()) {
 //            abort(403, 'Tylko AJAX');
@@ -54,7 +54,7 @@ class IndexController extends Controller
         return view('front.developro.investment_shared.other', compact('property'))->render();
     }
 
-    public function otherTable($lang, Property $property)
+    public function otherTable(Property $property)
     {
 //        if (!request()->ajax()) {
 //            abort(403, 'Tylko AJAX');

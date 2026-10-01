@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class InlineController extends Controller
 {
-    public function show($lang, Inline $inline)
+    public function show(Inline $inline)
     {
         if($inline)
         {
@@ -20,7 +20,7 @@ class InlineController extends Controller
         }
     }
 
-    public function update(Request $request, $lang, Inline $inline)
+    public function update(Request $request, Inline $inline)
     {
         if ($request->ajax()) {
 

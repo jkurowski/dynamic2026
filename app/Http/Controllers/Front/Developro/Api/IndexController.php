@@ -16,7 +16,7 @@ class IndexController extends Controller
         $this->repository = $repository;
     }
 
-    public function json($lang, $slug)
+    public function json($slug)
     {
         $investment = $this->repository->findBySlug($slug);
 

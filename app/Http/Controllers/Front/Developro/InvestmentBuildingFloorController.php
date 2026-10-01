@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class InvestmentBuildingFloorController extends Controller
 {
-    public function index($lang, $slug, Building $building, $buildingSlug, Floor $floor, $floorSlug, Request $request)
+    public function index($slug, Building $building, $buildingSlug, Floor $floor, $floorSlug, Request $request)
     {
         $investment = Investment::findBySlug($slug);
         $page = Page::where('id', 8)->first();

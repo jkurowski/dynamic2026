@@ -4,7 +4,7 @@
 	<div class="row">
 
 		<div class="col-12 col-md-6">
-			<a class="kafel pojawia-sie" href="{{ url('finansowanie') }}">
+			<a class="kafel pojawia-sie" href="{{ route('menu.show', ['uri' => 'finansowanie']) }}">
 				<picture>
 					<source type="image/webp" srcset="{{ asset('img/kafel-finansowanie.webp') }}">
 					<img src="{{ asset('img/kafel-finansowanie.jpg') }}" width="830" height="482" alt="" loading="lazy">
@@ -16,7 +16,7 @@
 		</div>
 
 		<div class="col-12 col-md-6">
-			<a class="kafel pojawia-sie opoznienie-1" href="{{ url('wykonczenie-pod-klucz') }}">
+			<a class="kafel pojawia-sie opoznienie-1" href="{{ route('menu.show', ['uri' => 'wykonczenie-pod-klucz']) }}">
 				<picture>
 					<source type="image/webp" srcset="{{ asset('img/kafel-wykonczenie.webp') }}">
 					<img src="{{ asset('img/kafel-wykonczenie.jpg') }}" width="830" height="482" alt="" loading="lazy">

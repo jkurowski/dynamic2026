@@ -21,7 +21,7 @@ class InvestmentController extends Controller
         $this->pageId = 8;
     }
 
-    public function show($lang, $slug)
+    public function show($slug)
     {
         $investment = Investment::with('sections')
             ->withMin('pricesProperties as min_price', 'price_search')

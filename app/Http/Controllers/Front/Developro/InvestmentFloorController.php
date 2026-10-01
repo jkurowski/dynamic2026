@@ -23,7 +23,7 @@ class InvestmentFloorController extends Controller
         $this->pageId = 8;
     }
 
-    public function index($lang, $slug, Floor $floor, $floorSlug, Request $request)
+    public function index($slug, Floor $floor, $floorSlug, Request $request)
     {
         $floor->loadMin('pricesProperties as min_price', 'price_search')
             ->loadMax('pricesProperties as max_price', 'price_search');

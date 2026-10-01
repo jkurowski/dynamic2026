@@ -22,7 +22,7 @@ class InvestmentPlanController extends Controller
         $this->pageId = 8;
     }
 
-    public function index($lang, Request $request, $slug)
+    public function index(Request $request, $slug)
     {
         $investment = Investment::withMin('pricesProperties as min_price', 'price_search')
             ->withMax('pricesProperties as max_price', 'price_search')
@@ -245,7 +245,7 @@ class InvestmentPlanController extends Controller
         ]);
     }
 
-    public function mockup($lang, $slug)
+    public function mockup($slug)
     {
         $investment = Investment::findBySlug($slug);
 

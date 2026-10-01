@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Front\MenuController;
 use Illuminate\Support\Facades\Route;
 
 //GET - admin/crm/module
@@ -339,4 +338,3 @@ Route::group([
 
 });
 
-Route::get('{uri}', [MenuController::class, 'index'])->where('uri', '([A-Za-z0-9\-\/]+)');

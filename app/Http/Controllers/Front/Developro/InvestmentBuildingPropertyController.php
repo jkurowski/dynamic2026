@@ -21,7 +21,7 @@ class InvestmentBuildingPropertyController extends Controller
         $this->pageId = 8;
     }
 
-    public function index($lang, $slug, Building $building, $buildingSlug, Floor $floor, $floorSlug, Property $property)
+    public function index($slug, Building $building, $buildingSlug, Floor $floor, $floorSlug, Property $property)
     {
         $property->timestamps = false;
         $property->increment('views');

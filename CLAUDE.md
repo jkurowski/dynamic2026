@@ -63,13 +63,16 @@ Zasada: sekcje powtarzające się na kilku podstronach → komponenty Blade `x-.
 - Źródła LESS: `resources/less/front/*.less` (31 plików, `style.less` = same importy). Kompilacja: `npx lessc resources/less/front/style.less public/css/style.css` (url-e `../img`, `../fonty` zostają bez zmian i pasują do public/css).
 - Bootstrap i jQuery z lokalnych plików CMS (`css/bootstrap.min.css` 5.3.8, `js/jquery.min.js` 3.7.1, `js/bootstrap.bundle.min.js`), nie z CDN.
 - W `slider.js`, `karuzele.js`, `aktualnosci.js` ścieżki `img/` zmienione na `/img/` (inaczej psują się na podstronach w podkatalogach).
-- Linki do podstron na razie `url('inwestycje')`, `url('finansowanie')`, `url('wykonczenie-pod-klucz')`, `url('poznaj-nas')`, `url('wyszukiwarka')`; istniejące trasy: `route('index')`, `route('contact')`, `route('aktualnosci.index')`.
+- Strona NIE jest wielojęzyczna — trasy frontu bez prefiksu języka (`/finansowanie`, nie `/pl/finansowanie`). Grupa Front w `routes/web.php` nie ma już `{locale?}`; z sygnatur metod kontrolerów `Front/*` usunięty parametr `$lang`/`$locale` (Laravel przekazuje parametry trasy po kolei — zostawiony `$locale` dostawałby wartość `{uri}`).
+- Linki przez `route()`: `route('index')`, `route('contact')`, `route('aktualnosci.index')`, strony statyczne `route('menu.show', ['uri' => 'finansowanie'])`.
+- Trasy frontu zaczynające się od parametru (`{uri}` menu.show, `{slug}/{page}`, `{slug}/d/{property}`, `{property}/notifications`) mają `where(... '(?!admin(?:/|$))...')` — web.php ładuje się PRZED admin.php, bez tego przechwytywały `/admin/...`.
+- Z `routes/admin.php` usunięta zdublowana trasa `{uri}` → MenuController (nadpisywała `menu.show`).
 
 ### Wspólne sekcje szablonu (analiza wszystkich 10 stron)
 | Sekcja | Gdzie w szablonie | W CMS |
 |---|---|---|
 | Nagłówek + menu mobilne (offcanvas) | wszystkie | `layouts/partials/header.blade.php` (menu z tablicy, aktywna pozycja z `request()->is()`) |
-| Stopka | wszystkie | `layouts/partials/footer.blade.php` |
+| Stopka | wszystkie | `layouts/partials/footer.blade.php` (menu z tablicy, aktywna pozycja z adresu) |
 | Kontakt z formularzem (`section.kontakt`) — identyczna | index, finansowanie, inwestycja, lokal, poznaj-nas, wykończenie | `<x-sekcje.kontakt />` (form → `route('contact.send')` + @csrf; nazwy pól z szablonu: imie, telefon, email, wiadomosc, zgoda-rodo — NIE pasują jeszcze do ContactFormRequest) |
 | Kafle Finansowanie / Wykończenie | index (`div.kafle`), inwestycja (`section.kafle.oferta-uzupelniajaca`) | `<x-sekcje.kafle />`, na inwestycji `<x-sekcje.kafle tag="section" class="oferta-uzupelniajaca" aria-label="Dodatkowe usługi" />` |
 | Sterowanie mapy (GPS + zoom) — identyczne | index, inwestycja, kontakt | `<x-mapa-sterowanie />` |
@@ -77,17 +80,40 @@ Zasada: sekcje powtarzające się na kilku podstronach → komponenty Blade `x-.
 | Przycisk „pigułka” ze strzałką | ~16× | `<x-przycisk-pigulka href="..." class="na-tle">TEKST</x-przycisk-pigulka>` (bez href → span) |
 | Ikony SVG: daszek, strzałka przycisku, telefon | nagłówek, wyszukiwarka, hero, formularz | `<x-ikona.daszek />`, `<x-ikona.strzalka />`, `<x-ikona.telefon />` |
 | Karta aktualności (karuzela) | index | `<x-karta-aktualnosci :tytul :zajawka :data :link :kategoria :obrazek :webp />` |
-| DO ZROBIENIA przy podstronach: hero podstrony `section.fin-hero` (ten sam szkielet, inna treść) | finansowanie, poznaj-nas, wykończenie (+ podobny `inwestycja-hero`) | planowany `<x-hero-podstrony>` ze slotami |
-| DO ZROBIENIA: nagłówek podstrony `section.naglowek-strony` + okruszki `nav.okruszki` | aktualnosci, inwestycje, kontakt, lokal, wyszukiwarka (+ okruszki też w fin-hero) | planowane `<x-naglowek-strony>`, `<x-okruszki>` |
+| Hero podstrony `section.fin-hero` (ten sam szkielet, inna treść) | finansowanie, poznaj-nas, wykończenie (+ podobny `inwestycja-hero`) | `<x-hero-podstrony class="hero-finansowanie" :sciezka="['Finansowanie' => null]" zdjecie="fin-hero" alt="...">treść kolumny</x-hero-podstrony>` |
+| Pasek boczny (FB, IG, motyw, ulubione) — identyczny | wszystkie 10 | `<x-pasek-boczny />` |
+| Zdjęcie po lewej + kolumna tekstu `section.partner-wykonczenia` | wykończenie (partner), poznaj-nas (`partner-misja`, `partner-o-nas`) | `<x-sekcje.zdjecie-tekst class="partner-misja" zdjecie="poznaj-misja" alt="...">treść</x-sekcje.zdjecie-tekst>` (opcjonalnie szerokosc/wysokosc, domyślnie 1370×750) |
+| Okruszki `nav.okruszki` | wszystkie podstrony | `<x-okruszki :sciezka="['Inwestycje' => route(...), 'Nazwa' => null]" />` („Strona główna” dokładana sama) |
+| DO ZROBIENIA: nagłówek podstrony `section.naglowek-strony` (okruszki już są) | aktualnosci, inwestycje, kontakt, lokal, wyszukiwarka (+ okruszki też w fin-hero) | planowane `<x-naglowek-strony>`, `<x-okruszki>` |
 | DO ZROBIENIA: nagłówek galerii `naglowek-galerii` | inwestycja, wykończenie (różna treść) | do decyzji |
 | Liczby: `section.liczby` (index) vs `section.liczby-firmy` (poznaj-nas) | — | różne, NIE wspólne (index: inline) |
 | Wyszukiwarka-pasek (index) vs filtry (wyszukiwarka.html) | — | różne |
+
+### Layouty frontu
+- `layouts/front.blade.php` — wspólny (head z SEO, header, footer, skrypty). SEO jak w starym CMS: `@section('seo_title')`, `seo_description`, `seo_robots`, albo `meta_title` → tytuł „{page_title} - {meta_title}”. Klasa body: `@section('body_class', '...')`.
+- `layouts/homepage.blade.php` → extends front, body `strona-glowna`. `layouts/page.blade.php` → extends front (podstrony).
+- Skrypty wspólne w layoucie: jquery, bootstrap, (stack scripts), animacje.js, glowny.js. Skrypty strony: `@push('scripts')`.
+
+### Strony statyczne (MenuController)
+- Rekord w `pages` (model `Page` — observer ustawia slug/uri z tytułu) + widok `resources/views/front/menupage/{uri}.blade.php`. `Front/MenuController@index` (trasa `menu.show`, `/{uri}`) szuka strony po `uri` i widoku o tej nazwie.
+- Finansowanie (2026-10-01): `pages.id=1`, uri `finansowanie`, meta z szablonu; widok `front/menupage/finansowanie.blade.php` (hero, kalkulator raty — js/kalkulator.js, partner kredytowy, kontakt). Struktura HTML = `dynamic-front/finansowanie.html` (329 znaczników, 0 różnic).
+- Wykończenie pod klucz (2026-10-01): `pages.id=2`, uri `wykonczenie-pod-klucz`, widok `front/menupage/wykonczenie-pod-klucz.blade.php` (hero, korzyści, partner Complex, galeria realizacji — js/karuzele.js, kontakt). Struktura = szablon (320 znaczników, 0 różnic).
+- Poznaj nas (2026-10-01): `pages.id=3`, uri `poznaj-nas`, widok `front/menupage/poznaj-nas.blade.php` (hero, liczby firmy, misja i o nas przez `x-sekcje.zdjecie-tekst`, cytat, nagrody, historia firmy — js/karuzele.js, kontakt). Struktura = szablon (351 znaczników, 0 różnic).
+- Stopka: menu z tablicy `$menuStopki`, klasa `aktywny` wyliczana z adresu (jak w szablonie na bieżącej podstronie).
+- Konwerter użyty do podstron: scratchpad `podstrona.py` (zamienia img/ → asset(), linki .html → route(), etykiety/pigułki/hero/zdjęcie-tekst/kontakt/kafle → komponenty). Wywołanie: `python podstrona.py <plik> "<Nazwa>" <body_class|""> <js1,js2>`.
 
 ### Strona główna (2026-10-01)
 - `layouts/homepage.blade.php` (body `strona-glowna` — wymagane przez motyw jasny), `front/homepage/index.blade.php`.
 - Treść statyczna z makiety (baza pusta). Do podpięcia: slider hero (`js/slider.js` ma tablicę slajdów), inwestycje w sprzedaży, mapa inwestycji, aktualności (`$aktualnosci` w @php na górze widoku), formularz kontaktowy.
 - Weryfikacja: HTML strony głównej ma tę samą strukturę co `dynamic-front/index.html` (622 znaczniki, 0 różnic w tekście; jedyna różnica — „Inwestycje” nie są aktywne na stronie głównej). 81 zasobów → 200.
 - Chrome nie ufa certyfikatowi Laragona dla https://dynamic-cms.test (strona błędu) — test w przeglądarce wymaga zaufania cert. Laragon (Menu → SSL).
+
+## Ustalenia z klientem — Aktualności (poczta, folder „Dynamic Investment”, maile 20.05–21.08.2026)
+- Umowa, Załącznik nr 1 (Etap 1): klient sam edytuje w CMS treści, grafiki, **aktualności**, dane kontaktowe i treść raty. Do tego instrukcja CMS i jedno szkolenie.
+- 15.07 (decyzja): podstrona Aktualności i publikowanie zostają, ale **na start nie ma ich w menu głównym**. Dostęp przez sekcję na stronie głównej i link w stopce (tak jest w szablonie). Pozycję w menu można przywrócić, jeśli będą publikować regularnie.
+- Strona główna: desktop — karuzela ze strzałkami (wpisów może być więcej niż 3); mobile (09.08) — tylko 1 wpis.
+- Klient przewiduje rzadkie publikacje, więc sekcja musi dobrze wyglądać przy 1–3 wpisach. Treści dostarcza klient, obecne teksty to draft.
+- NIE ustalono w mailach: kategorii/plakietek, pól wpisu, paginacji, filtrów, SEO. Źródło: Figma (desktop 9tV8G3SpEvQRq4vmZG3osH, podstrona Aktualności node 802-175; mobile 6hOLzQF6peoLxnX9C8i59d) albo szablon `dynamic-front/aktualnosci.html` — lub dopytać klienta.
 
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).
