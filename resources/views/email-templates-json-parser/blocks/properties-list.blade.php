@@ -1,0 +1,5 @@
+<div>
+    {!! $props['placeholder'] !!}
+</div>
+
+

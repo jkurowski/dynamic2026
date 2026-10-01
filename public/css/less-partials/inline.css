@@ -1,0 +1,216 @@
+/* Inline
+================================================== */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../../fonts/fontawesome-webfont.eot');
+  src: url('../../fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), url('../../fonts/fontawesome-webfont.woff') format('woff'), url('../../fonts/fontawesome-webfont.ttf') format('truetype'), url('../../fonts/fontawesome-webfont.svg#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.btn.focus,
+.btn:focus,
+.btn:active:focus,
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn:active {
+  outline: 0;
+  box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.25);
+}
+a:focus,
+button:focus {
+  outline: none;
+}
+.inline {
+  position: relative;
+}
+.inline:hover:before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid #00acc1;
+  content: "";
+  z-index: 90;
+}
+.inline-btn {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  display: none;
+  z-index: 90;
+  padding: 0;
+}
+.inline-bc .inline-btn {
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.inline-tc .inline-btn {
+  top: -20px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.inline-tl .inline-btn {
+  top: -20px;
+  left: 0;
+}
+.inline-tr .inline-btn {
+  top: -20px;
+  right: 0;
+}
+.inline-br .inline-btn {
+  bottom: -1px;
+  right: 0;
+}
+.inline-bl .inline-btn {
+  bottom: -1px;
+  left: 0;
+}
+.inline-btn button {
+  background: #00acc1;
+  border: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inline-btn button svg {
+  width: 20px;
+  height: 20px;
+}
+.inline-btn button svg path {
+  fill: #ffffff !important;
+}
+.inline-btn .btn-primary,
+#inlineModal .btn-primary {
+  color: #fff;
+  background-color: #00acc1;
+  border: 0 #00acc1;
+}
+.inline-btn .btn:before {
+  background-color: transparent;
+}
+.modal {
+  font-family: 'Poppins', sans-serif;
+}
+.modal-header {
+  background: #1e1e2d;
+  color: white;
+  text-transform: uppercase;
+  padding: 13px 15px;
+}
+.modal-header .btn-close {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  text-shadow: none;
+  opacity: 1;
+  color: #00acc1;
+  background: #fff;
+  -webkit-transition: all 100ms linear;
+  -moz-transition: all 100ms linear;
+  -o-transition: all 100ms linear;
+  transition: all 100ms linear;
+  border-radius: 3px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-header .btn-close:hover {
+  background: #00acc1;
+  color: white;
+}
+.modal-header .btn-close svg {
+  width: 20px;
+  height: 20px;
+}
+.modal-header .btn-close svg path {
+  fill: #00acc1 !important;
+}
+.modal-header .btn-close:hover svg path {
+  fill: #ffffff !important;
+}
+.modal-title {
+  font-size: 16px;
+}
+.modal-content {
+  -webkit-box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.37);
+  -moz-box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.37);
+}
+.modal-content label {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+.inline:hover .inline-btn {
+  display: block;
+}
+.alert {
+  border-radius: 0;
+}
+.btn-modal {
+  font-size: 13px;
+  display: inline-block;
+  border-radius: 0;
+}
+.btn-modal-edit,
+.btn-modal-move,
+.btn-modal-dell {
+  display: inline-block;
+  font-size: 13px;
+  text-align: center;
+  width: 26px;
+  line-height: 13px;
+  padding: 5px 0;
+  border-radius: 0;
+}
+.btn-modal:before {
+  font-family: "FontAwesome";
+  content: "\f044";
+  margin: 0 0 0 2px;
+}
+.btn-modal-edit:before {
+  font-family: "FontAwesome";
+  content: "\f044";
+}
+.btn-modal-dell:before {
+  font-family: "FontAwesome";
+  content: "\f014";
+}
+.btn-modal-move:before {
+  font-family: "FontAwesome";
+  content: "\f047";
+}
+.btn-modal-img:before {
+  font-family: "FontAwesome";
+  content: "\f03e";
+}
+.modal-content,
+.modal-header,
+.modal-dialog {
+  border-radius: 0;
+}
+.modal-dialog {
+  max-width: 950px;
+}
+.modal-dialog .form-control {
+  font-size: 14px;
+  border: 1px solid #D5D5D5;
+  border-radius: 3px !important;
+  padding: 7px 12px;
+}
+.modal-dialog .btn {
+  padding: 8px 23px;
+  border-radius: 3px !important;
+  font-weight: 500;
+  font-size: 14px;
+}
+.progress {
+  display: none;
+}
+/*# sourceMappingURL=inline.css.map */

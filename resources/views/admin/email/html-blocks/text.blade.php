@@ -1,0 +1,1 @@
+<div class="email-node" data-uuid="{{ $uuid }}" data-type="text"><div style="padding-top:15px;padding-bottom:15px"><p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p></div></div>
