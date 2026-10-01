@@ -1,0 +1,186 @@
+// Mixiny pomocnicze - tylko to, co faktycznie powtarza się w kilku miejscach.
+
+.kontener() {
+	width: 100%;
+	max-width: var(--kontener-maks, @kontener-maks);
+	margin: 0 auto;
+	padding: 0 var(--kontener-wciecie, @margines-boczny);
+}
+
+// ================= skos =================
+.skos-zdjecia() {
+	clip-path: polygon(23.31% 0, 100% 0, 76.69% 100%, 0 100%);
+}
+
+.zamalowanie(@kolor) {
+	position: relative;
+	z-index: 0;
+	// wypełnienie ma się kończyć na zaokrągleniu przycisku, a nie na prostokącie
+	overflow: hidden;
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: -1;
+		width: 100%;
+		height: 100%;
+		background: @kolor;
+		transform: scaleX(0);
+		transform-origin: right;
+		transition: transform var(--czas-zamalowania) @krzywa-zamalowania;
+	}
+
+	&:hover::after,
+	&:focus-visible::after {
+		transform: scaleX(1);
+		transform-origin: left;
+	}
+}
+
+// Pomarańczowe ramki dekoracyjne to w Figmie równoległoboki ("Rectangle 67")
+@kat-skosu: -20.9deg;
+
+.skos-ramki() {
+	transform: skewX(@kat-skosu);
+}
+
+// Kółko z ikoną (strzałki slidera, ikony społecznościowe w hero)
+.kolko(@rozmiar) {
+	width: @rozmiar;
+	height: @rozmiar;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+}
+
+// Pomarańczowy ukośnik na początku przycisku-pigułki
+.ukos-przycisku(@szerokosc: 7px; @wysokosc: 14px; @odstep: 10px) {
+	&::before {
+		content: '';
+		width: @szerokosc;
+		height: @wysokosc;
+		margin-right: @odstep;
+		flex: 0 0 auto;
+		background: url('../img/ikona-strzalka-pigulka.svg') center / 100% 100% no-repeat;
+	}
+}
+
+// Jeden wzorzec plakietki „W SPRZEDAŻY”
+.plakietka-w-sprzedazy-pasmo(@skala: 1) {
+	@skos-vw: unit((22 * @skala / 19.2), vw);
+	height: unit((58 * @skala / 19.2), vw);
+	padding: 0 unit((46 * @skala / 19.2), vw);
+	.tekst-makiety((24 * @skala); (18 * @skala));
+	clip-path: polygon(@skos-vw 0, 100% 0, calc(100% - @skos-vw) 100%, 0 100%);
+}
+
+.plakietka-w-sprzedazy(@skala: 1) {
+	@wysokosc: (58px * @skala);
+	@skos: (22px * @skala);
+	height: @wysokosc;
+	padding: 0 (46px * @skala);
+	display: inline-flex;
+	align-items: center;
+	background: @pomaranczowy;
+	color: var(--tekst-na-ciemnym);
+	font-size: (24px * @skala);
+	font-weight: 700;
+	line-height: 1;
+	clip-path: polygon(@skos 0, 100% 0, calc(100% - @skos) 100%, 0 100%);
+}
+
+// ================= proporcja z makiety =================
+.tekst-makiety(@px; @min) {
+	font-size: clamp(unit(@min, px), unit((@px / 19.2), vw), unit(@px, px));
+}
+
+// ================= podłoga, która nie robi uskoku na progu 1025px =================
+.tekst-makiety(@px; @min; @mobilny) when (@mobilny > @min) {
+	@spadek: (@mobilny - @min);
+	@wyraz-wolny: (@mobilny + @spadek * 1025 / 375);
+	@nachylenie: (@spadek * 100 / 375);
+	font-size: clamp(
+		unit(@min, px),
+		max(unit((@px / 19.2), vw), calc(~"@{wyraz-wolny}px - @{nachylenie}vw")),
+		unit(@px, px)
+	);
+}
+
+// Gdy na telefonie napis nie jest większy od podłogi pasma, nie ma czego ratować.
+.tekst-makiety(@px; @min; @mobilny) when (@mobilny =< @min) {
+	.tekst-makiety(@px; @min);
+}
+
+// ================= duże zdjęcie sekcji jako tło strony =================
+.tlo-strony(@zdjecie; @tresc; @proporcja; @kadr) {
+	--parallaks: 1;
+	// 0 = kadr stoi w przepływie, 1 = kadr wypełnia okno jako tło
+	--postep: 0;
+	// Skos rozprostowuje się razem z rozlewaniem
+	--skos: ~"clamp(0, 1 - var(--postep) / .6, 1)";
+
+	// Własny kontekst układania - warstwa position: fixed nie może wyjść nad sekcje stojące
+	// dalej w dokumencie.
+	z-index: 0;
+
+	padding-bottom: 0;
+
+	@{zdjecie} {
+		aspect-ratio: @proporcja;
+
+		picture {
+			clip-path: @kadr;
+
+			// Proporcja stoi na kadrze, nie tylko na podpórce
+			height: auto;
+			aspect-ratio: @proporcja;
+
+			// Przygaszenie tła. Leży wewnątrz kadru, więc przycina się razem z nim.
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: fade(@granat, 62%);
+				opacity: var(--postep);
+				pointer-events: none;
+			}
+		}
+
+		&::after {
+			opacity: calc(1 - var(--postep));
+		}
+	}
+
+	// Kolumna z treścią wsuwa się nad tło, więc musi być nieprzezroczysta na całą szerokość okna
+	@{tresc} {
+		position: relative;
+		z-index: 2;
+
+		&::before {
+			content: '';
+			position: absolute;
+			z-index: -1;
+			left: 50%;
+			top: 0;
+			width: 100vw;
+			height: 100%;
+			margin-left: -50vw;
+			// Tło strony, a nie stały granat
+			background: var(--tlo-strony, @granat);
+
+			// Zaokrąglone górne rogi - panel wjeżdża na zdjęcie jak wsuwana karta
+			border-radius: @rog-karty @rog-karty 0 0;
+		}
+	}
+
+	// Stan włączany przez JS: kadr przechodzi w warstwę okna. Wszystkie cztery wymiary
+	// ustawia skrypt, więc proporcja z przepływu musi zostać wyłączona.
+	&.tlo-strony @{zdjecie} picture {
+		position: fixed;
+		aspect-ratio: auto;
+	}
+}

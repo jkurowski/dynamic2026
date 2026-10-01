@@ -1,0 +1,345 @@
+// Stopka - cztery kolumny na ciemnym tle + czarny pasek z prawami autorskimi. Projekt:
+// pas 1920x471 (#1A1A2C) i pod nim pas 1920x91 (#000000).
+
+.stopka {
+	background: @granat-stopka;
+	padding: 96px 0 0;
+}
+
+// ================= stopka odsłaniana =================
+body.stopka-odslaniana {
+
+	.stopka {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 1;
+	}
+
+	main {
+		position: relative;
+		z-index: 2;
+		background: var(--tlo-strony, @granat);
+	}
+}
+
+.stopka-uklad {
+	.kontener();
+	display: grid;
+	grid-template-columns: 2.4fr 1fr 1fr 1.5fr;
+	gap: 40px;
+	padding-bottom: 60px;
+
+	@media (max-width: @duzy-ekran) {
+		grid-template-columns: 1fr 1fr;
+		gap: 34px;
+	}
+
+}
+
+.stopka-marka {
+	.logo-stopki {
+		width: 286px;
+		height: auto;
+	}
+
+	.haslo {
+		margin: 27px 0 0;
+		color: @pomaranczowy;
+		font-size: 24px;
+		font-weight: 400;
+		line-height: 1.83;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.logo-stopki {
+			width: 210px;
+		}
+
+		.haslo {
+			font-size: 18px;
+		}
+	}
+}
+
+.stopka-kolumna {
+	h2 {
+		// Ukośnik przed nagłówkiem jest ten sam co w etykietach sekcji: 12x19px i 15px odstępu
+		// do napisu.
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		margin: 0 0 26px;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-podstawa;
+		font-weight: 400;
+		line-height: 1.21;
+		letter-spacing: .5px;
+
+		img {
+			flex: 0 0 auto;
+		}
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.kod-pocztowy {
+		white-space: nowrap;
+	}
+
+	li {
+		font-size: 16px;
+		line-height: 2.5;
+	}
+
+	a,
+	p {
+		margin: 0;
+		color: @szary-stopka;
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 2.5;
+		text-decoration: none;
+	}
+
+	// link do strony, na której właśnie jesteśmy
+	a.aktywny {
+		color: @pomaranczowy;
+	}
+
+	a:hover {
+		color: @pomaranczowy-jasny;
+	}
+}
+
+.stopka-social {
+	display: flex;
+	gap: 20px;
+	margin-top: 47px;
+
+	a {
+		.kolko(69px);
+		background: @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+		transition: background @czas-animacji ease;
+
+		&:hover {
+			background: @pomaranczowy-jasny;
+		}
+
+		img {
+			width: 28px;
+			height: 28px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 24px;
+
+		a {
+			.kolko(52px);
+
+			img {
+				width: 22px;
+				height: 22px;
+			}
+		}
+	}
+}
+
+.pasek-praw {
+	margin: 0;
+	background: #000;
+	padding: 33px @margines-boczny;
+	color: @szary-copyright;
+	font-size: 16px;
+	line-height: 1.21;
+	text-align: center;
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		font-size: 13px;
+		padding: 16px @margines-boczny;
+	}
+}
+
+// ================= stopka na najmniejszych ekranach =================
+@media (max-width: (@telefon-duzy - 1px)) {
+	.stopka {
+		padding-top: 56px;
+	}
+
+	.stopka-uklad {
+		gap: 24px;
+		padding-bottom: 36px;
+	}
+
+	.stopka-marka {
+		.haslo {
+			margin-top: 16px;
+			font-size: 16px;
+		}
+	}
+
+	.stopka-social {
+		margin-top: 18px;
+	}
+
+	.stopka-kolumna {
+		h2 {
+			margin-bottom: 14px;
+		}
+
+		li,
+		a,
+		p {
+			line-height: 2;
+		}
+	}
+}
+
+@media (max-width: @telefon) {
+	.stopka-uklad {
+		gap: 24px 16px;
+	}
+
+	.stopka-marka,
+	.stopka-kolumna {
+		min-width: 0;
+	}
+
+	// Nagłówek kolumny to jedno słowo ze skośnikiem
+	.stopka-kolumna h2 {
+		font-size: clamp(14px, calc(3.63636vw + 2.36364px), 18px);
+	}
+}
+
+// Wymiary dwóch pasów stopki z desktopowej ramki: 471 px + 91 px.
+@media (min-width: @desktop-pelny) {
+	.stopka {
+		padding-top: 80px;
+	}
+
+	.stopka-uklad {
+		grid-template-columns: 707px 284px 283px 1fr;
+		gap: 0;
+		height: 391px;
+		padding-bottom: 0;
+		box-sizing: border-box;
+	}
+
+	.stopka-marka {
+		padding-top: 16px;
+
+		.haslo {
+			margin-top: 17.8px;
+		}
+	}
+
+	// Makieta: środek nagłówka kolumny na 92px, a pierwszy wiersz listy zaczyna się na 130px
+	// - czyli jego środek wypada na 150px, bo interlinia ma 40px.
+	.stopka-kolumna {
+		padding-top: 1.5px;
+
+		h2 {
+			margin-bottom: 26.7px;
+		}
+	}
+
+	.stopka-social {
+		margin-top: 52px;
+	}
+
+	// pas ma 91px, a napis środek 46px od jego górnej krawędzi
+	.pasek-praw {
+		padding-top: 37.02px;
+		padding-bottom: 34.62px;
+	}
+}
+
+// ================= plynny desktop 1400-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.stopka {
+		padding-top: 4.16667vw;
+	}
+
+	.stopka-marka,
+	.stopka-kolumna {
+		min-width: 0;
+	}
+
+	.stopka-marka {
+		padding-top: .83333vw;
+
+		.logo-stopki {
+			width: 14.89583vw;
+		}
+
+		// Trzeci argument to rozmiar mobilny
+		.haslo {
+			margin-top: .92708vw;
+			line-height: 2.2875vw;
+			.tekst-makiety(24; 17; 18);
+		}
+	}
+
+	.stopka-social {
+		gap: 1.04167vw;
+		margin-top: 2.70833vw;
+
+		a {
+			width: max(40px, 3.59375vw);
+			height: max(40px, 3.59375vw);
+
+			img {
+				width: max(16px, 1.45833vw);
+				height: max(16px, 1.45833vw);
+			}
+		}
+	}
+
+	.stopka-kolumna {
+		padding-top: .07813vw;
+
+		// Interlinie mają podłogi z tego samego powodu, co krój
+		h2 {
+			gap: .78125vw;
+			margin-bottom: 1.39063vw;
+			line-height: max(14px, 1.13438vw);
+			.tekst-makiety(18; 14; 18);
+
+			img {
+				width: .625vw;
+				height: .98958vw;
+			}
+		}
+
+		li,
+		a,
+		p {
+			line-height: max(22px, 2.08333vw);
+			.tekst-makiety(16; 14; 16);
+		}
+	}
+
+	.pasek-praw {
+		padding: 1.92813vw 1.25vw 1.80313vw;
+		line-height: max(13px, 1.00833vw);
+		.tekst-makiety(16; 13; 16);
+	}
+}
+
+// Cztery kolumny z makiety - w proporcjach fr, więc bez względu na to, ile ma kontener
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.stopka-uklad {
+		grid-template-columns: minmax(0, 707fr) minmax(0, 284fr) minmax(0, 283fr) minmax(0, 405.5fr);
+		gap: 0;
+		height: auto;
+		min-height: 20.36458vw;
+		padding-bottom: 0;
+	}
+}

@@ -1,0 +1,87 @@
+
+// --- kolory marki ---
+@pomaranczowy:          #DC5C0C;   // kolor przewodni, 116 użyć w projekcie
+@pomaranczowy-jasny:    #F17A2C;   // obrys przycisków i kółek, hover
+@pomaranczowy-ciemny:   #B84A08;   // własny - wciśnięcie przycisku (brak w projekcie)
+
+// --- tla i tekst (wersja ciemna) ---
+@granat:                #25253A;   // tlo strony
+@granat-karta:          #2C304C;   // tło kart i pól formularza
+@granat-ciemny:         #202034;   // tło sekcji "Aktualności" i kafli
+@granat-tytul:          #2D3346;
+@granat-stopka:         #1A1A2C;
+@granat-atut:           #222236;   // tło kafli z atutami inwestycji
+@granat-obrys:          #4C4C79;
+@granat-ramka:          #555565;   // obrysy kart, separatory
+@szary-etykieta:        #686C7C;   // etykiety pól formularza
+@szary-stopka:          #828283;
+@szary-copyright:       #777777;
+@bialy:                 #FFFFFF;
+@szary-tekst:           #555565;
+@szary-jasny:           #737888;   // wartości w wyszukiwarce
+@szary-tooltip:         #767676;
+@szary-tlo-tooltip:     #DDDDDD;
+@szary-linia:           #EAEBEE;   // separatory w wyszukiwarce
+@szary-separator:       #D9D9D9;   // cienkie kreski w dymkach na mapie
+@zielony:               #28A745;   // poprawna walidacja formularza
+
+// --- typografia ---
+@font: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
+
+@tekst-hero:      106px;   // nagłówek na hero
+@tekst-duzy:      64px;
+@tekst-sekcja:    28px;
+@tekst-srodek:    22px;    // etykiety wyszukiwarki, przyciski
+@tekst-menu:      21px;
+@tekst-podstawa:  18px;    // telefon w nagłówku, treść
+@tekst-maly:      17px;    // wartości w wyszukiwarce
+@tekst-drobny:    14px;
+
+// --- zaokrąglenia ---
+@rog-maly:   4px;
+@rog-duzy:   8px;
+
+@rog-karty:  24px;
+
+// --- siatka ---
+@szerokosc-tresci: 1680px;
+@margines-boczny:  24px;   // oddech na mniejszych ekranach
+@kontener-maks:    (@szerokosc-tresci + @margines-boczny * 2);
+
+// Najwęższe okno, w którym wiersz wyników mieści osiem kolumn z makiety
+@wyniki-osiem-kolumn: 1848px;
+
+// --- punkty łamania ---
+@desktop:       1025px;   // = (@duzy-ekran + 1px); początek układu desktopowego
+@desktop-xl:    1200px;
+@desktop-xxl:   1400px;
+@desktop-pelny: 1900px;
+@desktop-projekt: 1920px;
+@duzy-ekran:    1024px;
+@menu-chowane:  1024.98px;
+@tablet:        768px;
+@telefon-duzy:  576px;    // dawniej @maly-tablet: 575px - zgodny z Bootstrap sm
+@telefon:       430px;
+
+// Bezpieczna prawa krawędź kontrolek stojących na wysokości pionowego paska akcji
+@rezerwa-paska-bocznego: max(
+	var(--kontener-wciecie, @margines-boczny),
+	clamp(@margines-boczny, calc(971px - 50vw), 107px)
+);
+
+// Ta sama rezerwa, ale dla płynnego pasma 1025-1899px
+@rezerwa-paska-w-pasmie: ~"max(var(--kontener-wciecie, 24px), calc(1.3542vw + max(54px, 3.6vw) + 12px))";
+
+// --- inne ---
+@czas-animacji: .25s;
+
+// Odpowiedź na wciśnięcie
+@czas-wcisniecia: .14s;
+
+@czas-zamalowania: .45s;
+@krzywa-zamalowania: cubic-bezier(.16, 1, .3, 1);
+
+// Zmiana slajdu w hero (js/slider.js)
+@czas-zmiany-slajdu: .3s;
+@czas-przenikania-zdjecia: .6s;
+@przesuniecie-slajdu: 10px;

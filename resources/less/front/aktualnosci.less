@@ -1,0 +1,586 @@
+// Sekcja "Aktualności" - karuzela trzech kart na ciemniejszym tle
+
+.aktualnosci {
+	position: relative;
+	padding: 88px 0 90px;
+	background: @granat-ciemny;
+}
+
+.aktualnosci-gora {
+	.kontener();
+	display: flex;
+	align-items: flex-end;
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		.przycisk-pigulka {
+			padding: 0 58px;
+			gap: 14.7px;
+			margin-bottom: 15.8px;
+		}
+	}
+
+	@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+		gap: 2.08333vw;
+
+		.przycisk-pigulka {
+			padding: 0 max(32px, 3.02083vw);
+			gap: .76563vw;
+			margin-bottom: .82292vw;
+		}
+	}
+	justify-content: space-between;
+	gap: 40px;
+	padding-bottom: 109px;
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		padding-bottom: 94px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		align-items: flex-start;
+		padding-bottom: 40px;
+	}
+}
+
+.aktualnosci-lista {
+	.kontener();
+	// trzy kolumny na siatce Bootstrapa, odstęp 20px jak w makiecie
+	display: flow-root;
+
+	> .aktualnosci-kadr > .row {
+		--bs-gutter-x: 20px;
+		--bs-gutter-y: 20px;
+	}
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		> .aktualnosci-kadr {
+			// clip, a nie hidden - hidden wymusiłby na drugiej osi auto i uciąłby karty w trakcie
+			// wjazdu, bo klasa pojawia-sie startuje 60px niżej.
+			overflow-x: clip;
+			overflow-y: visible;
+		}
+
+		> .aktualnosci-kadr > .row {
+			flex-wrap: nowrap;
+			// Kopie doklejone przed pierwszą kartą przesunęłyby cały wiersz w prawo
+			position: relative;
+			left: var(--wysuniecie, 0px);
+		}
+	}
+
+	// Kopie zostają w DOM po zmniejszeniu okna, a wiersz wraca wtedy do łamania - bez tego
+	// rozłożyłyby się w drugim rzędzie jako duplikaty kart.
+	@media (max-width: @duzy-ekran) {
+		> .aktualnosci-kadr > .row > [aria-hidden='true'] {
+			display: none;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		// Bootstrap włącza col-sm-6 od 576px. W mobilnym zakresie karta potrzebuje jednak całego
+		// wiersza, inaczej treść i plakietka robią się zbyt wąskie.
+		> .aktualnosci-kadr > .row > .col-sm-6 {
+			flex: 0 0 auto;
+			width: 100%;
+		}
+	}
+}
+
+.aktualnosci-wiecej {
+	display: none;
+}
+
+@media (max-width: @duzy-ekran) {
+	.aktualnosci-kadr {
+		position: relative;
+		overflow: hidden;
+		max-height: var(--wysokosc-zwinieta, 780px);
+		transition: none;
+
+		&.pomiar-gotowy {
+			transition: max-height 450ms cubic-bezier(.77, 0, .175, 1);
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			z-index: 5;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: var(--wysokosc-zanikania, 255px);
+			background: linear-gradient(to bottom, fade(@granat-ciemny, 0%), @granat-ciemny 92%);
+			pointer-events: none;
+			transition: opacity 220ms ease;
+		}
+
+		&.rozwiniete::after {
+			opacity: 0;
+		}
+	}
+
+	.aktualnosci-wiecej {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		min-height: 52px;
+		margin: 28px auto 0;
+		padding: 0 28px;
+		border: 1px solid fade(@bialy, 65%);
+		border-radius: 28px;
+		background: transparent;
+		color: var(--tekst-na-ciemnym);
+		font-size: 15px;
+		font-weight: 600;
+		letter-spacing: .02em;
+
+		span {
+			color: @pomaranczowy;
+			font-size: 29px;
+			font-weight: 700;
+			line-height: 1;
+		}
+	}
+}
+
+@media (max-width: @duzy-ekran) and (prefers-reduced-motion: reduce) {
+	.aktualnosci-kadr,
+	.aktualnosci-kadr.pomiar-gotowy {
+		transition: none;
+	}
+}
+
+.karta-aktualnosci {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-height: 510px;
+	padding: 0 0 34.3px;
+	background: @granat-karta;
+	border: 1px solid @granat-ramka;
+	overflow: hidden;
+
+	// zdjęcie siedzi w <picture>, więc pozycjonujemy wrapper, nie samo <img>
+	> picture {
+		position: absolute;
+		left: -136px;
+		top: -97px;
+		width: 896px;
+		height: 504px;
+		z-index: 0;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform .4s ease;
+		}
+	}
+
+	// przejście ze zdjęcia w tło karty - w projekcie gradient + jednolity pasek pod nim
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 309px;
+		right: 0;
+		height: 99px;
+		background: linear-gradient(to bottom, fade(@granat, 0%), fade(@granat, 85%) 53%, @granat 86%);
+		z-index: 2;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 408px;
+		right: 0;
+		bottom: 0;
+		background: @granat;
+		z-index: 1;
+	}
+
+	// Treść musi być nad zdjęciem i gradientem
+	.karta-aktualnosci-tresc {
+		position: relative;
+		z-index: 3;
+	}
+
+	.karta-aktualnosci-stopka {
+		z-index: 3;
+	}
+
+	&:hover > picture img {
+		transform: scale(1.05);
+	}
+
+	// Makieta ma tylko wariant 1920px
+	@media (max-width: @duzy-ekran) {
+		> picture {
+			left: 0;
+			top: 0;
+			right: 0;
+			width: auto;
+			height: 309px;
+		}
+
+		&::before {
+			top: 210px;
+			height: 100px;
+		}
+
+		&::after {
+			top: 308px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		min-height: 430px;
+	}
+}
+
+// pomarańczowa plakietka w lewym górnym rogu karty
+.plakietka-karty {
+	position: absolute;
+	z-index: 3;
+	left: 53px;
+	top: 31px;
+	height: 34px;
+	padding: 0 18px;
+	display: inline-flex;
+	align-items: center;
+	background: @pomaranczowy;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-drobny;
+	font-weight: 600;
+	line-height: 1;
+	// Plakietka jest równoległobokiem - obie krawędzie boczne mają ten sam skos co reszta
+	// projektu. Przy wysokości 34px daje to 34 * tan(20,9°) = 13px.
+	clip-path: polygon(13px 0, 100% 0, calc(100% - 13px) 100%, 0 100%);
+}
+
+.karta-aktualnosci-tresc {
+	padding: 0 37px;
+
+	h3 {
+		margin: 0 0 4.5px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 27px;
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	p {
+		margin: 0;
+		// W makiecie opis ma 365px i kończy się przed strzałką, dzięki czemu oba elementy mogą
+		// na siebie nachodzić w pionie bez zderzenia.
+		max-width: 365px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 19px;
+		font-weight: 300;
+		line-height: 1.74;
+
+		// Niżej karty idą jedna pod drugą i są dużo szersze, więc opis może zająć całą kartę -
+		// wystarczy zostawić miejsce na strzałkę w rogu.
+		@media (max-width: @duzy-ekran) {
+			max-width: none;
+			padding-right: 0;
+		}
+	}
+}
+
+.karta-aktualnosci-stopka {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	margin-top: 9.5px;
+	padding: 0 24px 0 38px;
+
+	@media (max-width: @duzy-ekran) {
+		justify-content: space-between;
+		margin-top: 16px;
+		padding-right: 24px;
+	}
+
+	time {
+		color: @pomaranczowy;
+		font-size: @tekst-drobny;
+		font-weight: 300;
+	}
+}
+
+// owalny przycisk ze strzałką w prawym dolnym rogu karty
+.przycisk-strzalka {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 85px;
+	height: 50px;
+	border: 1px solid fade(@bialy, 50%);
+	border-radius: 25px;
+	background: transparent;
+	// transform osobno i szybciej
+	transition:
+		background @czas-animacji ease,
+		border-color @czas-animacji ease,
+		transform @czas-wcisniecia @krzywa-zamalowania;
+
+	img {
+		width: 28px;
+		height: 30px;
+		transition: filter @czas-animacji ease;
+	}
+
+	&:hover,
+	&:focus-visible {
+		background: @pomaranczowy;
+		border-color: @pomaranczowy;
+
+		img {
+			filter: brightness(0) invert(1);
+		}
+	}
+
+	&:active {
+		transform: scale(.97);
+	}
+}
+
+// W makiecie strzałka nie stoi w jednym rzędzie z datą, tylko w prawym dolnym rogu karty
+// (37px od prawej, 40px od dołu) i nachodzi w pionie na opis.
+.karta-aktualnosci .przycisk-strzalka {
+	position: absolute;
+	right: 37px;
+	bottom: 40px;
+	z-index: 3;
+
+	@media (max-width: @duzy-ekran) {
+		// Na mobile strzałka wraca do stopki obok daty, więc nie przecina opisu.
+		position: static;
+		margin-left: auto;
+		flex: 0 0 auto;
+	}
+}
+
+// strzałki przewijania karuzeli przy krawędziach ekranu
+.aktualnosci-nawigacja {
+	position: absolute;
+	top: 60%;
+	left: 0;
+	right: 0;
+	z-index: 4;
+	display: flex;
+	justify-content: space-between;
+	padding: 0 26px;
+	pointer-events: none;
+
+	button {
+		.kolko(68px);
+		pointer-events: auto;
+		background: transparent;
+		border: 1px solid @bialy;
+		transition: background @czas-animacji ease, border-color @czas-animacji ease;
+
+		img {
+			width: 20px;
+			height: 20px;
+			transition: filter @czas-animacji ease;
+		}
+
+		&:hover,
+		&:focus-visible {
+			background: @pomaranczowy;
+			border-color: @pomaranczowy-jasny;
+
+			img {
+				filter: brightness(0) invert(1);
+			}
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		display: none;
+	}
+}
+
+// Trzy karty w wierszu, czyli ten sam podział co w makiecie
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.karta-aktualnosci {
+		min-height: 26.5625vw;
+		padding-bottom: 1.7865vw;
+
+		> picture {
+			left: -24.876%;
+			top: -19.0196%;
+			width: 163.894%;
+			height: 98.8235%;
+		}
+
+		&::before {
+			top: 60.5882%;
+			height: 19.4118%;
+		}
+
+		&::after {
+			top: 80%;
+		}
+	}
+
+	// Blok tekstu w karcie musi zajmować tę samą część jej wysokości co w makiecie (167 z 510px)
+	.karta-aktualnosci-tresc {
+		padding: 0 max(20px, 1.9271vw);
+
+		// Trzeci argument .tekst-makiety to rozmiar mobilny (patrz less/mixiny.less)
+		h3 {
+			margin-bottom: .2344vw;
+			.tekst-makiety(27; 20; 27);
+		}
+
+		p {
+			max-width: 19.0104vw;
+			.tekst-makiety(19; 15; 19);
+		}
+	}
+
+	.karta-aktualnosci-stopka {
+		gap: 1.0417vw;
+		margin-top: .4948vw;
+		padding: 0 1.25vw 0 1.9792vw;
+
+		time {
+			.tekst-makiety(14; 12; 14);
+		}
+	}
+
+	// Strzałka jest kontrolką
+	.karta-aktualnosci .przycisk-strzalka {
+		width: max(56px, 4.4271vw);
+		height: max(34px, 2.6042vw);
+		border-radius: max(17px, 1.3021vw);
+
+		position: absolute;
+		margin-left: 0;
+
+		bottom: 2.08333vw;
+		right: 1.92708vw;
+
+		img {
+			width: max(18px, 1.4583vw);
+			height: max(19px, 1.5625vw);
+		}
+	}
+
+	// Plakietka skaluje się razem z kartą
+	.plakietka-karty {
+		left: 2.7604vw;
+		top: 1.6146vw;
+		height: max(24px, 1.77083vw);
+		padding: 0 max(12px, .9375vw);
+		.tekst-makiety(14; 12; 14);
+		clip-path: polygon(max(9.17px, .67708vw) 0, 100% 0, calc(100% - max(9.17px, .67708vw)) 100%, 0 100%);
+	}
+
+	// Strzałki karuzeli to drugi cel dotykowy na tej sekcji - podłoga 44px jest ta sama, co
+	// przy kontrolkach mapy, i zaczyna działać poniżej 1242px.
+	.aktualnosci-nawigacja {
+		padding: 0 1.3542vw;
+
+		button {
+			width: max(44px, 3.5417vw);
+			height: max(44px, 3.5417vw);
+
+			img {
+				width: max(13px, 1.0417vw);
+				height: max(13px, 1.0417vw);
+			}
+		}
+	}
+}
+
+// ================= kompozycja wąskiego desktopu 1025-1399 =================
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.karta-aktualnosci {
+		min-height: max(300px, 22vw);
+
+		> picture {
+			left: 0;
+			top: 0;
+			right: 0;
+			width: auto;
+			height: 66%;
+		}
+
+		&::before {
+			top: 46%;
+			height: 20%;
+		}
+
+		&::after {
+			top: 66%;
+		}
+	}
+
+	.karta-aktualnosci-tresc p {
+		max-width: none;
+	}
+
+	.karta-aktualnosci .przycisk-strzalka {
+		position: static;
+		margin-left: auto;
+		flex: 0 0 auto;
+	}
+
+	.karta-aktualnosci-stopka {
+		justify-content: space-between;
+		margin-top: max(12px, 1.15vw);
+		padding-right: 1.7143vw;
+	}
+
+	// Boczny margines kontenera jest tu za wąski na strzałki obok karuzeli, więc schodzą pod
+	// nią, na środek.
+	.aktualnosci-nawigacja {
+		position: static;
+		justify-content: center;
+		gap: 12px;
+		margin-top: clamp(20px, 1.8vw, 44px);
+		padding: 0;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.aktualnosci-lista > .aktualnosci-kadr > .row > .col-md-4 {
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
+@media (min-width: @desktop-xl) and (max-width: (@desktop-xxl - .02px)) {
+	.aktualnosci-lista > .aktualnosci-kadr > .row > .col-md-4 {
+		flex: 0 0 50%;
+		width: 50%;
+		max-width: 50%;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.aktualnosci {
+		padding-top: 4.58333vw;
+		padding-bottom: 4.6875vw;
+	}
+
+	.aktualnosci-gora {
+		padding-bottom: 4.89583vw;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.aktualnosci-lista > .aktualnosci-kadr > .row {
+		--bs-gutter-x: 1.04167vw;
+		--bs-gutter-y: 1.04167vw;
+	}
+}

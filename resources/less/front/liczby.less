@@ -1,0 +1,244 @@
+// Pas z liczbami (20+ lat, 1000 lokali, 40 tys. m2) na zdjęciu w tle. Projekt: tło
+// 1920x503, trzy ramki 482x309 obok siebie.
+
+.liczby {
+	position: relative;
+	min-height: 503px;
+	display: flex;
+	align-items: center;
+	padding-bottom: 11px;
+	background: @granat-ciemny;
+	overflow: hidden;
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 0;
+		padding-top: 60px;
+		padding-bottom: 60px;
+		display: block;
+	}
+}
+
+.liczby-tlo {
+	position: absolute;
+	inset: 0;
+
+	picture {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}
+
+.liczby-lista {
+	.kontener();
+	position: relative;
+	z-index: 2;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 34px;
+	// bez "margin: 0" - .kontener() ustawia "margin: 0 auto" i to ono wyśrodkowuje listę
+	padding-top: 0;
+	padding-bottom: 0;
+	list-style: none;
+
+	@media (max-width: @duzy-ekran) {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+}
+
+@media (min-width: @desktop-pelny) {
+	.liczby-lista {
+		grid-template-columns: repeat(3, 482px);
+		column-gap: 112px;
+
+		li:nth-child(3) {
+			left: 10px;
+		}
+	}
+}
+
+.liczba {
+	position: relative;
+	min-height: 309px;
+	padding: 68px 0 0 51px;
+	border: 1px solid @szary-linia;
+	// Ozdobnik w makiecie wychodzi poza ramkę - 16px w prawo i 24px w dół
+	overflow: visible;
+
+	.wartosc {
+		// zerujemy margines akapitu z Bootstrapa
+		margin: 0;
+		display: flex;
+		align-items: flex-start;
+		// 15px, nie 24px - liczba kończy się na 262px od krawędzi kafla, a jednostka zaczyna w
+		// makiecie na 277px.
+		gap: 15px;
+		color: @pomaranczowy;
+		font-size: 106px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.jednostka {
+		margin-top: 19.5px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 28px;
+		font-weight: 700;
+		line-height: 1.21;
+		white-space: nowrap;
+	}
+
+	.opis {
+		display: block;
+		margin-top: 7.7px;
+		// W makiecie opis ma 361px szerokości i kończy się tuż przy ozdobniku
+		padding-right: 62px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 22.77px;
+		font-weight: 400;
+		line-height: 1.21;
+	}
+
+	// Pomarańczowy ozdobnik
+	.ozdobnik {
+		position: absolute;
+		right: -16px;
+		bottom: -24px;
+		width: 93px;
+		height: 112px;
+		pointer-events: none;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 240px;
+		padding: 40px 0 0 30px;
+
+		.wartosc {
+			font-size: 72px;
+			gap: 14px;
+		}
+
+		.jednostka {
+			font-size: 22px;
+		}
+
+		.opis {
+			font-size: 18px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 0;
+		padding: 26px 26px 26px 26px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+
+		.wartosc {
+			font-size: 54px;
+			justify-content: center;
+			gap: 6px;
+		}
+
+		.ozdobnik {
+			display: none;
+		}
+
+		.opis {
+			padding-right: 0;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.liczby {
+		min-height: clamp(360px, 26.2vw, 503px);
+	}
+
+	.liczby-lista {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		row-gap: clamp(16px, 1.77083vw, 34px);
+		column-gap: clamp(16px, 5.83333vw, 112px);
+	}
+
+	.liczba {
+		min-width: 0;
+		min-height: clamp(250px, 16.1vw, 309px);
+		padding: clamp(40px, 3.55vw, 68px) 0 0 clamp(24px, 2.66vw, 51px);
+
+		.wartosc {
+			gap: clamp(6px, .78vw, 15px);
+			font-size: clamp(56px, 5.52vw, 106px);
+		}
+
+		.jednostka {
+			margin-top: clamp(10px, 1.02vw, 19.5px);
+			font-size: clamp(18px, 1.46vw, 28px);
+		}
+
+		.opis {
+			padding-right: clamp(42px, 3.23vw, 62px);
+			font-size: clamp(15px, 1.19vw, 22.77px);
+		}
+
+		.ozdobnik {
+			width: clamp(58px, 4.84vw, 93px);
+			height: auto;
+			right: clamp(-16px, -.84vw, -8px);
+			bottom: clamp(-24px, -1.25vw, -12px);
+		}
+	}
+}
+
+// Liczby statystyk są drugim poziomem hierarchii, nie drugim nagłówkiem hero
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.liczby {
+		min-height: calc(8vw + 238px);
+	}
+
+	.liczba {
+		min-height: calc(4vw + 179px);
+
+		.wartosc {
+			font-size: calc(.8vw + 45.8px);
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: 1727.98px) {
+	.liczby {
+		min-height: calc(21.341463vw + 51.219512px);
+	}
+
+	.liczba {
+		min-height: calc(7.621951vw + 128.292683px);
+
+		.wartosc {
+			font-size: calc(5.792683vw - 24.097561px);
+		}
+	}
+}
+
+@media (min-width: 1728px) and (max-width: (@desktop-pelny - .02px)) {
+	.liczby {
+		min-height: calc(45.320724vw - 363.142105px);
+	}
+
+	.liczba {
+		min-height: calc(26.678545vw - 201.005263px);
+
+		.wartosc {
+			font-size: calc(16.865863vw - 215.442105px);
+		}
+	}
+}

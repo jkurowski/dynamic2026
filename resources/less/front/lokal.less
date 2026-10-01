@@ -1,0 +1,2020 @@
+
+// pasek nawigacji nad kartą: powrót do listy i następne mieszkanie
+.nawigacja-lokalu {
+	.kontener();
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	padding-top: 64px;
+
+	a {
+		display: inline-flex;
+		align-items: center;
+		gap: 14px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 18px;
+		text-decoration: none;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	.kolko {
+		.kolko(35px);
+		background: @pomaranczowy;
+		border: 1px solid @pomaranczowy-jasny;
+
+		// strzałka wycięta z makiety: 12,3x12,3 na środku kółka 35px
+		img {
+			width: 12.3px;
+			height: 12.3px;
+		}
+	}
+
+	.poprzedni {
+		margin-left: -1px;
+	}
+
+	.plan-pietra {
+		position: absolute;
+		left: 50%;
+		top: 62px;
+		width: 177px;
+		height: 40px;
+		justify-content: center;
+		border: 1px solid @pomaranczowy;
+		border-radius: 4px;
+		transform: translateX(-50%);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		a {
+			min-height: 44px;
+		}
+
+		.plan-pietra {
+			height: 44px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		padding-top: 40px;
+		flex-wrap: wrap;
+
+		a {
+			font-size: 14px;
+		}
+
+		.plan-pietra {
+			position: static;
+			order: 3;
+			width: 100%;
+			transform: none;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	// Link „Następne” nie może wchodzić pod pionowy pasek akcji
+	.nawigacja-lokalu {
+		padding-right: @rezerwa-paska-w-pasmie;
+	}
+}
+
+// --- układ dwóch kart ---
+.lokal-uklad {
+	.kontener();
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding-top: 32px;
+	padding-bottom: 97px;
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-bottom: 60px;
+	}
+}
+
+.karta-lokalu {
+	flex: 0 0 688px;
+	padding: 55px 52px;
+	background: @granat;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+
+	h1 {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 52px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 560px;
+		padding: 40px;
+
+		h1 {
+			font-size: 38px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		padding: 24px;
+
+		h1 {
+			font-size: 28px;
+		}
+	}
+}
+
+// dwie plakietki statusu nad nazwą mieszkania
+.plakietki-lokalu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 26px;
+
+	> span {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		height: 39px;
+		padding: 0 22px;
+		border-radius: 20px;
+		font-size: 15px;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.dostepne {
+		background: @granat-karta;
+		border: 1px solid @granat-ramka;
+		color: #18AB40;
+
+		// zielona kropka przed napisem
+		&::before {
+			content: '';
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: #18AB40;
+		}
+	}
+
+	.promocja {
+		background: @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+		font-size: 19px;
+		font-weight: 600;
+	}
+}
+
+// trzy parametry w rzędzie, rozdzielone pionowymi kreskami
+.parametry-lokalu {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	margin: 38px 0 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+
+	li {
+		padding: 0 10px;
+
+		& + li {
+			border-left: 1px solid @granat-ramka;
+		}
+	}
+
+	img {
+		width: 52px;
+		height: 52px;
+	}
+
+	.nazwa {
+		display: block;
+		margin: 20px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16px;
+		font-weight: 300;
+		line-height: 2.13;
+	}
+
+	.wartosc {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 26px;
+		font-weight: 700;
+		line-height: 2.05;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		img {
+			width: 36px;
+			height: 36px;
+		}
+
+		.nazwa {
+			font-size: 13px;
+			margin-top: 10px;
+		}
+
+		.wartosc {
+			font-size: 19px;
+		}
+	}
+
+	@media (max-width: @telefon) {
+		grid-template-columns: 1fr;
+		text-align: left;
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			padding: 12px 0;
+
+			& + li {
+				border-left: 0;
+				border-top: 1px solid @granat-ramka;
+			}
+		}
+
+		img {
+			width: 30px;
+			height: 30px;
+			flex: 0 0 auto;
+		}
+
+		.nazwa {
+			flex: 1 1 auto;
+			margin: 0;
+		}
+
+		.wartosc {
+			line-height: 1.2;
+		}
+	}
+}
+
+// --- ceny ---
+.ceny-lokalu {
+	margin-top: 36px;
+
+	.etykieta {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 15px;
+		font-weight: 300;
+		line-height: 2.05;
+	}
+
+	.wiersz {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+	}
+
+	// makieta: wiersz z ceną stoi 7px wyżej
+	.wiersz:first-of-type {
+		margin-top: -7px;
+	}
+
+	.cena {
+		color: @pomaranczowy;
+		font-size: 42px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.cena-metr {
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 2.01;
+	}
+
+	// stara cena - przekreślona i wyblakła
+	.przed-rabatem {
+		color: var(--tekst-na-ciemnym);
+		font-weight: 500;
+		opacity: .3;
+		text-decoration: line-through;
+		white-space: nowrap;
+	}
+
+	.rabat {
+		display: block;
+		margin-top: 6px;
+		color: @pomaranczowy;
+		font-size: 24px;
+		font-weight: 500;
+		line-height: 2.01;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.wiersz:first-of-type {
+			margin-top: 0;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.cena {
+			font-size: 28px;
+		}
+
+		.cena-metr,
+		.rabat {
+			font-size: 17px;
+		}
+	}
+}
+
+// przycisk rozwijający historię ceny
+.przycisk-historii {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 37px;
+	margin-top: 14px;
+	padding: 0 24px;
+	border: 1px solid @bialy;
+	border-radius: 19px;
+	background: transparent;
+	color: var(--tekst-na-ciemnym);
+	font-size: 16px;
+	line-height: 1;
+	transition: border-color @czas-zamalowania @krzywa-zamalowania;
+	.zamalowanie(@pomaranczowy);
+
+	&:hover,
+	&[aria-expanded='true'] {
+		border-color: @pomaranczowy;
+	}
+
+	// panel jest otwarty - wypełnienie zostaje na przycisku także bez najechania
+	&[aria-expanded='true']::after {
+		transform: scaleX(1);
+		transform-origin: left;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		height: 44px;
+	}
+}
+
+// Historia ceny z klatki "widok po kliknięciu w historia ceny": okno 678x277 leżące nad
+// rzutem mieszkania, a nie panel rozwijany pod ceną.
+.historia-ceny {
+	@media (min-width: (@duzy-ekran + 1px)) {
+		position: absolute;
+		left: 439px;
+		top: -301px;
+		z-index: 6;
+	}
+
+	// Nagłówek strony leży wyżej warstwą niż treść, więc sama zasłona by go nie zakryła
+	@media (min-width: (@duzy-ekran + 1px)) {
+		body:has(&.show) main {
+			z-index: 20;
+		}
+	}
+
+	// Zasłona przykrywa całe okno przeglądarki, a panel stoi nad nią
+	.zaslona-historii {
+		display: none;
+		position: fixed;
+		inset: 0;
+		z-index: 5;
+		background: rgba(0, 0, 0, .74);
+
+		@media (min-width: (@duzy-ekran + 1px)) {
+			display: block;
+		}
+	}
+
+	.historia-okno {
+		position: relative;
+		z-index: 6;
+		width: 678px;
+		padding: 20px 41px 40.5px;
+		background: @granat-karta;
+		border-radius: 12px;
+		box-sizing: border-box;
+	}
+
+	// "Historia ceny:" jest w makiecie nadpisane na znakach: 18px i cienkie, a sama nazwa
+	// mieszkania zostaje na 24px pogrubionych.
+	h2 {
+		margin: 0 0 5px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 50px;
+
+		// numer mieszkania jest w makiecie pomarańczowy, tak jak w tytule strony
+		.akcent {
+			color: @pomaranczowy;
+		}
+
+		.podpis {
+			font-size: 18px;
+			font-weight: 300;
+			// bez tego cieńszy napis rozpycha wiersz o 2px i cała tabela zjeżdża niżej
+			line-height: 1;
+		}
+	}
+
+	// krzyżyk zamknięcia - dwie kreski, tak jak w makiecie
+	.historia-zamknij {
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		background: transparent;
+		border: 0;
+		border-radius: 3px;
+		cursor: pointer;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			left: 9px;
+			top: 17px;
+			width: 18px;
+			height: 2px;
+			background: @granat-ramka;
+		}
+
+		&::before { transform: rotate(45deg); }
+		&::after { transform: rotate(-45deg); }
+	}
+
+	// Kolumny mają w makiecie stałe szerokości (183 + 177 + 236 = 596), a treść zaczyna się
+	// 69px od krawędzi kolumny - stąd sztywny układ tabeli.
+	table {
+		width: 596px;
+		table-layout: fixed;
+		border-collapse: collapse;
+		color: var(--tekst-na-ciemnym);
+		text-align: left;
+	}
+
+	th {
+		height: 39px;
+		padding: 0 0 0 69px;
+		background: #373C5D;
+		font-size: 18px;
+		font-weight: 700;
+	}
+
+	th:first-child { width: 183px; }
+	th:nth-child(2) { width: 177px; }
+
+	th:last-child {
+		padding: 0 0 0 46px;
+		text-align: center;
+	}
+
+	td {
+		height: 61px;
+		padding: 0 0 0 69px;
+		border-bottom: 1px solid @granat-ramka;
+		font-size: 15px;
+		font-weight: 300;
+		vertical-align: middle;
+	}
+
+	td:last-child {
+		padding: 0 22px 0 0;
+		font-size: 18px;
+		text-align: right;
+	}
+
+	// kwota i cena za metr stoją w makiecie w słupku wyśrodkowanym nad ikoną
+	.kwota {
+		display: block;
+		width: 99px;
+		font-size: 14.97px;
+		font-weight: 600;
+		line-height: 16.64px;
+		text-align: center;
+		// kwota z odstępami tysięcy jest szersza niż pole z makiety - w projekcie stoi w jednej
+		// linii, więc nie pozwalamy jej się łamać
+		white-space: nowrap;
+	}
+
+	td:nth-child(2) .kwota {
+		width: 98px;
+	}
+
+	.metr {
+		display: block;
+		font-size: 11.65px;
+		font-weight: 300;
+		line-height: 16.64px;
+		white-space: nowrap;
+	}
+
+	// ikona przy pierwszej kolumnie siedzi w jej lewym marginesie
+	td:first-child {
+		position: relative;
+	}
+
+	.ikona-ceny {
+		position: absolute;
+		left: 19px;
+		top: 19.1px;
+	}
+
+	dl {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 10px 20px;
+		margin: 0;
+	}
+
+	dt {
+		color: var(--tekst-na-ciemnym);
+		font-size: 15px;
+		font-weight: 300;
+	}
+
+	dd {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 15px;
+		font-weight: 700;
+		text-align: right;
+	}
+
+	// Do 1024px zdejmujemy wymiary z makiety: okno na całą szerokość karty, tabela
+	// elastyczna, a wcięcia kolumn z 69px na tyle, żeby zmieściła się ikona.
+	@media (max-width: @duzy-ekran) {
+		margin-top: 16px;
+
+		.historia-okno {
+			width: 100%;
+			padding: 20px;
+			overflow-x: auto;
+		}
+
+		h2 {
+			font-size: 20px;
+			line-height: 34px;
+
+			.podpis {
+				font-size: 15px;
+			}
+		}
+
+		.historia-zamknij {
+			right: 12px;
+			top: 12px;
+		}
+
+		table {
+			width: 100%;
+			table-layout: auto;
+		}
+
+		th:first-child,
+		th:nth-child(2) {
+			width: auto;
+		}
+
+		th,
+		td {
+			padding-left: 12px;
+		}
+
+		th:first-child,
+		td:first-child {
+			padding-left: 38px;
+		}
+
+		th:last-child,
+		td:last-child {
+			padding: 0 0 0 12px;
+			text-align: left;
+		}
+
+		td:last-child {
+			font-size: 14px;
+		}
+
+		.kwota,
+		td:nth-child(2) .kwota {
+			width: auto;
+			text-align: left;
+		}
+
+		.ikona-ceny {
+			left: 8px;
+			top: 21px;
+		}
+	}
+}
+
+// --- listy cech i kosztów ---
+.cechy-lokalu {
+	margin: 34px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 0 8px 10px;
+		border-top: 1px solid @granat-ramka;
+
+		&:first-child {
+			border-top: 0;
+		}
+	}
+
+	img {
+		width: 23px;
+		height: 23px;
+		flex: 0 0 auto;
+	}
+
+	li:nth-child(1) img,
+	li:nth-child(2) img {
+		width: 19px;
+		height: 19px;
+		margin: 0 2px;
+	}
+
+	.nazwa {
+		flex: 1 1 auto;
+		color: var(--tekst-na-ciemnym);
+		font-size: 18px;
+		font-weight: 300;
+	}
+
+	.wartosc {
+		color: var(--tekst-na-ciemnym);
+		font-size: 18px;
+		font-weight: 300;
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.nazwa,
+		.wartosc {
+			font-size: 14px;
+		}
+	}
+
+	@media (max-width: @telefon) {
+		li {
+			flex-wrap: wrap;
+		}
+
+		.wartosc {
+			white-space: normal;
+		}
+	}
+}
+
+.tytul-kosztow {
+	margin: 40px 0 6px;
+	color: var(--tekst-na-ciemnym);
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 2.68;
+}
+
+.koszty-lokalu {
+	.cechy-lokalu();
+
+	li {
+		gap: 20px;
+	}
+
+	li:first-child {
+		border-top: 1px solid @granat-ramka;
+	}
+
+	li:last-child {
+		border-bottom: 1px solid @granat-ramka;
+	}
+
+	.nazwa,
+	.wartosc {
+		font-size: 14px;
+	}
+
+	// status obowiązkowy/opcjonalny wyróżniony kolorem marki
+	.wartosc {
+		color: @pomaranczowy;
+	}
+}
+
+// --- przyciski akcji pod kartą ---
+.akcje-lokalu {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-top: 38px;
+
+	.glowny,
+	.dodatkowy {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 56px;
+		padding: 0 26px;
+		border-radius: 28px;
+		font-size: 15px;
+		font-weight: 600;
+		line-height: 1;
+		text-decoration: none;
+		white-space: nowrap;
+		transition: border-color @czas-zamalowania @krzywa-zamalowania;
+	}
+
+	.glowny {
+		background: @pomaranczowy;
+		border: 1px solid @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+		.zamalowanie(@pomaranczowy-jasny);
+
+		&:hover {
+			border-color: @pomaranczowy-jasny;
+		}
+	}
+
+	.dodatkowy {
+		background: @granat;
+		border: 1px solid fade(@bialy, 70%);
+		color: var(--tekst-na-ciemnym);
+		.zamalowanie(@pomaranczowy);
+
+		&:hover {
+			border-color: @pomaranczowy;
+		}
+	}
+
+	.ulubione {
+		width: 87px;
+		padding: 0;
+
+		img {
+			width: 35px;
+			height: 35px;
+		}
+
+		&.aktywne {
+			background: @pomaranczowy;
+			border-color: @pomaranczowy;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-wrap: wrap;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		gap: 10px;
+
+		.glowny,
+		.dodatkowy {
+			height: 46px;
+			padding: 0 18px;
+			font-size: 13px;
+		}
+
+		.ulubione {
+			width: 60px;
+			padding: 0;
+		}
+	}
+}
+
+.prospekt {
+	position: relative;
+	display: inline-block;
+	margin-top: 21px;
+	color: var(--tekst-na-ciemnym);
+	font-size: 16px;
+	font-weight: 300;
+	// w makiecie ten napis nie jest podkreślony
+	text-decoration: none;
+
+	@media (max-width: @duzy-ekran) {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+	}
+
+	// Daszek za napisem
+	&::after {
+		content: '';
+		position: absolute;
+		left: 100%;
+		top: 50%;
+		width: 6.1px;
+		height: 11px;
+		margin: -5.5px 0 0 4px;
+		background: url('../img/ikona-daszek-prawo.svg') center / 6.1px 11px no-repeat;
+	}
+
+	&:hover {
+		color: @pomaranczowy-jasny;
+	}
+}
+
+// --- biała karta z rzutem mieszkania ---
+.karta-rzutu {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 853px;
+	padding: 60px;
+	background: @bialy;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 600px;
+		padding: 34px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		width: 100%;
+		min-height: 0;
+	}
+}
+
+// --- kalkulator raty dla tej nieruchomości (lewy kafel na dole) ---
+.kafel-kalkulatora {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 482px;
+	padding: 58px 67px;
+	background: @granat-ciemny;
+	border: 1px solid @granat-obrys;
+	overflow: hidden;
+
+	> picture {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+
+		// W makiecie zdjęcie leży na granatowym prostokącie z kryciem 46%, przez co jest
+		// wyraźnie ciemniejsze niż sąsiedni kafel (tam krycie wynosi 100%).
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			opacity: .46;
+		}
+	}
+
+	> *:not(picture) {
+		position: relative;
+		z-index: 2;
+	}
+
+	h2 {
+		margin: 0 0 5px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 39px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.stopka-kalkulatora {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		margin-top: 10px;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-drobny;
+		font-weight: 300;
+		line-height: 30px;
+
+		// bez podkreślenia - w makiecie ten odnośnik go nie ma
+		a {
+			position: relative;
+			color: var(--tekst-na-ciemnym);
+			padding-left: 20px;
+			text-decoration: none;
+		}
+
+		// Kreska między RRSO a odnośnikiem
+		a::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			width: 1px;
+			height: 18px;
+			margin-top: -9px;
+			background: @szary-separator;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.przycisk-zapytaj {
+			.przycisk-pigulka();
+			width: 379.6px;
+			max-width: 100%;
+			justify-content: center;
+			margin-top: 24px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding: 40px;
+
+		h2 {
+			font-size: 28px;
+		}
+
+		.stopka-kalkulatora a {
+			min-height: 44px;
+			display: inline-flex;
+			align-items: center;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		min-height: 0;
+		padding: 24px;
+
+		h2 {
+			font-size: 21px;
+		}
+
+		.stopka-kalkulatora {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 6px;
+
+			a {
+				padding-left: 0;
+			}
+
+			a::before {
+				display: none;
+			}
+		}
+	}
+}
+
+@media (min-width: (@duzy-ekran + 1px)) {
+	.ceny-lokalu {
+		position: absolute;
+		left: 61px;
+		top: 423px;
+		width: 575px;
+		height: 172px;
+		margin: 0;
+
+		.wiersz {
+			position: absolute;
+			left: 0;
+			right: 0;
+			flex-wrap: nowrap;
+			align-items: flex-start;
+		}
+
+		.wiersz:nth-of-type(1) {
+			top: 32px;
+
+			.przed-rabatem {
+				position: absolute;
+				top: 9px;
+				right: 0;
+				width: 231px;
+				font-size: 28px;
+				line-height: 1.21;
+				text-align: right;
+			}
+		}
+
+		.wiersz:nth-of-type(2) {
+			top: 70px;
+
+			.cena-metr:first-child {
+				margin-left: 2px;
+			}
+
+			.przed-rabatem {
+				width: 214px;
+				text-align: right;
+			}
+		}
+
+		.rabat {
+			position: absolute;
+			left: 2px;
+			top: 126px;
+			margin: 0;
+		}
+	}
+
+	.przycisk-historii {
+		position: absolute;
+		right: 0;
+		top: 135px;
+		width: 204px;
+		margin: 0;
+	}
+
+	.cechy-lokalu {
+		position: absolute;
+		left: 51px;
+		right: 50px;
+		top: 624.5px;
+		margin: 0;
+
+		li {
+			height: 47px;
+			gap: 18px;
+			padding: 0;
+			box-sizing: border-box;
+		}
+	}
+
+	.tytul-kosztow {
+		position: absolute;
+		left: 51px;
+		right: 50px;
+		top: 875px;
+		margin: 0;
+	}
+
+	.koszty-lokalu {
+		position: absolute;
+		left: 51px;
+		right: 50px;
+		top: 924.5px;
+		margin: 0;
+
+		li {
+			height: 35px;
+			padding: 0;
+			box-sizing: border-box;
+			align-items: center;
+		}
+	}
+
+	.lokal-uklad {
+		height: 1391px;
+		box-sizing: border-box;
+		padding-top: 41px;
+	}
+
+	.karta-lokalu {
+		position: relative;
+		height: 1253px;
+		box-sizing: border-box;
+	}
+
+	.plakietki-lokalu {
+		position: absolute;
+		left: 54px;
+		top: 53.5px;
+		gap: 16.5px;
+		margin: 0;
+
+		> span {
+			width: 170.7px;
+			height: 39.4px;
+			justify-content: center;
+			padding: 0;
+		}
+
+		.dostepne .tekst {
+			position: relative;
+			top: -4px;
+		}
+
+		.promocja .tekst {
+			position: relative;
+			left: -6px;
+		}
+	}
+
+	.karta-lokalu > .etykieta-sekcji {
+		position: absolute;
+		left: 54px;
+		top: 119px;
+		gap: 15px;
+		margin: 0;
+	}
+
+	.karta-lokalu > h1 {
+		position: absolute;
+		left: 51px;
+		top: 146px;
+	}
+
+	// Kolumny liczymy ze środków, nie z lewych krawędzi ramek
+	.parametry-lokalu {
+		position: absolute;
+		left: 50.25px;
+		right: 49.65px;
+		top: 246.6px;
+		margin: 0;
+
+		// Ramki tekstu w Figmie są wyrównane do środka w pionie i zachodzą na siebie
+		.nazwa {
+			margin-top: 17.35px;
+		}
+
+		.wartosc {
+			margin-top: -7.05px;
+		}
+	}
+
+	.akcje-lokalu {
+		position: absolute;
+		left: 51px;
+		right: 50px;
+		top: 1102px;
+		margin: 0;
+
+		.glowny {
+			width: 243.4px;
+			padding: 0;
+			letter-spacing: .2px;
+		}
+
+		.dodatkowy:not(.ulubione) {
+			width: 225px;
+			padding: 0;
+			gap: 11px;
+
+			&::before {
+				content: '';
+				width: 12px;
+				height: 23px;
+				flex: 0 0 auto;
+				background: url('../img/ikona-pinezka.svg') center / 12px 23px no-repeat;
+			}
+		}
+	}
+
+	.prospekt {
+		position: absolute;
+		left: 51px;
+		top: 1179px;
+		margin: 0;
+		line-height: 30px;
+
+		&::after {
+			left: 175px;
+			margin-left: 0;
+		}
+	}
+
+	.strona-lokalu .kafle {
+		height: 483px;
+		box-sizing: border-box;
+		padding-bottom: 1px;
+	}
+
+	// wysokość dotyczy samych kafli, a nie kolumn siatki, w których teraz siedzą
+	.strona-lokalu .kafle .kafel,
+	.strona-lokalu .kafle .kafel-kalkulatora {
+		height: 482px;
+		min-height: 482px;
+		box-sizing: border-box;
+	}
+
+	.strona-lokalu .kafel-kalkulatora {
+		justify-content: flex-start;
+
+		h2 {
+			position: absolute;
+			left: 67px;
+			top: 57px;
+			margin: 0;
+		}
+
+		.suwak {
+			position: absolute;
+			left: 67px;
+			right: 65px;
+			height: 74px;
+			margin: 0;
+		}
+
+		.suwak:nth-of-type(1) {
+			top: 130px;
+		}
+
+		.suwak:nth-of-type(2) {
+			top: 214px;
+		}
+
+		.podsumowanie-raty {
+			position: absolute;
+			left: 67px;
+			top: 300px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0;
+			margin: 0;
+			padding: 0;
+			border: 0;
+
+			.podpis {
+				font-size: 21px;
+				line-height: 40px;
+			}
+
+			.wynik-raty {
+				position: absolute;
+				left: 0;
+				top: 31px;
+				font-size: 42px;
+				line-height: 63px;
+			}
+		}
+
+		.stopka-kalkulatora {
+			position: absolute;
+			left: 67px;
+			top: 394px;
+			display: block;
+			margin: 0;
+
+			a {
+				display: inline-block;
+				margin-left: 10px;
+			}
+		}
+
+		.przycisk-zapytaj {
+			// mixin ustawia position: relative, a ten przycisk stoi na sztywnych współrzędnych -
+			// dlatego wołamy go przed własnym pozycjonowaniem
+			.zamalowanie(@pomaranczowy);
+			position: absolute;
+			left: 405.6px;
+			top: 345px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 358.4px;
+			height: 71px;
+			border-radius: 36px;
+			gap: 15px;
+			background: transparent;
+			border: 1px solid @bialy;
+			color: var(--tekst-na-ciemnym);
+			font-size: 20.48px;
+			font-weight: 600;
+			text-decoration: none;
+			transition: background @czas-animacji ease, border-color @czas-animacji ease;
+
+			&::before {
+				content: '';
+				width: 16px;
+				height: 31px;
+				flex: 0 0 auto;
+				background: url('../img/ikona-strzalka-pigulka.svg') center / contain no-repeat;
+			}
+
+			&:hover,
+			&:focus-visible {
+				background: @pomaranczowy;
+				border-color: @pomaranczowy;
+				color: var(--tekst-na-ciemnym);
+			}
+		}
+
+		.stopka-kalkulatora .akcent {
+			font-weight: 700;
+		}
+	}
+
+	.strona-lokalu .kafle .kafel {
+		padding: 0 0 63px 77px;
+
+		.etykieta-sekcji {
+			gap: 15px;
+		}
+
+		.tytul-sekcji {
+			left: -3px;
+			margin-bottom: 51px;
+		}
+
+		.przycisk-pigulka {
+			width: 358.4px;
+			height: 71px;
+			font-size: 20.48px;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: 1727.98px) {
+	.strona-lokalu .kafle {
+		height: auto;
+		padding-bottom: 97px;
+
+		> .row > .col-md-6 {
+			flex: 0 0 100%;
+			width: 100%;
+			max-width: none;
+		}
+
+		.kafel-kalkulatora,
+		.kafel {
+			width: 100%;
+			max-width: 830px;
+			margin-right: auto;
+			margin-left: auto;
+		}
+	}
+}
+
+// ================= płynny desktop =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.strona-lokalu {
+		--karta: ~"max(12.2px, 1vw)";
+	}
+
+	.lokal-uklad {
+		gap: ~"calc(1.0417 * var(--karta))";
+		padding-top: ~"calc(1.6667 * var(--karta))";
+		padding-bottom: ~"calc(5.0521 * var(--karta))";
+	}
+
+	.karta-lokalu {
+		flex: 0 0 ~"calc(35.8333 * var(--karta))";
+		padding: ~"calc(2.8646 * var(--karta))" ~"calc(2.7083 * var(--karta))";
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kafel-kalkulatora {
+		padding: 3.02083vw 3.48958vw;
+
+		h2 {
+			margin-bottom: .26042vw;
+			.tekst-makiety(39; 27);
+		}
+
+		.stopka-kalkulatora {
+			gap: 1.04167vw;
+			margin-top: .52083vw;
+			line-height: 1.5625vw;
+			.tekst-makiety(14; 12);
+
+			a {
+				padding-left: 1.04167vw;
+			}
+
+			a::before {
+				height: .9375vw;
+				margin-top: -.46875vw;
+			}
+		}
+	}
+
+	.strona-lokalu .kafle {
+		height: 25.15625vw;
+	}
+
+	.strona-lokalu .kafle .kafel,
+	.strona-lokalu .kafle .kafel-kalkulatora {
+		height: 25.10417vw;
+		min-height: 25.10417vw;
+	}
+
+	.strona-lokalu .kafel-kalkulatora {
+		h2 {
+			left: 3.48958vw;
+			top: 2.96875vw;
+		}
+
+		.suwak {
+			left: 3.48958vw;
+			right: 3.38542vw;
+			height: 3.85417vw;
+		}
+
+		.suwak:nth-of-type(1) {
+			top: 6.77083vw;
+		}
+
+		.suwak:nth-of-type(2) {
+			top: 11.14583vw;
+		}
+
+		.podsumowanie-raty {
+			left: 3.48958vw;
+			top: 15.625vw;
+
+			.podpis {
+				line-height: 2.08333vw;
+				.tekst-makiety(21; 17);
+			}
+
+			.wynik-raty {
+				top: 1.61458vw;
+				line-height: 3.28125vw;
+				.tekst-makiety(42; 28);
+			}
+		}
+
+		.stopka-kalkulatora {
+			left: 3.48958vw;
+			top: 20.52083vw;
+
+			a {
+				margin-left: .52083vw;
+			}
+		}
+
+		.przycisk-zapytaj {
+			left: auto;
+			right: ~"min(3.48958vw, calc(100% - 3.48958vw - 237px - 18.66667vw))";
+			top: 17.96875vw;
+			width: 18.66667vw;
+			height: 3.69792vw;
+			border-radius: 1.875vw;
+			gap: .78125vw;
+			.tekst-makiety(20.48; 16);
+
+			&::before {
+				width: .83333vw;
+				height: 1.61458vw;
+			}
+		}
+	}
+
+	.strona-lokalu .kafle .kafel {
+		padding: 0 0 3.28125vw 4.01042vw;
+
+		// Blok z 1025px w górę powtarza tu odstęp ukośnika od napisu w pikselach makiety i
+		// czteroma klasami bije jednoklasową regułę pasma.
+		.etykieta-sekcji {
+			gap: .78125vw;
+		}
+
+		.tytul-sekcji {
+			left: -.15625vw;
+			margin-bottom: 2.65625vw;
+		}
+
+		.przycisk-pigulka {
+			width: max(236px, 18.66667vw);
+			height: 3.69792vw;
+			.tekst-makiety(20.48; 16);
+		}
+	}
+}
+
+// ================= płynny desktop 1400-1899: wnętrze karty lokalu =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.ceny-lokalu {
+		position: absolute;
+		left: ~"calc(3.17708 * var(--karta))";
+		top: ~"calc(22.03125 * var(--karta))";
+		width: ~"calc(29.94792 * var(--karta))";
+		height: ~"calc(8.95833 * var(--karta))";
+		margin: 0;
+		.wiersz {
+			position: absolute;
+			left: 0;
+			right: 0;
+			flex-wrap: nowrap;
+			align-items: flex-start;
+		}
+		.wiersz:nth-of-type(1) {
+			top: ~"calc(1.66667 * var(--karta))";
+			.przed-rabatem {
+				position: absolute;
+				top: ~"calc(0.46875 * var(--karta))";
+				right: 0;
+				width: ~"calc(12.03125 * var(--karta))";
+				.tekst-makiety(28; 20);
+				line-height: 1.21;
+				text-align: right;
+			}
+		}
+		.wiersz:nth-of-type(2) {
+			top: ~"calc(3.64583 * var(--karta))";
+			.cena-metr:first-child {
+				margin-left: 2px;
+			}
+			.przed-rabatem {
+				width: ~"calc(11.14583 * var(--karta))";
+				text-align: right;
+			}
+		}
+		.rabat {
+			position: absolute;
+			left: 2px;
+			top: ~"calc(6.5625 * var(--karta))";
+			margin: 0;
+		}
+	}
+	.przycisk-historii {
+		position: absolute;
+		right: 0;
+		top: ~"calc(7.03125 * var(--karta))";
+		width: ~"calc(10.625 * var(--karta))";
+		margin: 0;
+	}
+	.cechy-lokalu {
+		position: absolute;
+		left: ~"calc(2.65625 * var(--karta))";
+		right: ~"calc(2.60417 * var(--karta))";
+		top: ~"calc(32.52604 * var(--karta))";
+		margin: 0;
+		li {
+			height: ~"calc(2.44792 * var(--karta))";
+			gap: ~"calc(0.9375 * var(--karta))";
+			padding: 0;
+			box-sizing: border-box;
+		}
+	}
+	.tytul-kosztow {
+		position: absolute;
+		left: ~"calc(2.65625 * var(--karta))";
+		right: ~"calc(2.60417 * var(--karta))";
+		top: ~"calc(45.57292 * var(--karta))";
+		margin: 0;
+	}
+	.koszty-lokalu {
+		position: absolute;
+		left: ~"calc(2.65625 * var(--karta))";
+		right: ~"calc(2.60417 * var(--karta))";
+		top: ~"calc(48.15104 * var(--karta))";
+		margin: 0;
+		li {
+			height: ~"calc(1.82292 * var(--karta))";
+			padding: 0;
+			box-sizing: border-box;
+			align-items: center;
+		}
+	}
+	// Karta lokalu rośnie z tekstem, więc wysokość układu to minimum
+	.lokal-uklad {
+		height: auto;
+		min-height: ~"calc(72.44792 * var(--karta))";
+		box-sizing: border-box;
+		padding-top: ~"calc(2.13542 * var(--karta))";
+	}
+	.karta-lokalu {
+		position: relative;
+		height: auto;
+		min-height: ~"calc(65.26042 * var(--karta))";
+		box-sizing: border-box;
+	}
+	.plakietki-lokalu {
+		position: absolute;
+		left: ~"calc(2.8125 * var(--karta))";
+		top: ~"calc(2.78646 * var(--karta))";
+		gap: ~"calc(0.85938 * var(--karta))";
+		margin: 0;
+		> span {
+			width: ~"calc(8.89063 * var(--karta))";
+			height: ~"calc(2.05208 * var(--karta))";
+			justify-content: center;
+			padding: 0;
+		}
+		.dostepne .tekst {
+			position: relative;
+			top: -4px;
+		}
+		.promocja .tekst {
+			position: relative;
+			left: ~"calc(-0.3125 * var(--karta))";
+		}
+	}
+	.karta-lokalu > .etykieta-sekcji {
+		position: absolute;
+		left: ~"calc(2.8125 * var(--karta))";
+		top: ~"calc(6.19792 * var(--karta))";
+		gap: ~"calc(0.78125 * var(--karta))";
+		margin: 0;
+	}
+	.karta-lokalu > h1 {
+		position: absolute;
+		left: ~"calc(2.65625 * var(--karta))";
+		top: ~"calc(7.60417 * var(--karta))";
+	}
+	.parametry-lokalu {
+		position: absolute;
+		left: ~"calc(2.61719 * var(--karta))";
+		right: ~"calc(2.58594 * var(--karta))";
+		top: ~"calc(12.84375 * var(--karta))";
+		margin: 0;
+		.nazwa {
+			margin-top: ~"calc(0.90365 * var(--karta))";
+		}
+		.wartosc {
+			margin-top: ~"calc(-0.36719 * var(--karta))";
+		}
+	}
+	.akcje-lokalu {
+		position: absolute;
+		left: ~"calc(2.65625 * var(--karta))";
+		right: ~"calc(2.60417 * var(--karta))";
+		top: ~"calc(57.39583 * var(--karta))";
+		margin: 0;
+		.glowny {
+			width: ~"calc(12.67708 * var(--karta))";
+			min-width: fit-content;
+			padding: 0 12px;
+			letter-spacing: .2px;
+		}
+		.dodatkowy:not(.ulubione) {
+			width: ~"calc(11.71875 * var(--karta))";
+			min-width: fit-content;
+			padding: 0 12px;
+			gap: ~"calc(0.57292 * var(--karta))";
+			&::before {
+				content: '';
+				width: ~"calc(0.625 * var(--karta))";
+				height: ~"calc(1.19792 * var(--karta))";
+				flex: 0 0 auto;
+				background: url('../img/ikona-pinezka.svg') center / 12px 23px no-repeat;
+			}
+		}
+	}
+	.prospekt {
+		position: absolute;
+		left: ~"calc(2.65625 * var(--karta))";
+		top: ~"calc(61.40625 * var(--karta))";
+		margin: 0;
+		line-height: ~"calc(1.5625 * var(--karta))";
+		&::after {
+			left: ~"calc(9.11458 * var(--karta))";
+			margin-left: 0;
+		}
+	}
+
+	// Typografia karty
+	.karta-lokalu h1 { .tekst-makiety(52; 38); }
+	.plakietki-lokalu > span { .tekst-makiety(15; 14); gap: ~"calc(.52083 * var(--karta))"; }
+	// Bez marginesów
+	.parametry-lokalu {
+		li { padding-inline: ~"calc(.52083 * var(--karta))"; }
+		img { width: ~"calc(2.70833 * var(--karta))"; height: ~"calc(2.70833 * var(--karta))"; }
+		.nazwa { .tekst-makiety(16; 14); }
+		.wartosc { .tekst-makiety(26; 19); }
+	}
+	.ceny-lokalu {
+		.etykieta { .tekst-makiety(15; 14); }
+		.wiersz { gap: ~"calc(.83333 * var(--karta))"; }
+		.cena { .tekst-makiety(42; 28); }
+		.cena-metr { .tekst-makiety(24; 18); }
+		.rabat { .tekst-makiety(24; 18); }
+	}
+	.przycisk-historii {
+		min-width: fit-content;
+		height: ~"calc(1.92708 * var(--karta))";
+		padding: 0 ~"calc(1.25 * var(--karta))";
+		border-radius: ~"calc(.98958 * var(--karta))";
+		.tekst-makiety(16; 14);
+	}
+	// Ikona pinezki ma tło rysowane rozmiarem w pikselach - bez tego pudełko się skaluje, a
+	// rysunek w środku zostaje w pełnym rozmiarze.
+	.akcje-lokalu .dodatkowy:not(.ulubione)::before { background-size: 100% 100%; }
+}
+
+// Pasek "wróć do listy / następny lokal" ma wcięcie 64px z makiety 1920px
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.nawigacja-lokalu {
+		gap: 1.04167vw;
+		padding-top: 3.33333vw;
+
+		// Wnetrze paska zostawalo na pikselach makiety
+		a {
+			gap: .72917vw;
+			.tekst-makiety(18; 14);
+		}
+
+		.kolko {
+			width: 1.82292vw;
+			height: 1.82292vw;
+
+			img {
+				width: .64063vw;
+				height: .64063vw;
+			}
+		}
+
+		.plan-pietra {
+			top: 3.22917vw;
+			width: 9.21875vw;
+			height: 2.08333vw;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.karta-rzutu {
+		min-height: 44.42708vw;
+		padding: 3.125vw;
+		border-radius: .625vw;
+
+		img {
+			width: 34.58333vw;
+		}
+	}
+}
+
+// ================= płynny desktop 1400-1899: dwie kolumny kafli =================
+@media (min-width: @desktop) and (max-width: 1727.98px) {
+	.strona-lokalu .kafle > .row > .col-md-6 {
+		flex: 0 0 50%;
+		width: 50%;
+	}
+
+	// dolne 97px wcięcia należy do wariantu jednokolumnowego
+	.strona-lokalu .kafle {
+		padding-bottom: 1px;
+	}
+
+	.strona-lokalu .kafle {
+		.kafel,
+		.kafel-kalkulatora {
+			max-width: none;
+			margin-right: 0;
+			margin-left: 0;
+		}
+	}
+}
+
+// ============ płynny desktop 1400-1899: typografia wnętrza karty lokalu ============
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.tytul-kosztow {
+		.tekst-makiety(18; 14);
+	}
+
+	.cechy-lokalu {
+		// Makieta daje tu ikony 23px
+		li img {
+			width: ~"calc(1.19792 * var(--karta))";
+			height: ~"calc(1.19792 * var(--karta))";
+		}
+
+		.nazwa,
+		.wartosc {
+			.tekst-makiety(18; 14);
+		}
+	}
+
+	.koszty-lokalu {
+		li {
+			height: auto;
+			min-height: ~"calc(1.82292 * var(--karta))";
+			gap: ~"calc(1.04167 * var(--karta))";
+		}
+
+		.nazwa,
+		.wartosc {
+			.tekst-makiety(14; 12);
+		}
+	}
+
+	.akcje-lokalu {
+		gap: ~"calc(.78125 * var(--karta))";
+
+		.glowny,
+		.dodatkowy {
+			height: clamp(44px, 2.91667vw, 56px);
+			.tekst-makiety(15; 13);
+		}
+
+		.ulubione {
+			width: ~"calc(4.53125 * var(--karta))";
+
+			img {
+				width: ~"calc(1.82292 * var(--karta))";
+				height: ~"calc(1.82292 * var(--karta))";
+			}
+		}
+	}
+
+	.prospekt {
+		.tekst-makiety(16; 12);
+
+		// daszek wraca do doklejania się do końca napisu - sztywne 9,~"calc(11 * var(--karta))"
+		// działało tylko przy napisie w pełnym rozmiarze makiety
+		&::after {
+			left: 100%;
+			width: ~"calc(.31771 * var(--karta))";
+			height: ~"calc(.57292 * var(--karta))";
+			margin: ~"calc(-.28646 * var(--karta))" 0 0 ~"calc(.20833 * var(--karta))";
+			background-size: 100% 100%;
+		}
+	}
+}
+
+// Plakietka "PROMOCJA" skaluje się razem z kartą
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.promocja {
+		.tekst-makiety(19; 15);
+	}
+}
+
+// Listy cech i kosztów lokalu
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.cechy-lokalu,
+	.koszty-lokalu {
+		margin-top: 0;
+
+		li:nth-child(1) img,
+		li:nth-child(2) img {
+			width: ~"calc(.98958 * var(--karta))";
+			height: ~"calc(.98958 * var(--karta))";
+			margin: 0 ~"calc(.10417 * var(--karta))";
+		}
+	}
+
+	.koszty-lokalu li {
+		gap: ~"calc(1.04167 * var(--karta))";
+	}
+}
+
+// Przy 1400-1531px podłoga czytelności 12px zawija najdłuższą nazwę kosztu na drugą linię
+@media (min-width: @desktop) and (max-width: 1531.98px) {
+	.tytul-kosztow {
+		position: static;
+		margin: ~"calc(42.70832 * var(--karta))" ~"calc(-.10417 * var(--karta))" 0 ~"calc(-.05208 * var(--karta))";
+	}
+
+	.koszty-lokalu {
+		position: static;
+		margin: 2px ~"calc(-.10417 * var(--karta))" 0 ~"calc(-.05208 * var(--karta))";
+	}
+
+	.akcje-lokalu {
+		position: static;
+		margin: ~"calc(.625 * var(--karta))" ~"calc(-.10417 * var(--karta))" 0 ~"calc(-.05208 * var(--karta))";
+		// Trzy elementy z wyściółką nie mieszczą się w jednym wierszu poniżej ~1480px
+		flex-wrap: wrap;
+	}
+
+	.prospekt {
+		position: relative;
+		left: auto;
+		top: auto;
+		display: block;
+		width: fit-content;
+		margin: ~"calc(.625 * var(--karta))" 0 0 ~"calc(-.05208 * var(--karta))";
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.plakietki-lokalu .promocja {
+		.tekst-makiety(19; 15);
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.historia-ceny {
+		left: 22.86458vw;
+		top: -15.67708vw;
+
+		.historia-okno {
+			width: 35.3125vw;
+			padding: 1.04167vw 2.13542vw 2.10938vw;
+		}
+
+		h2 {
+			margin: 0 0 .26042vw;
+			.tekst-makiety(24; 19);
+			line-height: 2.60417vw;
+
+			.podpis {
+				.tekst-makiety(18; 14);
+			}
+		}
+
+		.historia-zamknij {
+			right: 1.04167vw;
+			top: 1.04167vw;
+			width: 1.875vw;
+			height: 1.875vw;
+
+			&::before,
+			&::after {
+				left: .46875vw;
+				top: .88542vw;
+				width: .9375vw;
+				height: .10417vw;
+			}
+		}
+
+		table {
+			width: 31.04167vw;
+		}
+
+		th {
+			height: 2.03125vw;
+			padding: 0 0 0 3.59375vw;
+			.tekst-makiety(18; 14);
+		}
+
+		th:first-child { width: 9.53125vw; }
+		th:nth-child(2) { width: 9.21875vw; }
+		th:last-child { padding: 0 0 0 2.39583vw; }
+
+		td {
+			height: 3.17708vw;
+			padding: 0 0 0 3.59375vw;
+			.tekst-makiety(15; 12);
+		}
+
+		td:last-child {
+			padding: 0 1.14583vw 0 0;
+			.tekst-makiety(18; 14);
+		}
+
+		// Podpisy w komórkach są w makiecie najdrobniejszym pismem na stronie
+		.kwota {
+			width: 5.15625vw;
+			.tekst-makiety(14.97; 12);
+			line-height: .86667vw;
+		}
+
+		td:nth-child(2) .kwota {
+			width: 5.10417vw;
+		}
+
+		.metr {
+			.tekst-makiety(11.65; 10);
+			line-height: .86667vw;
+		}
+
+		.ikona-ceny {
+			left: .98958vw;
+			top: .99479vw;
+			width: .98958vw;
+			height: .98958vw;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.plakietki-lokalu .dostepne::before {
+		width: ~"calc(.52083 * var(--karta))";
+		height: ~"calc(.52083 * var(--karta))";
+	}
+}
+
+// Zakres 1025-1399px korzysta z tego samego układu
+
+// ============ dwa kafle sekcji "kafle" na tablecie: jedna kolumna ============
+@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+	.strona-lokalu .kafle > .row > .col-md-6 {
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: none;
+	}
+}
+
+// ====== jedna szerokość obu przycisków sekcji "kafle" poniżej 1025px ======
+@media (max-width: @duzy-ekran) {
+	.strona-lokalu .kafle .kafel .przycisk-pigulka {
+		max-width: ~"calc(100% - 38px)";
+	}
+}
+
+@media (max-width: (@telefon-duzy - 1px)) {
+	.strona-lokalu .kafle .kafel .przycisk-pigulka {
+		max-width: ~"calc(100% - 22px)";
+	}
+}

@@ -1,0 +1,2443 @@
+// Podstrona pojedynczej inwestycji zbudowana na bazie makiety 1920 px.
+
+.inwestycja-hero {
+	.fin-hero();
+	padding-bottom: 148px;
+
+	h1 {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 68px;
+		font-weight: 700;
+		line-height: 1.21;
+
+		// Zejście mobilne nagłówka inwestycji
+		@media (max-width: @duzy-ekran) {
+			font-size: 38px;
+		}
+
+		@media (max-width: (@telefon-duzy - 1px)) {
+			font-size: 30px;
+		}
+	}
+
+	.okruszki {
+		padding-top: 2.5px;
+	}
+
+	.etykieta-sekcji {
+		margin-bottom: 10px;
+	}
+
+	.para-przyciskow {
+		margin-top: 50.3px;
+
+		// Obie pigułki mają w makiecie po 326px
+		@media (min-width: (@duzy-ekran + 1px)) {
+			.przycisk-pigulka {
+				width: 326px;
+				padding: 0 60px;
+				gap: 14.5px;
+			}
+		}
+
+		// .pelny ma justify-content
+		@media (max-width: @duzy-ekran) {
+			.przycisk-pigulka {
+				justify-content: center;
+			}
+		}
+	}
+}
+
+.inwestycja-hero-kolumna {
+	max-width: 790px;
+	margin-top: 106.5px;
+
+	.wstep {
+		margin: 28px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-sekcja;
+		font-weight: 400;
+		line-height: 1.57;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 70px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 30px;
+
+		.wstep {
+			font-size: @m-tekst-podstawa;
+		}
+	}
+}
+
+.inwestycja-zdjecie {
+	position: absolute;
+	left: 46.9%;
+	top: 236px;
+	width: 53.1%;
+	height: 650px;
+	z-index: 1;
+
+	picture {
+		// Kadr dochodzi do prawej krawędzi ekranu, więc jest trapezem, a nie równoległobokiem
+		clip-path: polygon(248px 0, 100% 0, 100% 100%, 0 100%);
+		// nad pomarańczową ramką, ale w tym samym kontekście - ramka ma być widoczna tam, gdzie
+		// wystaje poza kadr zdjęcia
+		position: relative;
+		z-index: 1;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	// Pomarańczowa obwódka
+	&::after {
+		content: '';
+		position: absolute;
+		left: 218.5px;
+		top: -36px;
+		width: 128px;
+		height: 324px;
+		z-index: 0;
+		border: 3px solid @pomaranczowy;
+		transform-origin: top left;
+		transform: skewX(@kat-skosu);
+		pointer-events: none;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		height: 480px;
+
+		picture {
+			// niższy kadr, więc skos musi być krótszy, żeby zachować ten sam kąt
+			clip-path: polygon(183px 0, 100% 0, 100% 100%, 0 100%);
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		display: block;
+	}
+}
+
+// ========= rozlewanie zdjęcia w nagłówku pojedynczej inwestycji poniżej 1025px =========
+@media (max-width: @duzy-ekran) {
+	.inwestycja-hero {
+		display: flex;
+		flex-direction: column;
+		padding-top: calc(122px + 3.534%);
+
+		.tlo-strony(
+			~".inwestycja-zdjecie";
+			~".fin-hero-tresc";
+			~"1019 / 650";
+			~"polygon(calc(24.34% * var(--skos)) 0, 100% 0, 100% 100%, 0 100%)"
+		);
+
+		--parallaks: 0;
+
+		.inwestycja-zdjecie {
+			order: -1;
+			position: relative;
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1019 / 650;
+			top: auto;
+			left: auto;
+			margin-top: 0;
+
+			picture {
+				height: auto;
+				aspect-ratio: 1019 / 650;
+				clip-path: polygon(calc(24.34% * var(--skos)) 0, 100% 0, 100% 100%, 0 100%);
+			}
+
+			picture img {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				max-width: none;
+				object-fit: cover;
+				object-position: center;
+			}
+
+			// Obwódka wraca na ekrany dotykowe
+			&::after {
+				left: 21.43%;
+				top: -5.54%;
+				width: 12.56%;
+				height: 49.85%;
+			}
+		}
+
+		.inwestycja-hero-kolumna {
+			max-width: none;
+		}
+
+		.okruszki {
+			.kontener();
+			position: absolute;
+			left: 0;
+			top: 0;
+			margin-top: ~"calc(-32px - 67.322%)";
+			z-index: 3;
+		}
+
+		.fin-hero-tresc {
+			padding-top: 40px;
+			padding-bottom: 60px;
+		}
+	}
+
+	.inwestycja-hero.tlo-strony .inwestycja-zdjecie picture {
+		position: fixed;
+		aspect-ratio: auto;
+	}
+}
+
+// trzy parametry inwestycji w rzędzie
+.parametry-inwestycji {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px 0;
+	margin: 55px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 18px;
+	}
+
+	@media (min-width: @telefon-duzy) {
+		li:nth-child(1) {
+			width: 261px;
+		}
+
+		li:nth-child(2) {
+			width: 221px;
+		}
+	}
+
+	img {
+		width: 34px;
+		height: 34px;
+		flex: 0 0 auto;
+	}
+
+	.tresc {
+		color: var(--tekst-na-ciemnym);
+		font-size: 16.36px;
+		font-weight: 300;
+		line-height: 30.84px;
+
+		.nazwa {
+			display: block;
+		}
+
+		.wartosc {
+			display: block;
+			font-weight: 600;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		gap: 14px;
+
+		img {
+			width: 24px;
+			height: 24px;
+		}
+
+		.tresc {
+			font-size: 15px;
+		}
+	}
+}
+
+// ================= pasek zakładek =================
+.zakladki-inwestycji {
+	margin-bottom: 95px;
+	// pasek nie może rozpychać strony w poziomie
+	overflow: hidden;
+
+	// Siedem zakładek to około 790px, więc na telefonie nie mieszczą się w rzędzie
+	@media (max-width: (@telefon-duzy - 1px)) {
+		overflow-x: auto;
+		scroll-snap-type: x proximity;
+
+		ul {
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+		}
+
+		li {
+			scroll-snap-align: center;
+		}
+	}
+	background: @granat-karta;
+	border-top: 1px solid @granat-ramka;
+	border-bottom: 1px solid @granat-ramka;
+
+	ul {
+		.kontener();
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		// W makiecie siedem zakładek stoi w jednym rzędzie
+		flex-wrap: nowrap;
+		@media (min-width: @desktop-pelny) {
+			flex-wrap: wrap;
+		}
+		gap: 0;
+		// 104px z makiety minus obie ramki paska
+		min-height: 102px;
+		// bez "margin: 0" - .kontener() wyśrodkowuje pasek zakładek
+		padding-top: 10px;
+		padding-bottom: 10px;
+		list-style: none;
+	}
+
+	li + li {
+		position: relative;
+
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			width: 1px;
+			height: 29px;
+			margin-top: -14.5px;
+			background: @granat-ramka;
+		}
+	}
+
+	a {
+		position: relative;
+		display: block;
+		// w makiecie każdą zakładkę otacza 56px odstępu
+		--wciecie-zakladki: 56px;
+		padding: 4px var(--wciecie-zakladki);
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		line-height: 1.21;
+		text-decoration: none;
+		white-space: nowrap;
+
+		// pomarańczowa kreska pod aktywną zakładką - taka sama jak w menu głównym
+		&::after {
+			content: '';
+			position: absolute;
+			left: var(--wciecie-zakladki);
+			right: var(--wciecie-zakladki);
+			bottom: -6px;
+			height: 1px;
+			background: @pomaranczowy;
+			transform: scaleX(0);
+			transform-origin: left;
+			transition: transform @czas-animacji ease;
+		}
+
+		&:hover::after {
+			transform: scaleX(1);
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		a {
+			--wciecie-zakladki: 18px;
+			font-size: 16px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-bottom: 50px;
+		overflow: visible;
+
+		ul {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			overflow: visible;
+			padding-top: 12px;
+			padding-bottom: 12px;
+		}
+
+		li + li::before {
+			display: none;
+		}
+
+		li {
+			display: flex;
+			justify-content: center;
+		}
+
+		a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 44px;
+			font-size: @m-tekst-drobny;
+			--wciecie-zakladki: 12px;
+			white-space: normal;
+			text-align: center;
+		}
+	}
+}
+
+@media (min-width: (@duzy-ekran + 1px)) {
+	.zakladki-inwestycji {
+		margin-bottom: 97px;
+	}
+}
+
+// ================= wyszukiwarka mieszkań w inwestycji =================
+.szukaj-mieszkan {
+	.kontener();
+	text-align: center;
+	padding-bottom: 61px;
+}
+
+// pasek filtrów tej sekcji jest węższy niż na stronie wyników, ale zbudowany tak samo
+.filtry-inwestycji {
+	.filtry-wynikow();
+	max-width: none;
+	padding-left: 0;
+	padding-right: 0;
+	padding-top: 53px;
+	gap: 18.8px;
+	text-align: left;
+
+	.pole-filtru,
+	.przycisk-szukaj-pigulka {
+		flex: 0 0 223.8px;
+	}
+
+	// przełącznik widoku listy/kafelków po prawej stronie paska
+	.widok {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-left: auto;
+		color: #91929D;
+		font-size: 14px;
+	}
+
+	// przełącznik widoku listy/kafelków po prawej stronie paska
+	.widok {
+		// w makiecie oba kwadraty dzieli 8px, a od podpisu odsuwa je 19px
+		gap: 8px;
+
+		> span {
+			margin-right: 11px;
+		}
+	}
+
+	.przelacznik-widoku {
+		width: 51px;
+		height: 51px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: 1px solid @granat-ramka;
+		border-radius: 7px;
+		// w makiecie obie ikony są pomarańczowe - wybór widoku pokazuje ramka, nie ikona
+		color: @pomaranczowy;
+
+		&.wybrany {
+			border-color: @pomaranczowy;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.pole-filtru,
+		.przycisk-szukaj-pigulka {
+			flex: 1 1 100%;
+			width: 100%;
+		}
+
+		.widok {
+			display: none;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.filtry-inwestycji {
+		flex-wrap: wrap;
+
+		.pole-filtru,
+		.przycisk-szukaj-pigulka {
+			flex: 1 1 210px;
+			min-width: 0;
+		}
+
+		.widok {
+			flex: 0 0 100%;
+			justify-content: flex-end;
+			margin-left: 0;
+		}
+	}
+}
+
+// Kontener nad listą mieszkań: szerokość treści i zamknięcie marginesów wiersza.
+.kontener-mieszkan {
+	.kontener();
+	display: flow-root;
+
+	// Drugi widok (lista) - przełącznik .widok wyżej
+	.lista-lokali {
+		display: none;
+	}
+
+	&.widok-listy {
+		@media (min-width: (@duzy-ekran + 1px)) {
+			.lista-mieszkan {
+				display: none;
+			}
+
+			.lista-lokali {
+				display: block;
+			}
+		}
+	}
+
+	.wiersz-lokalu {
+		// tu nie ma serca do ulubionych (ta strona ich nie ma) - dwie akcje karty (oblicz ratę +
+		// przejdź do lokalu) trafiają w jedną kolumnę obok siebie
+		.akcje-wiersza {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+	}
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		.wiersz-lokalu {
+			// własna siatka
+			grid-template-columns: 260px 160px 190px 180px 260px 190px auto;
+		}
+	}
+}
+
+.lista-mieszkan {
+	// wiersz siatki Bootstrapa
+	--bs-gutter-x: 20px;
+	--bs-gutter-y: 31px;
+	margin-bottom: 0;
+	padding-bottom: 97px;
+
+	// liczbą kolumn steruje siatka Bootstrapa (col-sm-6 col-md-3)
+	@media (max-width: (@tablet - 1px)) {
+		padding-bottom: 60px;
+
+		// Karta potrzebuje co najmniej około 300px na dwa paski i wartości cenowe
+		> .col-sm-6 {
+			flex: 0 0 auto;
+			width: 100%;
+		}
+	}
+
+	@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+		padding-bottom: 60px;
+
+		> .col-sm-6 {
+			flex: 0 0 auto;
+			width: 50%;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.lista-mieszkan > .col-md-3 {
+		width: 50%;
+	}
+}
+
+.karta-mieszkania {
+	display: flex;
+	flex-direction: column;
+	// biała plansza z rzutem zaczyna się w makiecie 14px poniżej krawędzi karty, a ramka
+	// zjada z tego 1px
+	padding: 13px 11px 20px;
+	background: @granat;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		height: 627px;
+	}
+
+	// biała plansza z rzutem mieszkania
+	.rzut {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 261px;
+		margin-bottom: 25px;
+		background: @bialy;
+		border-radius: 7px;
+
+		// Rzut ma w makiecie stałe 215x218
+		picture {
+			display: block;
+			width: 215px;
+			height: 218px;
+		}
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.paski {
+		display: flex;
+		gap: 10px;
+		// W makiecie plakietki mają po 169px i zaczynają się 28px od krawędzi karty
+		padding: 0 16px;
+		// pierwszy wiersz parametrów ma środek 34px pod plakietkami
+		margin-bottom: 10.3px;
+	}
+
+	.status,
+	.oblicz-rate {
+		flex: 1 1 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 39px;
+		border-radius: 6px;
+		font-size: @tekst-drobny;
+		font-weight: 700;
+		text-decoration: none;
+		color: var(--tekst-na-ciemnym);
+
+		@media (max-width: @duzy-ekran) {
+			height: 44px;
+		}
+	}
+
+	// kolory statusów odczytane z makiety
+	.status.dostepne {
+		background: #457C52;
+	}
+
+	.status.rezerwacja {
+		background: @pomaranczowy;
+	}
+
+	.status.sprzedane {
+		background: #AC2B2B;
+	}
+
+	.oblicz-rate {
+		border: 1px solid fade(@bialy, 90%);
+		transition: border-color @czas-zamalowania @krzywa-zamalowania;
+		.zamalowanie(@pomaranczowy);
+
+		&:hover {
+			border-color: @pomaranczowy;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.rzut {
+			height: 190px;
+
+			picture {
+				width: 156px;
+				height: 158px;
+			}
+		}
+	}
+}
+
+.parametry-mieszkania {
+	// W makiecie wiersz parametrów jest wcięty o 42px od krawędzi karty, symetrycznie
+	position: relative;
+	margin: 0 30px;
+	padding: 0 0 8.3px;
+	list-style: none;
+
+	// Kreska pod parametrami jest w makiecie szersza niż same wiersze: idzie od 148 do 496,
+	// czyli o 14px dalej w każdą stronę niż ikona i wartość.
+	&::after {
+		content: '';
+		position: absolute;
+		left: -14px;
+		right: -13px;
+		bottom: 0;
+		height: 1px;
+		background: @granat-ramka;
+	}
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		height: 47.35px;
+	}
+
+	img {
+		width: 24px;
+		height: 24px;
+		flex: 0 0 auto;
+	}
+
+	.nazwa {
+		flex: 1 1 auto;
+		color: var(--tekst-na-ciemnym);
+		font-size: 15px;
+		font-weight: 300;
+	}
+
+	.wartosc {
+		color: var(--tekst-na-ciemnym);
+		font-size: 17px;
+		font-weight: 700;
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		margin-right: 12px;
+		margin-left: 12px;
+
+		li {
+			gap: 10px;
+		}
+
+		.nazwa {
+			font-size: @m-tekst-drobny;
+		}
+
+		.wartosc {
+			font-size: @m-tekst-maly;
+		}
+	}
+}
+
+// stopka karty: nazwa mieszkania i okrągła strzałka
+.stopka-mieszkania {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin: 21px 30px 0;
+
+	.nazwa {
+		color: var(--tekst-na-ciemnym);
+		font-size: 22px;
+		font-weight: 600;
+		line-height: 36.1px;
+
+		.akcent {
+			color: @pomaranczowy;
+		}
+		text-decoration: none;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+
+		@media (max-width: @duzy-ekran) {
+			padding: 4px 0;
+		}
+	}
+
+	.strzalka {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 67px;
+		height: 36px;
+		border: 1px solid fade(@bialy, 50%);
+		border-radius: 18px;
+		transition: background @czas-animacji ease;
+
+		&:hover {
+			background: @pomaranczowy;
+			border-color: @pomaranczowy;
+		}
+
+		img {
+			// to samo płótno 40x40 co przy dużych strzałkach - wysokość musi zachować proporcję
+			// pliku, inaczej strzałka jest o połowę spłaszczona
+			width: 24px;
+			height: 25px;
+		}
+
+		@media (max-width: @duzy-ekran) {
+			height: 44px;
+		}
+	}
+}
+
+// ================= opis inwestycji: kolaż zdjęć + tekst =================
+.opis-inwestycji {
+	.kontener();
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	min-height: 1045px;
+	padding-bottom: 0;
+	overflow: hidden;
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		min-height: 0;
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+}
+
+// dwa zdjęcia nachodzące na siebie, tak jak w sekcji "O nas" na stronie głównej
+.opis-zdjecia {
+	position: relative;
+	flex: 0 0 922px;
+	min-height: 1045px;
+
+	// Ramka jest pochylona w tę samą stronę co wszystkie pozostałe
+	.ramka-opisu {
+		position: absolute;
+		left: 400px;
+		top: 0;
+		z-index: 0;
+		width: 413px;
+		height: 1045px;
+		border: 3px solid @pomaranczowy;
+		transform-origin: top left;
+		transform: skewX(@kat-skosu);
+		pointer-events: none;
+	}
+
+	.duze,
+	.male {
+		position: absolute;
+		display: block;
+	}
+
+	.duze {
+		left: 0;
+		top: 130px;
+		width: 540px;
+		height: 561px;
+	}
+
+	.male {
+		left: 567px;
+		top: 464px;
+		width: 355px;
+		height: 458px;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.stempel-hygge {
+		position: absolute;
+		left: 20px;
+		top: 150px;
+		z-index: 2;
+		width: 91px;
+		height: 161px;
+		display: block;
+
+		// Zdjęcia w tej sekcji wypełniają kadr (object-fit: cover wyżej), a stempel jest
+		// rysunkiem z przezroczystym tłem i ma się zmieścić w całości.
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 640px;
+		min-height: 560px;
+
+		.duze {
+			width: 380px;
+			height: 395px;
+		}
+
+		.male {
+			left: 400px;
+			top: 235px;
+			width: 240px;
+			height: 310px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		width: 100%;
+		flex-basis: auto;
+		min-height: 0;
+		aspect-ratio: 922 / 1045;
+
+		.duze,
+		.male {
+			position: absolute;
+		}
+
+		.duze {
+			left: 0;
+			top: 12.44%;
+			width: 58.57%;
+			height: 53.68%;
+		}
+
+		.male {
+			left: 61.5%;
+			top: 44.4%;
+			width: 38.5%;
+			height: 43.83%;
+		}
+
+		.ramka-opisu {
+			left: 43.38%;
+			top: 0;
+			width: 44.79%;
+			height: 100%;
+		}
+
+		.stempel-hygge {
+			left: 2.17%;
+			top: 14.35%;
+			width: 9.87%;
+			height: auto;
+		}
+	}
+}
+
+.opis-tresc {
+	flex: 1 1 0;
+	min-width: 0;
+	margin-left: -94px;
+	padding-top: 213px;
+
+	p:not(.etykieta-sekcji) {
+		max-width: 685px;
+		margin: 35px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	.etykieta-sekcji {
+		margin: 0 0 20px 2px;
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	> p:not(.etykieta-sekcji) {
+		margin-left: 147px;
+		margin-top: 34px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		width: 100%;
+		margin-left: 0;
+		padding-top: 30px;
+
+		p:not(.etykieta-sekcji) {
+			margin-left: 0;
+			font-size: @m-tekst-maly;
+			line-height: 1.7;
+		}
+
+		.etykieta-sekcji {
+			margin-left: 0;
+		}
+	}
+}
+
+// Sekcja Mokotowa ma zdjęcie przyklejone do prawej krawędzi i ścięte tylko z lewej.
+.mokotow-inwestycji {
+	min-height: 900px;
+	padding-bottom: 0;
+
+	// Ta ramka ma w makiecie ostrzejszy skos niż pozostałe: 147px przesunięcia na 343px
+	// wysokości. Góra stoi w prawo (1164-1315), dół w lewo (1017-1170).
+	.ramka-mokotowa {
+		position: absolute;
+		left: 1164px;
+		top: 17px;
+		z-index: 0;
+		width: 151px;
+		height: 343px;
+		border: 3px solid @pomaranczowy;
+		transform-origin: top left;
+		transform: skewX(-22.9deg);
+		pointer-events: none;
+
+		@media (max-width: @duzy-ekran) {
+			display: none;
+		}
+	}
+
+	.nagrody-zdjecie {
+		left: 888px;
+		top: 81px;
+		width: calc(100% - 888px);
+		height: 750px;
+
+		picture {
+			clip-path: polygon(30.91% 0, 100% 0, 100% 100%, 0 100%);
+		}
+
+		@media (min-width: (@duzy-ekran + 1px)) {
+			img {
+				position: static;
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	.tresc {
+		padding-top: 113px;
+	}
+
+	.kolumna {
+		max-width: 792px;
+	}
+
+	.etykieta-sekcji {
+		margin: 0 0 21px;
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.punkty-mokotowa {
+		display: flex;
+		gap: 142px;
+		margin: 49px 0 0;
+		padding: 0;
+		list-style: none;
+
+		li {
+			flex: 0 0 100px;
+			// podpis jest szerszy niż kolumna
+			min-width: 0;
+		}
+
+		img {
+			display: block;
+			width: 69px;
+			height: 69px;
+			object-fit: contain;
+		}
+
+		li:first-child img {
+			width: 67px;
+			height: 67px;
+			margin-left: 2px;
+		}
+
+		li:nth-child(2) img {
+			width: 75px;
+			height: 69px;
+			margin-left: -4px;
+		}
+
+		li:nth-child(3) {
+			position: relative;
+			left: -2px;
+
+			img {
+				width: 72px;
+				height: 72px;
+			}
+		}
+
+		span {
+			display: block;
+			margin-top: 25px;
+			color: var(--tekst-na-ciemnym);
+			font-size: 26.73px;
+			font-weight: 600;
+			line-height: 36.1px;
+			white-space: nowrap;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 0;
+
+		.tlo-strony(
+			~".nagrody-zdjecie";
+			~"> .tresc";
+			~"1032 / 750";
+			~"polygon(calc(30.91% * var(--skos)) 0, 100% 0, 100% 100%, 0 100%)"
+		);
+
+		> .tresc {
+			padding-top: 60px;
+			padding-bottom: 60px;
+		}
+
+		.ramka-mokotowa {
+			display: none;
+		}
+
+		.nagrody-zdjecie::after {
+			content: '';
+			position: absolute;
+			// Zdjęcie zaczyna się na górnej krawędzi sekcji - ramka nie może wystawać nad nie
+			left: 17.05%;
+			top: 4%;
+			width: 14.63%;
+			height: 45.73%;
+			z-index: 0;
+			border: 3px solid @pomaranczowy;
+			transform-origin: top left;
+			transform: skewX(-22.9deg);
+			pointer-events: none;
+		}
+
+		.nagrody-zdjecie picture {
+			z-index: 1;
+		}
+
+		.nagrody-zdjecie {
+			position: relative;
+			left: auto;
+			top: auto;
+			width: 100%;
+			height: auto;
+			margin-top: 0;
+			margin-bottom: 0;
+		}
+
+		.punkty-mokotowa {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 30px;
+
+			li {
+				width: auto;
+				min-width: 0;
+			}
+
+			span {
+				font-size: 20px;
+				line-height: 1.35;
+				white-space: normal;
+			}
+		}
+	}
+}
+
+// ================= lokalizacja: ciemny pas z mapą =================
+.lokalizacja-inwestycji {
+	padding-bottom: 97px;
+	background: @granat-ciemny;
+
+	@media (max-width: @duzy-ekran) {
+		padding-bottom: 60px;
+	}
+
+	// Nagłówek tej mapy siedzi w makiecie wyżej niż na stronie głównej, a same filtry
+	// zaczynają się 24px poniżej etykiety sekcji.
+	@media (min-width: (@duzy-ekran + 1px)) {
+		.mapa-gora {
+			padding-top: 88.8px;
+			padding-bottom: 66.2px;
+		}
+
+		.filtry-mapy-inwestycji {
+			margin-top: 23.9px;
+		}
+	}
+}
+
+// filtry punktów na mapie - dwa rzędy pól wyboru po prawej stronie nagłówka
+.filtry-mapy-inwestycji {
+	display: grid;
+	grid-template-columns: repeat(4, 214px);
+	// w makiecie kolumny dzieli 18px, a wiersze 22px
+	gap: 22px 18px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	label {
+		display: flex;
+		align-items: center;
+		// w makiecie ikona stoi 17px od lewej krawędzi, napis 10px za nią, a pole wyboru kończy
+		// się 19px przed prawą krawędzią
+		gap: 10px;
+		height: 68px;
+		padding: 0 19px 0 17px;
+		border: 1px solid #6B6A75;
+		border-radius: 8px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16px;
+		cursor: pointer;
+		transition: border-color @czas-animacji ease;
+	}
+
+	label > img {
+		width: 28px;
+		height: 28px;
+		flex: 0 0 auto;
+	}
+
+	label > span {
+		flex: 1 1 auto;
+	}
+
+	// pole wyboru rysujemy sami, bo domyślne nie da się ostylować spójnie
+	input {
+		appearance: none;
+		-webkit-appearance: none;
+		flex: 0 0 auto;
+		width: 22px;
+		height: 22px;
+		margin: 0;
+		border: 1px solid #6B6A75;
+		border-radius: 3px;
+		cursor: pointer;
+	}
+
+	input:checked {
+		background: @pomaranczowy url('../img/mapa-ptaszek.svg') center / 11px 11px no-repeat;
+		border-color: @pomaranczowy;
+	}
+
+	// zaznaczony punkt podświetla całe pole
+	li:has(input:checked) label {
+		border-color: @pomaranczowy;
+	}
+
+	@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+		grid-template-columns: repeat(4, 1fr);
+		gap: 12px;
+
+		label {
+			height: 52px;
+			padding: 0 12px;
+			font-size: @m-tekst-drobny;
+		}
+	}
+
+	@media (max-width: (@tablet - 1px)) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (max-width: @telefon) {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.lokalizacja-inwestycji .mapa-gora {
+		flex-direction: column;
+		padding-top: clamp(52px, 4.625vw, 65px);
+		padding-bottom: clamp(38px, 3.44792vw, 48px);
+		column-gap: clamp(20px, 2.08333vw, 29px);
+	}
+
+	.filtry-mapy-inwestycji {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		width: 100%;
+		gap: clamp(12px, 1.14583vw, 16px) clamp(10px, .9375vw, 13px);
+		margin-top: clamp(16px, 1.24479vw, 18px);
+
+		label {
+			gap: clamp(7px, .52083vw, 10px);
+			height: clamp(52px, 3.54167vw, 68px);
+			padding: 0 clamp(12px, .98958vw, 19px) 0 clamp(12px, .88542vw, 17px);
+			border-radius: clamp(6px, .41667vw, 8px);
+			.tekst-makiety(16; 14);
+		}
+
+		label > img {
+			width: clamp(24px, 1.45833vw, 28px);
+			height: clamp(24px, 1.45833vw, 28px);
+		}
+
+		input {
+			width: clamp(18px, 1.14583vw, 22px);
+			height: clamp(18px, 1.14583vw, 22px);
+		}
+	}
+}
+
+// ================= galeria inwestycji =================
+.galeria-inwestycji {
+	.galeria-realizacji();
+	text-align: left;
+
+	.naglowek-galerii {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 30px;
+		flex-wrap: wrap;
+	}
+}
+
+// Ten sam blok co na stronie głównej, więc korzysta z komponentu .kafle
+.oferta-uzupelniajaca {
+	padding-bottom: 0;
+
+	// Poniżej 1025px kontakt jest kartą, która nasuwa się na tę sekcję
+	@media (max-width: @duzy-ekran) {
+		padding-bottom: 64px;
+	}
+
+	@media (max-width: @telefon) {
+		padding-bottom: 40px;
+	}
+}
+
+@media (min-width: (@duzy-ekran + 1px)) {
+	.mokotow-inwestycji {
+		height: 921px;
+		box-sizing: border-box;
+	}
+
+	.lokalizacja-inwestycji {
+		height: 2044px;
+		box-sizing: border-box;
+	}
+
+	.galeria-inwestycji {
+		height: 1104px;
+		box-sizing: border-box;
+		padding-top: 88px;
+		padding-bottom: 0;
+	}
+
+	.oferta-uzupelniajaca {
+		height: 483px;
+		padding-bottom: 1px;
+	}
+}
+
+.zakladki-galerii {
+	display: flex;
+	gap: 20px;
+	// w makiecie pigułki stoją niżej niż wynikałoby to z wyrównania do nagłówka
+	margin-top: 15px;
+
+	button {
+		// w makiecie wszystkie trzy pigułki mają po 263px, niezależnie od długości napisu
+		width: 263px;
+		height: 75px;
+		padding: 0;
+		background: transparent;
+		border: 1px solid fade(@bialy, 90%);
+		border-radius: 38px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 20px;
+		font-weight: 600;
+		white-space: nowrap;
+		transition: background @czas-animacji ease, border-color @czas-animacji ease;
+
+		&:hover {
+			border-color: @pomaranczowy;
+		}
+
+		&.wybrana {
+			background: @pomaranczowy;
+			border-color: @pomaranczowy;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		gap: 10px;
+
+		button {
+			width: auto;
+			height: 52px;
+			padding: 0 20px;
+			font-size: @m-tekst-drobny;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		flex-wrap: wrap;
+
+		button {
+			height: 44px;
+			padding: 0 14px;
+			font-size: @m-tekst-drobny;
+		}
+	}
+}
+
+// ================= atuty inwestycji =================
+.atuty-naglowek {
+	.kontener();
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 40px;
+	padding-top: 104.2px;
+	padding-bottom: 53.2px;
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		justify-content: flex-start;
+		gap: 0;
+
+		> div:first-child {
+			flex: 0 0 708px;
+		}
+
+		.atuty-wstep {
+			flex: 0 0 485px;
+		}
+	}
+
+	.atuty-wstep {
+		flex: 0 0 auto;
+		max-width: 485px;
+		margin: 73.9px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		gap: 16px;
+		padding-top: 60px;
+
+		> div:first-child {
+			flex: 0 0 auto;
+		}
+
+		.atuty-wstep {
+			flex: 0 0 auto;
+			max-width: none;
+			margin-top: 0;
+			font-size: @m-tekst-maly;
+			line-height: 1.7;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.atuty-naglowek {
+		flex-direction: column;
+		gap: 20px;
+
+		> div:first-child,
+		.atuty-wstep {
+			flex: 1 1 auto;
+			width: 100%;
+			max-width: none;
+		}
+
+		.atuty-wstep {
+			margin-top: 0;
+		}
+	}
+}
+
+@media (min-width: @desktop-xl) and (max-width: (@desktop-pelny - .02px)) {
+	.atuty-naglowek {
+		> div:first-child {
+			flex: 0 1 708px;
+			min-width: 0;
+		}
+
+		.atuty-wstep {
+			flex: 0 1 485px;
+			min-width: 0;
+		}
+	}
+}
+
+.kontener-atutow {
+	.kontener();
+	position: relative;
+	display: flow-root;
+
+	.ramka-atutow {
+		position: absolute;
+		z-index: 0;
+		left: 1356px;
+		top: -199px;
+		width: 292px;
+		height: 738px;
+		border: 3px solid @pomaranczowy;
+		transform-origin: top left;
+		transform: skewX(@kat-skosu);
+		pointer-events: none;
+
+		// Poniżej 1649px ozdobnik nachodzi na kafle, więc go ukrywamy
+		@media (max-width: @duzy-ekran) {
+			left: 75.625vw;
+			// Pion liczony OD dołu kontenera, nie od góry
+			top: auto;
+			bottom: -1.30208vw;
+			width: 15.20833vw;
+			height: 38.4375vw;
+		}
+
+		@media (min-width: @desktop) and (max-width: 1648.98px) {
+			display: none;
+		}
+	}
+}
+
+.lista-atutow {
+	// trzy kolumny na siatce Bootstrapa; odstępy i wysokość kafla z makiety
+	--bs-gutter-x: 20px;
+	--bs-gutter-y: 26px;
+	margin-bottom: 0;
+	padding-bottom: 20px;
+
+	.kafel-atutu {
+		height: 234px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		--bs-gutter-y: 20px;
+
+		// Sztywne 234px z makiety to minimum
+		.kafel-atutu {
+			height: 100%;
+			min-height: 234px;
+		}
+	}
+
+	@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+		> .col-md-4 {
+			flex: 0 0 auto;
+			width: 50%;
+		}
+	}
+
+	@media (max-width: (@tablet - 1px)) {
+		> .col-sm-6 {
+			flex: 0 0 auto;
+			width: 100%;
+		}
+	}
+}
+
+// Kafel atutu
+.kafel-atutu {
+	display: grid;
+	grid-template-columns: 85px 1fr;
+	column-gap: 30px;
+	align-content: start;
+
+	position: relative;
+	z-index: 1;
+	background: @granat-atut;
+	// makieta: kafel ma obrys 1px
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	transition: background @czas-animacji ease;
+
+	&:hover {
+		background: @granat-karta;
+	}
+
+	// wcięcie treści od krawędzi kafla wprost z makiety: ikona 42px od lewej krawędzi i 45px
+	// od górnej
+	@media (min-width: (@duzy-ekran + 1px)) {
+		padding: 45px 0 0 42px;
+	}
+
+	// Wyściółka kafla poniżej 1025px
+	@media (max-width: @duzy-ekran) {
+		padding: 24px 14px 24px 22px;
+	}
+
+	// Treść kafla wyśrodkowana w pionie
+	@media (max-width: (@desktop-pelny - .02px)) {
+		align-content: center;
+	}
+
+	img {
+		grid-row: 1 / span 2;
+		width: 85px;
+		height: 85px;
+	}
+
+	h3 {
+		grid-column: 2;
+		margin: 0 0 16.5px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 27px;
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	p {
+		grid-column: 2;
+		margin: 0;
+		max-width: 353px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 19px;
+		font-weight: 300;
+		line-height: 1.58;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		grid-template-columns: 52px 1fr;
+		column-gap: 18px;
+		padding: 20px 14px 20px 18px;
+
+		img {
+			width: 52px;
+			height: 52px;
+		}
+
+		h3 {
+			font-size: 20px;
+			margin-bottom: 10px;
+		}
+
+		p {
+			font-size: 15px;
+		}
+	}
+}
+
+@media (max-width: @telefon) {
+	.mokotow-inwestycji .punkty-mokotowa {
+		grid-template-columns: 1fr;
+
+		li {
+			text-align: center;
+		}
+
+		img,
+		li:first-child img,
+		li:nth-child(2) img {
+			margin-right: auto;
+			margin-left: auto;
+		}
+	}
+}
+
+// ================= płynny desktop 1400-1899 =================
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	// --- nagłówek podstrony: układ "tekst obok zdjęcia" ma własny blok 1025-1899 niżej ---
+
+	// --- pasek zakładek ---
+	.zakladki-inwestycji {
+		margin-bottom: 5.05208vw;
+	}
+
+	// --- wyszukiwarka mieszkań ---
+	.szukaj-mieszkan { padding-bottom: 3.17708vw; }
+	.filtry-inwestycji {
+		flex-wrap: nowrap;
+		padding-top: 2.76042vw;
+		gap: .97917vw;
+
+		.pole-filtru,
+		.przycisk-szukaj-pigulka { flex: 0 0 11.65625vw; min-width: 0; }
+
+		.widok {
+			flex: 0 0 auto;
+			justify-content: flex-start;
+			margin-left: auto;
+			gap: .41667vw;
+			> span { margin-right: .57292vw; }
+		}
+		.przelacznik-widoku {
+			width: 2.65625vw;
+			height: 2.65625vw;
+			border-radius: .36458vw;
+
+			&[data-widok="lista"] img { width: .9375vw; height: .52083vw; }
+			&[data-widok="kafelki"] img { width: .78125vw; height: .78125vw; }
+		}
+	}
+
+	// --- siatka mieszkań ---
+	.lista-mieszkan {
+		--bs-gutter-x: 1.04167vw;
+		--bs-gutter-y: 1.61458vw;
+		padding-bottom: 5.05208vw;
+	}
+	.karta-mieszkania {
+		height: 32.65625vw;
+		padding: .67708vw .57292vw 1.04167vw;
+		border-radius: .625vw;
+
+		.rzut {
+			height: 13.59375vw;
+			margin-bottom: 1.30208vw;
+			border-radius: .36458vw;
+			picture { width: 11.19792vw; height: 11.35417vw; }
+		}
+		.paski { gap: .52083vw; padding: 0 .83333vw; margin-bottom: .53646vw; }
+		.status,
+		.oblicz-rate { height: 2.03125vw; border-radius: .3125vw; }
+	}
+	.parametry-mieszkania {
+		margin: 0 1.5625vw;
+		padding-bottom: .43229vw;
+		&::after { left: -.72917vw; right: -.67708vw; }
+		li { gap: .72917vw; height: 2.46615vw; }
+		img { width: 1.25vw; height: 1.25vw; }
+		.nazwa { .tekst-makiety(15; 14); }
+		.wartosc { .tekst-makiety(17; 14); }
+	}
+	.stopka-mieszkania {
+		gap: .625vw;
+		margin: 1.09375vw 1.5625vw 0;
+		.nazwa { line-height: 1.88021vw; .tekst-makiety(22; 17); }
+		.strzalka {
+			width: 3.48958vw;
+			height: 1.875vw;
+			border-radius: .9375vw;
+			img { width: 1.25vw; height: 1.30208vw; }
+		}
+	}
+
+	// --- kolaż zdjęć i opis inwestycji ---
+	.opis-inwestycji { gap: 1.04167vw; min-height: 54.42708vw; }
+	.opis-zdjecia {
+		flex: 0 0 48.02083vw;
+		min-height: 54.42708vw;
+		.ramka-opisu { left: 20.83333vw; width: 21.51042vw; height: 54.42708vw; }
+		.duze { top: 6.77083vw; width: 28.125vw; height: 29.21875vw; }
+		.male { left: 29.53125vw; top: 24.16667vw; width: 18.48958vw; height: 23.85417vw; }
+		.stempel-hygge { left: 1.04167vw; top: 7.8125vw; width: 4.73958vw; height: 8.38542vw; }
+	}
+	.opis-tresc {
+		margin-left: -4.89583vw;
+		padding-top: 11.09375vw;
+		p:not(.etykieta-sekcji) {
+			max-width: 35.67708vw;
+			margin-top: 1.82292vw;
+			.tekst-makiety(21; 16);
+		}
+		> p:not(.etykieta-sekcji) { margin-left: 7.65625vw; margin-top: 1.77083vw; }
+	}
+
+	// --- sekcja "Mokotów" (wariant .nagrody) ---
+
+	// --- ciemny pas z mapą ---
+	.lokalizacja-inwestycji {
+		padding-bottom: 5.05208vw;
+		// Odstęp tytułu od filtrów
+		.mapa-gora { padding-top: 4.625vw; padding-bottom: 3.44792vw; column-gap: 2.08333vw; }
+		.filtry-mapy-inwestycji { margin-top: 1.24479vw; }
+	}
+	// Odstęp nagłówka galerii
+	.galeria-inwestycji .naglowek-galerii {
+		gap: 1.5625vw;
+		// Dolne wcięcie nagłówka galerii (62px w makiecie)
+		padding-bottom: 3.22917vw;
+	}
+
+	.filtry-mapy-inwestycji {
+		grid-template-columns: repeat(4, 11.14583vw);
+		gap: 1.14583vw .9375vw;
+
+		label {
+			gap: .52083vw;
+			height: 3.54167vw;
+			padding: 0 .98958vw 0 .88542vw;
+			border-radius: .41667vw;
+			.tekst-makiety(16; 14);
+		}
+		label > img { width: 1.45833vw; height: 1.45833vw; }
+		input { width: 1.14583vw; height: 1.14583vw; }
+		input:checked { background-size: .57292vw .57292vw; }
+	}
+
+	// --- atuty ---
+	.atuty-naglowek {
+		padding-top: 5.42708vw;
+		padding-bottom: 2.77083vw;
+
+		> div:first-child { flex: 0 1 36.875vw; }
+		.atuty-wstep {
+			flex: 0 1 25.26042vw;
+			max-width: 25.26042vw;
+			margin-top: 3.84896vw;
+			.tekst-makiety(21; 17);
+		}
+	}
+	.lista-atutow {
+		--bs-gutter-x: 1.04167vw;
+		--bs-gutter-y: 1.35417vw;
+		padding-bottom: 1.04167vw;
+		.kafel-atutu {
+			height: 100%;
+			min-height: max(227px, 12.1875vw);
+		}
+	}
+	.kafel-atutu {
+		grid-template-columns: 4.42708vw 1fr;
+		column-gap: 1.5625vw;
+		padding: 2.34375vw 0 2.34375vw 2.1875vw;
+		border-radius: .625vw;
+
+		img { width: 4.42708vw; height: 4.42708vw; }
+		h3 { margin-bottom: .85938vw; .tekst-makiety(27; 27); }
+		p { max-width: 18.38542vw; .tekst-makiety(19; 19); }
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.zakladki-galerii {
+		gap: 1.04167vw;
+		margin-top: .78125vw;
+
+		button {
+			width: 13.69792vw;
+			height: 3.90625vw;
+			border-radius: 1.97917vw;
+			.tekst-makiety(20; 16);
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.lokalizacja-inwestycji {
+		height: auto;
+		min-height: 106.45833vw;
+	}
+	.galeria-inwestycji { height: 57.5vw; padding-top: 4.58333vw; }
+	.oferta-uzupelniajaca { height: 25.15625vw; }
+}
+
+// Lista parametrow inwestycji stala w calosci na pikselach makiety 1920px
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.parametry-inwestycji {
+		gap: 1.04167vw 0;
+		margin-top: 2.86458vw;
+
+		li {
+			gap: .9375vw;
+		}
+
+		li:nth-child(1) {
+			width: 13.59375vw;
+		}
+
+		li:nth-child(2) {
+			width: 11.51042vw;
+		}
+
+		img {
+			width: 1.77083vw;
+			height: 1.77083vw;
+		}
+
+		.tresc {
+			font-size: clamp(13px, .85208vw, 16.36px);
+			line-height: 1.60625vw;
+		}
+	}
+}
+
+// Wnętrze paska filtrów w zakresie 1400-1899px
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.filtry-inwestycji {
+		.pasmo-wnetrza-filtrow();
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.opis-tresc .etykieta-sekcji {
+		margin: 0 0 1.04167vw .10417vw;
+		.tekst-makiety(18; 15);
+		line-height: 1.25vw;
+	}
+
+}
+
+// --- sekcja "Mokotów": pasmo 1025-1899 ---
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.mokotow-inwestycji { height: 47.96875vw; }
+	.mokotow-inwestycji {
+		min-height: 46.875vw;
+		.ramka-mokotowa { left: 60.625vw; top: .88542vw; width: 7.86458vw; height: 17.86458vw; }
+		.nagrody-zdjecie {
+			left: 46.25vw;
+			top: 4.21875vw;
+			width: calc(100% - 46.25vw);
+			height: 39.0625vw;
+		}
+		.tresc { padding-top: 5.88542vw; }
+		.kolumna { max-width: 41.25vw; }
+		.etykieta-sekcji { margin-bottom: 1.09375vw; }
+		.punkty-mokotowa {
+			gap: 7.39583vw;
+			margin-top: 2.55208vw;
+			li { flex: 0 0 5.20833vw; }
+			img { width: 3.59375vw; height: 3.59375vw; }
+			li:first-child img { width: 3.48958vw; height: 3.48958vw; margin-left: .10417vw; }
+			li:nth-child(2) img { width: 3.90625vw; height: 3.59375vw; margin-left: -.20833vw; }
+			li:nth-child(3) { left: -.10417vw; img { width: 3.75vw; height: 3.75vw; } }
+			span { margin-top: 1.30208vw; line-height: 1.88021vw; .tekst-makiety(26.73; 20); }
+		}
+	}
+
+	// Podłoga 18px, nie 15px
+	.mokotow-inwestycji .etykieta-sekcji {
+		.tekst-makiety(18; 18);
+		line-height: 1.25vw;
+	}
+}
+
+// --- ramka atutów: pasmo 1025-1899 ---
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kontener-atutow .ramka-atutow {
+		display: block;
+		left: 75.625vw;
+		top: -10.36458vw;
+		width: 15.20833vw;
+		height: 38.4375vw;
+	}
+}
+
+// Siedem kolumn widoku listy w płynnym desktopie
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.kontener-mieszkan .wiersz-lokalu {
+		grid-template-columns:
+			minmax(0, 260fr) minmax(0, 160fr) minmax(0, 190fr) minmax(0, 180fr)
+			minmax(0, 260fr) minmax(0, 190fr) minmax(0, 350fr);
+
+		.akcje-wiersza {
+			gap: .52083vw;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.kontener-mieszkan .wiersz-lokalu {
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr) minmax(0, 1.1fr) minmax(0, 1.1fr);
+		grid-template-areas:
+			"nazwa pietro metraz pokoje"
+			"cena status akcje akcje";
+		column-gap: clamp(12px, 1.25vw, 20px);
+		row-gap: 8px;
+		min-height: 165px;
+		padding: 12px clamp(24px, 2.7vw, 45px);
+
+		> :nth-child(1) { grid-area: nazwa; }
+		> :nth-child(2) { grid-area: pietro; }
+		> :nth-child(3) { grid-area: metraz; }
+		> :nth-child(4) { grid-area: pokoje; }
+		> :nth-child(5) { grid-area: cena; }
+		> :nth-child(6) { grid-area: status; }
+		> :nth-child(7) { grid-area: akcje; }
+
+		.komorka,
+		.linia {
+			min-width: 0;
+			overflow-wrap: anywhere;
+		}
+
+		// sztywna wysokość pierwszej komórki jest z makiety jednoliniowego wiersza
+		.komorka:first-child {
+			height: auto;
+		}
+
+		.status {
+			width: 100%;
+			max-width: 169px;
+		}
+
+		.status,
+		.akcje-wiersza {
+			justify-self: start;
+		}
+	}
+}
+
+// Kolaż opisu inwestycji poniżej 1400px
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.opis-inwestycji {
+		gap: 1.04167vw;
+		min-height: 54.42708vw;
+	}
+
+	.opis-zdjecia {
+		flex: 0 0 48.02083vw;
+		min-height: 54.42708vw;
+
+		.ramka-opisu { left: 20.83333vw; width: 21.51042vw; height: 54.42708vw; }
+		.duze { top: 6.77083vw; width: 28.125vw; height: 29.21875vw; }
+		.male { left: 29.53125vw; top: 24.16667vw; width: 18.48958vw; height: 23.85417vw; }
+		.stempel-hygge { left: 1.04167vw; top: 7.8125vw; width: 4.73958vw; height: 8.38542vw; }
+	}
+
+	.opis-tresc {
+		margin-left: -4.89583vw;
+		padding-top: 11.09375vw;
+
+		// Minimalne rozmiary pisma dla węższych ekranów
+		p:not(.etykieta-sekcji) {
+			max-width: 35.67708vw;
+			margin-top: 1.82292vw;
+			.tekst-makiety(21; 16; 17);
+		}
+
+		> p:not(.etykieta-sekcji) {
+			margin-left: 7.65625vw;
+			margin-top: 1.77083vw;
+		}
+	}
+
+	.opis-tresc .etykieta-sekcji {
+		margin: 0 0 1.04167vw .10417vw;
+		.tekst-makiety(18; 15; 18);
+		line-height: ~"max(24px, 1.25vw)";
+	}
+}
+
+// Kafle atutów poniżej 1400px
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.lista-atutow .kafel-atutu {
+		height: 100%;
+		// Im węższy kafel, tym więcej wierszy potrzebuje opis
+		min-height: clamp(176px, calc(430.36px - 18.18vw), 244px);
+	}
+
+	.kafel-atutu {
+		grid-template-columns: clamp(52px, 4.42708vw, 62px) minmax(0, 1fr);
+		column-gap: clamp(16px, 1.5625vw, 22px);
+		padding: clamp(24px, 2.34375vw, 33px) clamp(14px, 1.25vw, 18px)
+			clamp(24px, 2.34375vw, 33px) clamp(22px, 2.1875vw, 31px);
+
+		img {
+			width: clamp(52px, 4.42708vw, 62px);
+			height: clamp(52px, 4.42708vw, 62px);
+		}
+
+		h3 {
+			margin-bottom: clamp(10px, .85938vw, 12px);
+			.tekst-makiety(27; 27);
+		}
+
+		p {
+			max-width: none;
+			.tekst-makiety(19; 19);
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.lista-mieszkan {
+		--bs-gutter-x: clamp(14px, 1.04167vw, 20px);
+		--bs-gutter-y: clamp(22px, 1.61458vw, 31px);
+		padding-bottom: clamp(60px, 5.05208vw, 71px);
+	}
+
+	.karta-mieszkania {
+		height: max(380px, 32.65625vw);
+		padding: clamp(8px, .67708vw, 10px) clamp(7px, .57292vw, 8px)
+			clamp(12px, 1.04167vw, 15px);
+		border-radius: clamp(8px, .625vw, 9px);
+
+		.rzut {
+			height: max(140px, 13.59375vw);
+			margin-bottom: clamp(14px, 1.30208vw, 18px);
+			border-radius: clamp(5px, .36458vw, 6px);
+
+			picture {
+				width: max(115px, 11.19792vw);
+				height: max(117px, 11.35417vw);
+			}
+		}
+
+		.paski {
+			gap: clamp(7px, .52083vw, 8px);
+			padding: 0 clamp(9px, .83333vw, 12px);
+			margin-bottom: clamp(6px, .53646vw, 8px);
+		}
+
+		.status,
+		.oblicz-rate {
+			height: max(30px, 2.03125vw);
+			border-radius: max(4px, .3125vw);
+		}
+	}
+
+	.parametry-mieszkania {
+		margin: 0 clamp(18px, 1.5625vw, 22px);
+		padding-bottom: clamp(6px, .43229vw, 7px);
+
+		&::after {
+			left: max(-10px, -.72917vw);
+			right: max(-10px, -.67708vw);
+		}
+
+		li {
+			gap: clamp(8px, .72917vw, 10px);
+			height: max(30px, 2.46615vw);
+		}
+
+		img {
+			width: max(16px, 1.25vw);
+			height: max(16px, 1.25vw);
+		}
+
+		.nazwa { .tekst-makiety(15; 14); }
+		.wartosc { .tekst-makiety(17; 14); }
+	}
+
+	.stopka-mieszkania {
+		gap: clamp(8px, .625vw, 9px);
+		margin: clamp(12px, 1.09375vw, 15px) clamp(18px, 1.5625vw, 22px) 0;
+
+		.nazwa {
+			line-height: max(26px, 1.88021vw);
+			.tekst-makiety(22; 22);
+		}
+
+		.strzalka {
+			width: max(48px, 3.48958vw);
+			height: max(36px, 1.875vw);
+			border-radius: max(18px, .9375vw);
+
+			img {
+				width: max(18px, 1.25vw);
+				height: max(19px, 1.30208vw);
+			}
+		}
+	}
+
+	// Te sekcje były jedynymi pudełkami nadal zamrożonymi na wysokości 1920px
+	.lokalizacja-inwestycji,
+	.galeria-inwestycji {
+		height: auto;
+		box-sizing: border-box;
+	}
+
+	.lokalizacja-inwestycji {
+		min-height: 106.45833vw;
+		padding-bottom: clamp(60px, 5.05208vw, 71px);
+	}
+
+	.galeria-inwestycji {
+		min-height: 57.5vw;
+		padding-top: 4.58333vw;
+		padding-bottom: 1px;
+
+		.naglowek-galerii {
+			gap: clamp(20px, 1.5625vw, 22px);
+			padding-bottom: 3.22917vw;
+		}
+	}
+
+	.zakladki-galerii {
+		gap: clamp(10px, 1.04167vw, 15px);
+		margin-top: clamp(10px, .78125vw, 11px);
+
+		button {
+			width: max(190px, 13.69792vw);
+			height: max(52px, 3.90625vw);
+			border-radius: max(26px, 1.97917vw);
+			.tekst-makiety(20; 16);
+		}
+	}
+
+	.atuty-naglowek {
+		padding-top: 5.42708vw;
+		padding-bottom: 2.77083vw;
+
+		// Szerokości z makiety obowiązują tylko tam, gdzie nagłówek naprawdę stoi
+		// w dwóch kolumnach. Poniżej @desktop-xl przełącza się on na flex-direction:
+		// column i wtedy flex-basis przestaje być szerokością - staje się WYSOKOŚCIĄ.
+		// Proporcje 36,875vw i 25,26042vw rezerwowały w pionie 442px na tytuł mający
+		// 130px treści i 303px na wstęp mający 117px, czyli 312px i 186px martwej
+		// przestrzeni; odstęp tytuł-wstęp skakał z -78px (obok siebie) na 384px,
+		// a cały nagłówek z 273,7px na 909,4px na jednym pikselu szerokości okna.
+		// Te same reguły przykrywały też "max-width: none" i "margin-top: 0" z bloku
+		// 1025-1199,98px, bo stoją w pliku niżej. Po zawężeniu nagłówek ma w tym
+		// paśmie 261,8-280,8px, a granica 1200px to stopień 273,7 -> 280,8px.
+		@media (min-width: @desktop-xl) {
+			> div:first-child {
+				flex-basis: 36.875vw;
+			}
+
+			.atuty-wstep {
+				flex-basis: 25.26042vw;
+				max-width: 25.26042vw;
+				margin-top: 3.84896vw;
+			}
+		}
+
+		// Stopniowanie pisma dotyczy obu układów, więc zostaje poza zawężeniem
+		.atuty-wstep {
+			.tekst-makiety(21; 17);
+		}
+	}
+
+	.lista-atutow {
+		--bs-gutter-x: 1.04167vw;
+		--bs-gutter-y: clamp(20px, 1.35417vw, 26px);
+		padding-bottom: 1.04167vw;
+	}
+}
+
+// Podpisy są treścią, nie dekoracją
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.mokotow-inwestycji .punkty-mokotowa {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: clamp(18px, 2.5vw, 48px);
+
+		li {
+			min-width: 0;
+			text-align: center;
+		}
+
+		img,
+		li:first-child img,
+		li:nth-child(2) img {
+			margin-right: auto;
+			margin-left: auto;
+		}
+
+		span {
+			white-space: normal;
+		}
+	}
+}
+
+// ================= pasek zakładek: jeden rząd w całym paśmie 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.zakladki-inwestycji {
+		ul {
+			min-height: 5.3125vw;
+			padding-top: .52083vw;
+			padding-bottom: .52083vw;
+		}
+
+		li + li::before {
+			height: 1.51042vw;
+			margin-top: -.75521vw;
+		}
+
+		a {
+			--wciecie-zakladki: ~"calc(4.469vw - 29.8px)";
+			padding-top: .20833vw;
+			padding-bottom: .20833vw;
+			.tekst-makiety(21; 16);
+		}
+	}
+}
+
+// ================= nagłówek inwestycji: wnętrze schodzi od 1025px =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycja-hero {
+		h1 {
+			.tekst-makiety(68; 44);
+		}
+
+		.etykieta-sekcji {
+			margin-bottom: .52083vw;
+		}
+
+		.para-przyciskow {
+			margin-top: 2.61979vw;
+
+			.przycisk-pigulka {
+				width: max(276px, 16.97917vw);
+				padding: 0 3.125vw;
+				gap: .75521vw;
+				// Napis z ukośnikiem wyśrodkowany w pigułce
+				justify-content: center;
+			}
+		}
+	}
+
+	.inwestycja-hero-kolumna {
+		margin-top: 5.54688vw;
+
+		.wstep {
+			margin-top: 1.45833vw;
+			.tekst-makiety(28; 20);
+		}
+	}
+
+	.parametry-inwestycji {
+		margin-top: 2.86458vw;
+		gap: 1.04167vw 2.60417vw;
+
+		li {
+			gap: .9375vw;
+		}
+
+		li:nth-child(1),
+		li:nth-child(2) {
+			width: auto;
+		}
+
+		.nazwa,
+		.wartosc {
+			white-space: nowrap;
+		}
+
+		img {
+			width: max(24px, 1.77083vw);
+			height: max(24px, 1.77083vw);
+		}
+
+		.tresc {
+			.tekst-makiety(16.36; 15);
+			line-height: 1.885;
+		}
+	}
+}
+
+// ================= nagłówek inwestycji 1025-1899: tekst obok zdjęcia =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycja-hero {
+		padding-bottom: 7.70833vw;
+
+		.fin-hero-tresc { padding-top: 12.29167vw; }
+	}
+	.inwestycja-hero-kolumna {
+		max-width: 41.14583vw;
+	}
+	.inwestycja-zdjecie {
+		top: 12.29167vw;
+		height: 33.85417vw;
+		picture { clip-path: polygon(12.91667vw 0, 100% 0, 100% 100%, 0 100%); }
+		// Grubość ramki zostaje 3px: przeskalowana schodzi poniżej piksela.
+		&::after { left: 11.38021vw; top: -1.875vw; width: 6.66667vw; height: 16.875vw; }
+	}
+}
+
+// ================= parametry inwestycji: symetria i ramki (poniżej 1900px) =================
+@media (max-width: (@desktop-pelny - .02px)) {
+	.parametry-inwestycji {
+		flex-wrap: wrap;
+		gap: clamp(10px, .83vw, 16px);
+
+		li,
+		li:nth-child(1),
+		li:nth-child(2) {
+			flex: 1 1 0;
+			width: auto;
+			min-width: 0;
+			padding: clamp(10px, .83vw, 16px) clamp(12px, 1vw, 18px);
+			border: 1px solid @granat-ramka;
+			border-radius: 12px;
+		}
+	}
+}
+
+// Przy 576-767px trzy pozycje w rzędzie mają po ok
+@media (min-width: @telefon-duzy) and (max-width: (@tablet - 1px)) {
+	.parametry-inwestycji {
+		li {
+			gap: 10px;
+		}
+
+		img {
+			width: 24px;
+			height: 24px;
+		}
+
+		.tresc {
+			font-size: 15px;
+		}
+	}
+}
+
+@media (max-width: (@telefon-duzy - 1px)) {
+	.parametry-inwestycji {
+		li,
+		li:nth-child(1),
+		li:nth-child(2) {
+			flex-basis: 100%;
+		}
+	}
+}
+
+// ================= pigułki nagłówka inwestycji: wcięcie pasma zamiast makietowego =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycja-hero .para-przyciskow .przycisk-pigulka {
+		padding: 0 max(32px, 2.34375vw);
+	}
+}
+
+// ================= nagłówek inwestycji 1025-1399: wnętrze wąskiej kolumny =================
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	// Trzy parametry nie zmieszczą się tu w jednym rzędzie - przy 1399px potrzebują
+	// 595px, a kolumna ma 575,6px. Ale "flex-basis: 100%" to przesada w drugą stronę:
+	// każde pudełko rozciągało się na całą kolumnę i zostawiało 225-410px pustki obok
+	// napisu, a lista rosła do 255,6px zamiast 56,5px, które ma tuż powyżej 1400px.
+	// Pudełka mają więc szerokość własnej treści i zawijają się same: dwa w rzędzie,
+	// trzecie pod nimi. Reguła musi stać tutaj, bo blok <1900px daje im flex-grow: 1.
+	.parametry-inwestycji {
+		li,
+		li:nth-child(1),
+		li:nth-child(2) {
+			flex: 0 1 auto;
+		}
+	}
+
+	.inwestycja-hero .para-przyciskow .przycisk-pigulka {
+		min-width: 0;
+	}
+}
+
+// ================= nagłówek inwestycji 1400-1899: parametry w kolumnie tekstu =================
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	// Górna krawędź etykiety: wcięcie treści + wysokość ścieżki nawigacji + margines kolumny
+	@gora-tekstu: ~"calc(17.83855vw + 2.5px + max(12px, .78125vw) * 1.21)";
+
+	.inwestycja-hero {
+		// Zdjęcie jest wyjęte z przepływu, więc sekcja musi objąć je sama
+		min-height: ~"calc(17.83855vw + 2.5px + max(12px, .78125vw) * 1.21 + 33.85417vw + 7.70833vw)";
+	}
+
+	.inwestycja-zdjecie {
+		top: @gora-tekstu;
+	}
+}
+
+// ================= kafle usług 1025-1399: na środku między galerią a kontaktem =================
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	// Wysokości z makiety 1920px (galeria 57.5vw, kafle 483px) zostawiały pod strzałkami
+	// stały odstęp, a cały luz spadał pod kafle - 44px nad nimi i 263px pod nimi przy 1100px.
+	// Galeria kończy się więc na strzałkach, a nad kaflami stoi ten sam odstęp, który kontakt
+	// ma nad swoją etykietą, jak na 1920px (96,8px nad kaflami, 95px pod nimi).
+	.galeria-inwestycji {
+		min-height: 0;
+		padding-bottom: 0;
+	}
+
+	.oferta-uzupelniajaca {
+		height: auto;
+		padding-top: ~"max(56px, 4.8958vw)";
+		padding-bottom: 0;
+	}
+}

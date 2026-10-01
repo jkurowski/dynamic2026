@@ -1,0 +1,1421 @@
+// Podstrona "Finansowanie" (makieta FINANSOWANIE, node 742:953, 1920x4799)
+
+// ================= nagłówek podstrony ze zdjęciem =================
+.fin-hero {
+	position: relative;
+	overflow: hidden;   // zdjęcie wychodzi poza prawą krawędź ekranu
+	padding-bottom: 107px;
+
+	@media (max-width: @duzy-ekran) {
+		padding-bottom: 60px;
+	}
+}
+
+.fin-hero-tresc {
+	.kontener();
+	position: relative;
+	z-index: 2;
+	padding-top: 236px;
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 180px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 130px;
+	}
+}
+
+// Szerokość kolumny to odstępstwo od makiety
+.fin-hero-kolumna {
+	max-width: 725px;
+	// odstęp od ścieżki nawigacji do etykiety sekcji
+	margin-top: 69px;
+
+	.wstep {
+		margin: 36px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-sekcja;
+		font-weight: 400;
+		line-height: 1.57;
+	}
+
+	.przycisk-pigulka {
+		margin-top: 46.4px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		max-width: 42%;
+	}
+
+	// Od tabletu w dół zdjęcie schodzi pod tekst, więc kolumna może zająć całą szerokość.
+	@media (max-width: @duzy-ekran) {
+		max-width: none;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.wstep {
+			font-size: 18px;
+		}
+	}
+}
+
+// Zdjęcie stoi na procentach, bo w makiecie zaczyna się na 895 z 1920 i wystaje poza
+// ekran. Procenty trzymają tę proporcję przy każdej szerokości.
+.fin-hero-zdjecie {
+	position: absolute;
+	left: 46.6%;
+	top: 318px;
+	width: 71.4%;
+	height: 750px;
+	z-index: 1;
+
+	// Skos jest na <picture>, a nie na całym kontenerze - inaczej przyciąłby też
+	// pomarańczową ramkę, która ma być osobnym kształtem.
+	picture {
+		// Poznaj nas i wykończenie mają ten sam kierunek skosu
+		clip-path: polygon(0 0, 79.09% 0, 100% 100%, 20.91% 100%);
+		// nad pomarańczową ramką, ale w tym samym kontekście - ramka ma być widoczna tam, gdzie
+		// wystaje poza kadr zdjęcia
+		position: relative;
+		z-index: 1;
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.fin-hero-ramka {
+		position: absolute;
+		left: 95px;
+		top: 368px;
+		width: 374px;
+		height: 443px;
+		z-index: 0;
+		background: url('../img/ramka-skos-prawy.svg') center / 100% 100% no-repeat;
+		pointer-events: none;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		height: 560px;
+
+		.fin-hero-ramka {
+			top: 260px;
+			width: 280px;
+			height: 330px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		display: block;
+
+		.fin-hero-ramka {
+			left: 7.08%;
+			top: 49.2%;
+			width: 27.28%;
+			height: 59.07%;
+		}
+	}
+}
+
+// ========= rozlewanie zdjęcia w nagłówkach podstron (.fin-hero) poniżej 1025px =========
+@media (max-width: @duzy-ekran) {
+	.fin-hero {
+		display: flex;
+		flex-direction: column;
+		padding-top: 132px;
+
+		.tlo-strony(
+			~".fin-hero-zdjecie";
+			~".fin-hero-tresc";
+			~"1370 / 750";
+			~"polygon(0 0, calc(100% - 20.91% * var(--skos)) 0, 100% 100%, calc(20.91% * var(--skos)) 100%)"
+		);
+
+		--parallaks: 0;
+
+		.fin-hero-zdjecie {
+			order: -1;
+			position: relative;
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1370 / 750;
+			top: auto;
+			left: auto;
+			margin-top: 0;
+			margin-bottom: 4.5274%;
+
+			picture {
+				height: auto;
+				aspect-ratio: 1370 / 750;
+			}
+
+			picture img {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				max-width: none;
+				object-fit: cover;
+				object-position: center;
+			}
+		}
+
+		.fin-hero-kolumna {
+			max-width: none;
+		}
+
+		.okruszki {
+			.kontener();
+			position: absolute;
+			left: 0;
+			top: 0;
+			margin-top: ~"calc(-42px - 59.2719%)";
+			z-index: 3;
+		}
+
+		.fin-hero-tresc {
+			padding-top: 40px;
+			padding-bottom: 60px;
+		}
+	}
+
+	.fin-hero.tlo-strony .fin-hero-zdjecie picture {
+		position: fixed;
+		aspect-ratio: auto;
+	}
+
+	.strona-finansowania .fin-hero .fin-hero-zdjecie picture {
+		clip-path: polygon(0 0, calc(100% - 23.31% * var(--skos)) 0, 100% 100%, calc(23.31% * var(--skos)) 100%);
+	}
+}
+
+// Zdjęcie stoi nad tekstem, więc odstęp jest mniejszy
+@media (max-width: @duzy-ekran) {
+	.strona-finansowania .fin-hero-kolumna {
+		margin-top: 40px;
+	}
+}
+
+.strona-finansowania .fin-hero-zdjecie picture {
+	clip-path: polygon(0 0, 76.69% 0, 100% 100%, 23.31% 100%);
+}
+
+.strona-finansowania .fin-hero-zdjecie img {
+	transform: scaleX(-1);
+	// Kadr stoi na środku bitmapy
+	object-position: center;
+
+	@media (min-width: @desktop-pelny) {
+		position: absolute;
+		left: -12.4px;
+		top: -174.6px;
+		width: 1135.4px;
+		height: 946.4px;
+		max-width: none;
+		object-position: center;
+	}
+
+	// niżej zdjęcie jest zwykłym blokiem na całą szerokość, bez ukośnego kadru
+	@media (max-width: @duzy-ekran) {
+		position: static;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+@media (min-width: @desktop-pelny) {
+	.strona-finansowania .fin-hero-ramka {
+		left: 97px;
+		top: 369px;
+	}
+}
+
+// Atuty pod przyciskiem
+.hero-finansowanie .przycisk-pigulka {
+	padding: 0 56px;
+	gap: 14.7px;
+}
+
+// Pigułka pod opisem współpracy stoi w makiecie ciaśniej: ukośnik 37px od krawędzi.
+.kalkulator-sekcja .przycisk-pigulka {
+	padding: 0 37px;
+	gap: 14.7px;
+}
+
+.atuty {
+	display: grid;
+	grid-template-columns: repeat(2, 257px);
+	gap: 28px;
+	// pigułka nad kaflami stoi wyżej, kafle zostają na miejscu
+	margin: 66.6px 0 0;
+	padding: 0;
+	list-style: none;
+
+	img {
+		width: 71px;
+		height: 71px;
+	}
+
+	h2 {
+		margin: 29px 0 16px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 27px;
+		@media (min-width: @desktop-pelny) {
+			white-space: nowrap;
+		}
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	p {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 19px;
+		font-weight: 300;
+		line-height: 1.74;
+
+		@media (min-width: @desktop-pelny) {
+			width: 262px;
+		}
+	}
+
+	// Trzy kafle, nie dwa
+	@media (max-width: @duzy-ekran) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 20px;
+
+		img {
+			width: 52px;
+			height: 52px;
+		}
+
+		h2 {
+			margin-top: 18px;
+			font-size: 21px;
+		}
+
+		p {
+			font-size: 16px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		grid-template-columns: 1fr;
+		margin-top: 40px;
+	}
+}
+
+// ================= kalkulator raty =================
+.kalkulator-sekcja {
+	.kontener();
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding-bottom: 97px;
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-bottom: 60px;
+	}
+}
+
+.kalkulator-opis {
+	flex: 1 1 0;
+	min-width: 0;
+	padding-top: 90px;
+
+	> .etykieta-sekcji {
+		gap: 15px;
+	}
+
+	> p:not(.etykieta-sekcji) {
+		max-width: 721px;
+		margin: 34px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	.przycisk-pigulka {
+		margin-top: 46.9px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		width: 100%;
+		padding-top: 0;
+
+		> p:not(.etykieta-sekcji) {
+			font-size: 17px;
+			line-height: 1.7;
+		}
+	}
+}
+
+.karta-kalkulatora {
+	flex: 0 0 830px;
+	padding: 56px 65px 60px;
+	background: @granat;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+
+	h2 {
+		margin: 0 0 12px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 39px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.wprowadzenie {
+		margin: 0 0 48px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 620px;
+		padding: 40px;
+
+		h2 {
+			font-size: 30px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		padding: 24px;
+
+		.wprowadzenie {
+			font-size: 17px;
+			margin-bottom: 30px;
+		}
+	}
+}
+
+// jeden suwak: podpis i wartość w jednym rzędzie, pod spodem tor
+.suwak {
+	margin-bottom: 42px;
+
+	.opis {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 4px 20px;
+		margin-bottom: 4px;
+	}
+
+	.podpis {
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	.wartosc {
+		color: var(--tekst-na-ciemnym);
+		font-size: 26px;
+		font-weight: 700;
+		line-height: 1.54;
+		white-space: nowrap;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		margin-bottom: 30px;
+
+		.podpis {
+			font-size: 16px;
+		}
+
+		.wartosc {
+			font-size: 20px;
+		}
+	}
+}
+
+input[type="range"].tor {
+	--wypelnienie: 0%;
+	width: 100%;
+	height: 28px;
+	margin: 0;
+	padding: 0;
+	background: transparent;
+	appearance: none;
+	-webkit-appearance: none;
+	cursor: pointer;
+
+	&::-webkit-slider-runnable-track {
+		height: 8px;
+		border-radius: 4px;
+		background: linear-gradient(to right, @pomaranczowy var(--wypelnienie), #4E5061 var(--wypelnienie));
+	}
+
+	&::-webkit-slider-thumb {
+		appearance: none;
+		-webkit-appearance: none;
+		width: 28px;
+		height: 28px;
+		margin-top: -10px;
+		border: 1px solid @bialy;
+		border-radius: 50%;
+		background: @pomaranczowy;
+	}
+
+	&::-moz-range-track {
+		height: 8px;
+		border-radius: 4px;
+		background: #4E5061;
+	}
+
+	&::-moz-range-progress {
+		height: 8px;
+		border-radius: 4px;
+		background: @pomaranczowy;
+	}
+
+	&::-moz-range-thumb {
+		width: 26px;
+		height: 26px;
+		border: 1px solid @bialy;
+		border-radius: 50%;
+		background: @pomaranczowy;
+	}
+
+	&:focus-visible {
+		outline: 2px solid @pomaranczowy-jasny;
+		outline-offset: 4px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		height: 44px;
+	}
+}
+
+.oprocentowanie {
+	margin: 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: 21px;
+	font-weight: 300;
+	line-height: 1.9;
+
+	.akcent {
+		color: @pomaranczowy;
+		font-weight: 700;
+	}
+}
+
+.podsumowanie-raty {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 20px;
+	margin-top: 33px;
+	padding-top: 36px;
+	border-top: 1px solid #4E5061;
+
+	.podpis {
+		color: var(--tekst-na-ciemnym);
+		font-size: 32px;
+		font-weight: 300;
+		line-height: 1.81;
+	}
+
+	.wynik-raty {
+		color: @pomaranczowy;
+		font-size: 57px;
+		font-weight: 700;
+		line-height: 1.21;
+		white-space: nowrap;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.podpis {
+			font-size: 22px;
+		}
+
+		.wynik-raty {
+			font-size: 38px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+		padding-top: 26px;
+
+		.podpis {
+			font-size: 18px;
+		}
+
+		.wynik-raty {
+			font-size: 30px;
+		}
+	}
+}
+
+.zastrzezenie {
+	margin: 16px 0 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-drobny;
+	font-weight: 300;
+	line-height: 2.04;
+	opacity: .8;
+}
+
+// ================= partner kredytowy =================
+.partner-sekcja {
+	.kontener();
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: flex-start;
+	gap: 20px;
+	padding-bottom: 95px;
+
+	@media (min-width: @desktop-pelny) {
+		gap: 120px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+}
+
+.karta-partnera {
+	flex: 0 0 830px;
+	padding: 50px;
+	background: @granat;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+
+	.logo-partnera {
+		display: block;
+		width: 506px;
+		max-width: 100%;
+		height: auto;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 40px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 620px;
+		padding: 34px;
+
+		.logo-partnera {
+			width: 340px;
+			margin-bottom: 26px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+}
+
+// wizytówka doradcy w ramce wewnątrz karty
+.wizytowka {
+	padding: 47px 49px 40px;
+	background: #222236;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+
+	.gora {
+		display: flex;
+		align-items: center;
+		gap: 42px;
+	}
+
+	.zdjecie {
+		width: 199px;
+		height: 199px;
+		flex: 0 0 auto;
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+	h3 {
+		margin: 0 0 6px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 42px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.stanowisko {
+		margin: 0 0 26px;
+		color: @pomaranczowy;
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding: 30px;
+
+		.gora {
+			gap: 24px;
+		}
+
+		.zdjecie {
+			width: 130px;
+			height: 130px;
+		}
+
+		h3 {
+			font-size: 28px;
+		}
+
+		.stanowisko {
+			font-size: 17px;
+			margin-bottom: 16px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		padding: 22px;
+
+		.gora {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 18px;
+		}
+	}
+}
+
+.dane-doradcy {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 19px;
+
+		& + li {
+			margin-top: 23px;
+		}
+	}
+
+	.ramka {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 55px;
+		height: 55px;
+		border: 1px solid @granat-ramka;
+		border-radius: 5px;
+
+		img {
+			width: 31px;
+			height: 31px;
+		}
+	}
+
+	.tresc {
+		color: var(--tekst-na-ciemnym);
+		font-size: 15.786px;
+		font-weight: 400;
+		line-height: 30.969px;
+		overflow-wrap: anywhere;
+	}
+
+	a {
+		color: var(--tekst-na-ciemnym);
+		font-size: 22.297px;
+		font-weight: 700;
+		line-height: inherit;
+		text-decoration: none;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.ramka {
+			width: 42px;
+			height: 42px;
+
+			img {
+				width: 22px;
+				height: 22px;
+			}
+		}
+
+		.tresc {
+			font-size: 14px;
+			line-height: 1.6;
+		}
+
+		a {
+			font-size: 16px;
+		}
+	}
+}
+
+// pasek na dole wizytówki
+.stopka-wizytowki {
+	display: flex;
+	align-items: center;
+	gap: 21px;
+	margin-top: 32px;
+	padding-top: 32px;
+	border-top: 1px solid @granat-ramka;
+
+	img {
+		width: 55px;
+		height: 55px;
+		flex: 0 0 auto;
+	}
+
+	p {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16px;
+		font-weight: 300;
+		line-height: 1.81;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		gap: 14px;
+		margin-top: 22px;
+		padding-top: 22px;
+
+		img {
+			width: 38px;
+			height: 38px;
+		}
+
+		p {
+			font-size: 14px;
+		}
+	}
+}
+
+.partner-opis {
+	flex: 1 1 0;
+	min-width: 0;
+	padding-top: 58px;
+
+	@media (max-width: @duzy-ekran) {
+		width: 100%;
+		padding-top: 0;
+	}
+}
+
+// lista tego, w czym pomaga doradca
+.lista-wsparcia {
+	margin: 43px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 21px;
+		padding: 28px 0;
+
+		& + li {
+			border-top: 1px solid @granat-ramka;
+		}
+	}
+
+	img {
+		width: 46px;
+		height: 46px;
+		flex: 0 0 auto;
+	}
+
+	span {
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 1.65;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		li {
+			gap: 16px;
+			padding: 20px 0;
+		}
+
+		img {
+			width: 34px;
+			height: 34px;
+		}
+
+		span {
+			font-size: 18px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		margin-top: 26px;
+
+		img {
+			width: 28px;
+			height: 28px;
+		}
+
+		span {
+			font-size: 15px;
+		}
+	}
+}
+
+// Dokładne wymiary głównej ramki desktopowej z projektu.
+@media (min-width: @desktop-pelny) {
+	.strona-finansowania main {
+		padding-bottom: 1px;
+	}
+
+	.fin-hero {
+		height: 1227px;
+		padding-bottom: 0;
+	}
+
+	.fin-hero-kolumna {
+		max-width: 830px;
+	}
+
+	.atuty {
+		grid-template-columns: repeat(3, 257px);
+		column-gap: 28px;
+	}
+
+	.lista-wsparcia {
+		li {
+			left: 3px;
+			width: calc(100% - 3px);
+			padding: 16.5px 0;
+
+			&:first-child {
+				padding-top: 8px;
+				padding-bottom: 8px;
+
+				> img,
+				> span {
+					position: relative;
+					top: -8px;
+				}
+			}
+
+			& + li {
+				border-top: 0;
+
+				&::before {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 546px;
+					height: 1px;
+					background: @granat-ramka;
+				}
+			}
+		}
+
+		span {
+			display: flex;
+			align-items: center;
+			height: 70px;
+		}
+	}
+
+	.karta-kalkulatora,
+	.karta-partnera {
+		height: 733px;
+		box-sizing: border-box;
+	}
+
+	.karta-partnera {
+		// Wewnętrzna wizytówka jest szersza od pola karty, min-width: 0 chroni kartę przed
+		// rozpychaniem
+		min-width: 0;
+
+		.logo-partnera {
+			position: relative;
+			left: 2px;
+			top: -1px;
+			margin-bottom: 39px;
+		}
+	}
+
+	.wizytowka {
+		position: relative;
+		left: -2px;
+		width: 736px;
+		height: 459px;
+		padding: 40px 48px 34px;
+		box-sizing: border-box;
+
+		.gora {
+			align-items: flex-start;
+
+			> picture {
+				flex: 0 0 199px;
+				margin-top: 6px;
+			}
+
+			> div {
+				flex: 0 0 397px;
+				min-width: 0;
+			}
+		}
+
+		h3 {
+			margin-bottom: 0;
+			line-height: 46px;
+		}
+
+		.stanowisko {
+			margin-bottom: 19px;
+		}
+	}
+
+	.dane-doradcy li + li {
+		margin-top: 13px;
+	}
+
+	.stopka-wizytowki {
+		gap: 32px;
+		margin-top: 35px;
+		padding-top: 31px;
+	}
+
+	.partner-sekcja {
+		padding-bottom: 0;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+
+	.atuty {
+		grid-template-columns: repeat(3, minmax(0, 257px));
+
+		img {
+			width: clamp(52px, 3.6979vw, 71px);
+			height: clamp(52px, 3.6979vw, 71px);
+		}
+
+		h2 {
+			margin: clamp(18px, 1.5104vw, 29px) 0 clamp(12px, .83333vw, 16px);
+			// Najdłuższe słowo ("Szacunkowa") musi zmieścić się w ramce kafla
+			font-size: clamp(17px, calc(2.3vw - 6px), 21px);
+		}
+
+		p {
+			width: 100%;
+			.tekst-makiety(19; 14; 16);
+		}
+	}
+
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.fin-hero-kolumna {
+		max-width: 42%;
+	}
+
+	.atuty {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+// ================= płynny desktop 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.fin-hero {
+		// Proporcja makiety to minimalna wysokość, nie sztywna
+		height: auto;
+		min-height: 63.9063vw;
+		padding-bottom: 0;
+	}
+
+	.fin-hero-tresc {
+		padding-top: 12.2917vw;
+	}
+
+	.fin-hero-kolumna {
+		max-width: 43.2292vw;
+
+		.wstep {
+			margin-top: 1.875vw;
+			// Rozmiar tekstu nie schodzi razem z oknem
+		}
+
+		.przycisk-pigulka {
+			margin-top: 2.4167vw;
+		}
+	}
+
+	.fin-hero-zdjecie {
+		top: 16.5625vw;
+		height: 39.0625vw;
+
+		.fin-hero-ramka {
+			left: 4.9479vw;
+			top: 19.1667vw;
+			width: 19.4792vw;
+			height: 23.0729vw;
+		}
+	}
+}
+
+// Kafle atutów zostają na własnym paśmie 1400-1899
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.atuty {
+		grid-template-columns: repeat(3, 13.3854vw);
+		gap: 1.4583vw;
+		margin-top: 3.4688vw;
+
+		img {
+			width: 3.6979vw;
+			height: 3.6979vw;
+		}
+
+		h2 {
+			margin: 1.5104vw 0 .83333vw;
+			font-size: clamp(21px, 1.40625vw, 27px);
+
+			// Tekst zostaje we własnej kolumnie
+			white-space: normal;
+		}
+
+		p {
+			font-size: clamp(14px, .98958vw, 19px);
+
+			// Szerokość treści należy do kolumny
+			width: 100%;
+		}
+	}
+}
+
+// Kalkulator i karta partnera skalowane z szerokością okna
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kalkulator-sekcja {
+		gap: 1.04167vw;
+		padding-bottom: 5.05208vw;
+	}
+
+	.kalkulator-opis {
+		padding-top: 4.6875vw;
+
+		> .etykieta-sekcji {
+			gap: .78125vw;
+		}
+
+		> p:not(.etykieta-sekcji) {
+			max-width: 37.55208vw;
+			margin-top: 1.77083vw;
+			.tekst-makiety(21; 17);
+		}
+
+		.przycisk-pigulka {
+			margin-top: 2.44271vw;
+		}
+	}
+
+	.karta-kalkulatora {
+		flex: 0 0 43.2292vw;
+		min-height: 38.17708vw;
+		padding: 2.91667vw 3.38542vw 3.125vw;
+		box-sizing: border-box;
+
+		// Trzeci argument to rozmiar mobilny tego samego napisu
+		h2 {
+			margin-bottom: .625vw;
+			.tekst-makiety(39; 28; 30);
+		}
+
+		.wprowadzenie {
+			margin-bottom: 2.5vw;
+			.tekst-makiety(21; 17; 21);
+		}
+	}
+
+	.suwak {
+		margin-bottom: 2.1875vw;
+
+		.opis {
+			gap: .20833vw 1.04167vw;
+			margin-bottom: .20833vw;
+		}
+
+		.podpis {
+			.tekst-makiety(21; 17);
+		}
+
+		.wartosc {
+			.tekst-makiety(26; 20);
+		}
+	}
+
+	// Suwak ma osobne pseudoelementy dla WebKita i Firefoksa, więc tor i kciuk schodzą razem
+	// z resztą karty w obu gałęziach osobno.
+	input[type="range"].tor {
+		height: 1.45833vw;
+
+		&::-webkit-slider-runnable-track {
+			height: .41667vw;
+			border-radius: .20833vw;
+		}
+
+		&::-webkit-slider-thumb {
+			width: 1.45833vw;
+			height: 1.45833vw;
+			margin-top: -.52083vw;
+		}
+
+		&::-moz-range-track,
+		&::-moz-range-progress {
+			height: .41667vw;
+			border-radius: .20833vw;
+		}
+
+		&::-moz-range-thumb {
+			width: 1.35417vw;
+			height: 1.35417vw;
+		}
+	}
+
+	.oprocentowanie {
+		.tekst-makiety(21; 17; 21);
+	}
+
+	.podsumowanie-raty {
+		gap: 1.04167vw;
+		margin-top: 1.71875vw;
+		padding-top: 1.875vw;
+
+		.podpis {
+			.tekst-makiety(32; 22);
+		}
+
+		.wynik-raty {
+			.tekst-makiety(57; 38);
+		}
+	}
+
+	.zastrzezenie {
+		margin-top: .83333vw;
+		.tekst-makiety(14; 12; 14);
+	}
+
+	.partner-sekcja {
+		gap: 6.25vw;
+		padding-bottom: 4.9479vw;
+	}
+
+	// Wizytówka jest szersza od wnętrza karty i z niej wystaje
+	.karta-partnera {
+		flex: 0 0 43.2292vw;
+		min-width: 0;
+		min-height: 38.17708vw;
+		padding: 2.6042vw;
+		box-sizing: border-box;
+
+		.logo-partnera {
+			position: relative;
+			left: .10417vw;
+			top: -.05208vw;
+			width: 26.3542vw;
+			margin-bottom: 2.03125vw;
+		}
+	}
+
+	.wizytowka {
+		position: relative;
+		left: -.10417vw;
+		width: 38.33333vw;
+		min-height: 23.90625vw;
+		padding: 2.08333vw 2.5vw 1.77083vw;
+		box-sizing: border-box;
+
+		.gora {
+			align-items: flex-start;
+			gap: 2.1875vw;
+
+			> picture {
+				flex: 0 0 10.36458vw;
+				margin-top: .3125vw;
+			}
+
+			> div {
+				flex: 0 0 20.67708vw;
+				min-width: 0;
+			}
+		}
+
+		.zdjecie {
+			width: 10.36458vw;
+			height: 10.36458vw;
+		}
+
+		h3 {
+			margin-bottom: 0;
+			line-height: 2.39583vw;
+			.tekst-makiety(42; 28);
+		}
+
+		.stanowisko {
+			margin-bottom: .98958vw;
+			.tekst-makiety(21; 16; 17);
+		}
+	}
+
+	.dane-doradcy {
+		li {
+			gap: .98958vw;
+		}
+
+		li + li {
+			margin-top: .67708vw;
+		}
+
+		.ramka {
+			width: 2.86458vw;
+			height: 2.86458vw;
+			border-radius: .26042vw;
+
+			img {
+				width: 1.61458vw;
+				height: 1.61458vw;
+			}
+		}
+
+		.tresc {
+			line-height: 1.61297vw;
+			.tekst-makiety(15.786; 13);
+		}
+
+		a {
+			.tekst-makiety(22.297; 17; 22.297);
+		}
+	}
+
+	.stopka-wizytowki {
+		gap: 1.66667vw;
+		margin-top: 1.82292vw;
+		padding-top: 1.61458vw;
+
+		img {
+			width: 2.86458vw;
+			height: 2.86458vw;
+		}
+
+		p {
+			.tekst-makiety(16; 13; 16);
+		}
+	}
+
+	.partner-opis {
+		padding-top: 3.02083vw;
+	}
+
+	// Lista wsparcia ma w makiecie stałą wysokość wiersza i krótszą kreskę niż szerokość kolumny
+	.lista-wsparcia {
+		margin-top: 2.23958vw;
+
+		li {
+			left: .15625vw;
+			width: calc(100% - .15625vw);
+			gap: 1.09375vw;
+			padding: .85938vw 0;
+
+			&:first-child {
+				padding-top: .41667vw;
+				padding-bottom: .41667vw;
+
+				> img,
+				> span {
+					position: relative;
+					top: -.41667vw;
+				}
+			}
+
+			& + li {
+				border-top: 0;
+
+				&::before {
+					content: '';
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 28.4375vw;
+					height: 1px;
+					background: @granat-ramka;
+				}
+			}
+		}
+
+		img {
+			width: 2.39583vw;
+			height: 2.39583vw;
+		}
+
+		span {
+			display: flex;
+			align-items: center;
+			height: 3.64583vw;
+			.tekst-makiety(24; 18);
+		}
+	}
+}
+
+// Dwie pigułki mają w makiecie własne, ciaśniejsze wcięcia - schodzą razem z globalną
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.hero-finansowanie .przycisk-pigulka {
+		padding: 0 2.91667vw;
+		gap: .765625vw;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kalkulator-sekcja .przycisk-pigulka {
+		padding: 0 1.92708vw;
+		gap: .765625vw;
+	}
+
+	.partner-sekcja {
+		padding-bottom: 0;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.fin-hero-kolumna {
+		margin-top: 3.5938vw;
+	}
+}
+
+// ================= ramki kafli atutów (poniżej widoku chronionego) =================
+@media (max-width: (@desktop-pelny - .02px)) {
+	.atuty li {
+		padding: clamp(14px, 1.25vw, 24px);
+		border: 1px solid @granat-ramka;
+		border-radius: 12px;
+	}
+}

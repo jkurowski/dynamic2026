@@ -1,0 +1,390 @@
+// Pasek wyszukiwania mieszkań
+
+.wyszukiwarka {
+	.kontener();
+	position: relative;
+	z-index: 3;
+	margin-top: -79px;
+}
+
+.pasek-wyszukiwarki {
+	display: flex;
+	align-items: stretch;
+	height: 158px;
+	padding-right: 51px;
+	background: @bialy;
+	border-radius: @rog-duzy;
+	box-shadow: 0 0 13px rgba(0, 0, 0, .05);
+}
+
+// Kolumny maja w projekcie stala szerokosc ~300px (kreski co 299-301px), a nie rowny
+// podzial dostepnego miejsca - stad flex-grow: 0.
+.filtr {
+	position: relative;
+	// display: flex jest tu konieczny - <button> domyslnie centruje zawartosc w pionie i
+	// etykieta zjezdza o ~24px w dol
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	flex: 0 1 300px;
+	min-width: 0;
+	padding: 38px 52px 0 30px;
+	background: none;
+	border: 0;
+	text-align: left;
+
+	&:first-child {
+		padding-left: 50px;
+	}
+
+	// kreska rozdzielająca - w projekcie nie na całą wysokość, tylko 89px
+	&:not(:first-child)::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		width: 2px;
+		height: 89px;
+		margin-top: -44px;
+		background: @szary-linia;
+	}
+
+	.etykieta {
+		display: block;
+		margin-bottom: 24px;
+		color: @granat;
+		font-size: @tekst-srodek;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.wartosc {
+		display: block;
+		color: @szary-jasny;
+		font-size: @tekst-maly;
+		font-weight: 400;
+		line-height: 1.21;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.daszek {
+		position: absolute;
+		right: 28px;
+		bottom: 48px;
+		width: 16px;
+		height: 9px;
+		transition: transform @czas-animacji ease;
+	}
+
+	&[aria-expanded='true'] .daszek {
+		transform: rotate(180deg);
+	}
+
+	&:hover .wartosc,
+	&:focus-visible .wartosc {
+		color: @granat;
+	}
+}
+
+// rozwijana lista - skórka na dropdown Bootstrapa
+.lista-filtru {
+	min-width: 240px;
+	padding: 8px 0;
+	border: 0;
+	border-radius: @rog-maly;
+	box-shadow: 0 6px 20px rgba(0, 0, 0, .12);
+
+	.dropdown-item {
+		padding: 10px 20px;
+		color: @granat;
+		font-size: @tekst-maly;
+
+		&:hover,
+		&:focus {
+			background: @szary-linia;
+		}
+
+		&.wybrany {
+			color: @pomaranczowy;
+			font-weight: 700;
+		}
+	}
+
+	// Pozycje wjeżdżają kolejno po rozwinięciu listy
+	&.show > li {
+		.wjazd-pozycji-menu(6);
+	}
+}
+
+.przycisk-szukaj {
+	align-self: center;
+	margin-left: auto;
+	width: 104px;
+	height: 73px;
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: @pomaranczowy;
+	border: 1px solid @pomaranczowy-jasny;
+	border-radius: @rog-maly;
+	transition: background @czas-animacji ease;
+
+	&:hover,
+	&:focus-visible {
+		background: @pomaranczowy-jasny;
+	}
+
+	svg {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+// Pięć pól nie może dalej zachowywać sztywnych kolumn 300px
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.pasek-wyszukiwarki {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: stretch;
+		gap: 8px;
+		height: auto;
+		min-height: 0;
+		padding: 24px;
+	}
+
+	.filtr {
+		width: 100%;
+		min-height: 92px;
+		padding: 16px 40px 16px 16px;
+
+		&:first-child {
+			padding-left: 16px;
+		}
+
+		&::before {
+			display: none;
+		}
+
+		.etykieta {
+			margin-bottom: 12px;
+			font-size: @tekst-podstawa;
+			white-space: nowrap;
+		}
+
+		.daszek {
+			top: 50%;
+			right: 16px;
+			bottom: auto;
+		}
+	}
+
+	.przycisk-szukaj {
+		width: 100%;
+		margin: 0;
+	}
+}
+
+@media (min-width: @desktop-xl) and (max-width: (@desktop-xxl - .02px)) {
+	.pasek-wyszukiwarki {
+		display: flex;
+		height: 158px;
+		padding-right: clamp(24px, 2.656vw, 51px);
+	}
+
+	.filtr {
+		flex: 1 1 0;
+		padding-right: clamp(30px, 2.708vw, 52px);
+		padding-left: clamp(16px, 1.563vw, 30px);
+
+		&:first-child {
+			flex-grow: 1.35;
+			padding-left: clamp(30px, 2.604vw, 50px);
+		}
+
+		.etykieta {
+			font-size: clamp(18px, 1.146vw, @tekst-srodek);
+			white-space: nowrap;
+		}
+
+		.daszek {
+			right: clamp(14px, 1.458vw, 28px);
+		}
+	}
+
+	.przycisk-szukaj {
+		width: clamp(88px, 5.417vw, 104px);
+		margin-left: clamp(16px, 1.302vw, 25px);
+	}
+}
+
+// --- ekrany mniejsze niż projekt (układ nasz, nie z Figmy) ---
+
+@media (max-width: @duzy-ekran) {
+	.filtr {
+		flex: 1 1 0;
+		padding: 28px 40px 0 20px;
+
+		&:first-child {
+			padding-left: 30px;
+		}
+
+		.etykieta {
+			font-size: @tekst-podstawa;
+			margin-bottom: 14px;
+		}
+
+		.daszek {
+			right: 16px;
+		}
+	}
+
+	.pasek-wyszukiwarki {
+		height: 130px;
+		padding-right: 24px;
+	}
+}
+
+@media (max-width: @duzy-ekran) {
+	.wyszukiwarka {
+		margin-top: 32px;
+	}
+
+	.pasek-wyszukiwarki {
+		height: auto;
+		flex-wrap: wrap;
+		padding: 24px;
+		gap: 4px;
+	}
+
+	.pasek-wyszukiwarki > .lista-filtru {
+		position: static !important;
+		inset: auto !important;
+		transform: none !important;
+		display: grid !important;
+		grid-template-rows: repeat(5, 0fr);
+		flex: 1 1 100%;
+		width: 100%;
+		min-width: 0;
+		margin: 0 !important;
+		padding: 0;
+		overflow: hidden;
+		box-shadow: none;
+		pointer-events: none;
+		transition: grid-template-rows .24s ease, padding .24s ease,
+			box-shadow .24s ease;
+
+		li {
+			min-height: 0;
+			overflow: hidden;
+		}
+
+		&.show {
+			grid-template-rows: repeat(5, 1fr);
+			padding: 8px 0;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, .12);
+			pointer-events: auto;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
+		}
+	}
+
+	.filtr {
+		// Na całym widoku mobilnym każde pole dostaje osobny wiersz
+		flex: 1 1 100%;
+		padding: 16px 40px 16px 0;
+
+		&:first-child {
+			padding-left: 0;
+		}
+
+		// Na telefonie chowamy wstawkę między listami dropdown
+		&::before {
+			display: none;
+		}
+
+		.daszek {
+			right: 12px;
+			bottom: auto;
+			top: 50%;
+		}
+	}
+
+	.przycisk-szukaj {
+		width: 100%;
+		margin-top: 12px;
+	}
+}
+
+@media (max-width: @telefon) {
+	.filtr {
+		flex: 1 1 100%;
+		padding: 14px 40px 14px 0;
+		border-bottom: 1px solid @szary-linia;
+	}
+}
+
+// Od 1400px pasek odtwarza proporcje makiety (1680x158, kolumny co 300px, kreski 2x89)
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.pasek-wyszukiwarki {
+		height: 8.2292vw;
+		padding-right: 2.6563vw;
+		border-radius: .41667vw;
+	}
+
+	.filtr {
+		flex: 0 1 15.625vw;
+		padding: 1.9792vw 2.7083vw 0 1.5625vw;
+
+		&:first-child {
+			padding-left: 2.6042vw;
+		}
+
+		&:not(:first-child)::before {
+			height: 4.6354vw;
+			margin-top: -2.3177vw;
+		}
+
+		.etykieta {
+			margin-bottom: 1.25vw;
+			// makieta ma 22px; 1,25vw to proporcja dla 24px i etykieta rosła za szybko
+			.tekst-makiety(22; 17);
+		}
+
+		.wartosc {
+			font-size: clamp(13px, .88542vw, @tekst-maly);
+		}
+
+		.daszek {
+			right: 1.4583vw;
+			bottom: 2.5vw;
+			width: .83333vw;
+			height: .46875vw;
+		}
+	}
+
+	.lista-filtru {
+		min-width: 12.5vw;
+		padding: .41667vw 0;
+
+		.dropdown-item {
+			padding: .52083vw 1.04167vw;
+			font-size: clamp(13px, .88542vw, @tekst-maly);
+		}
+	}
+
+	.przycisk-szukaj {
+		width: 5.4167vw;
+		margin-left: 1.3021vw;
+		height: 3.80208vw;
+
+		svg {
+			width: 1.66667vw;
+			height: 1.66667vw;
+		}
+	}
+}

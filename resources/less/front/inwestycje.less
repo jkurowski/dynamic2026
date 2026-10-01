@@ -1,0 +1,1186 @@
+// Sekcja "Inwestycje w sprzedaży" - karuzela z aktualną inwestycją
+
+.inwestycje {
+	position: relative;
+	padding-top: 130px;
+	padding-bottom: 130px;
+	overflow: hidden;
+
+	.uklad {
+		.kontener();
+		display: flex;
+		align-items: flex-start;
+		gap: 30px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 70px;
+		padding-bottom: 70px;
+
+		.uklad {
+			flex-direction: column;
+		}
+	}
+}
+
+.inwestycje-opis {
+	flex: 0 0 530px;
+	// Długi tytuł nie może poszerzać kolumny i wypychać miniatur poza ekran.
+	min-width: 0;
+	padding-top: 41px;
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 440px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+		padding-top: 0;
+	}
+}
+
+.inwestycje-podtytul {
+	margin: 27px 0 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-sekcja;
+	font-weight: 400;
+	line-height: 1.57;
+}
+
+.inwestycje-tytul-wiersz {
+	display: block;
+}
+
+.inwestycje-przelacznik-szczegolow {
+	display: none;
+}
+
+// Na desktopie dodatkowy wrapper nie zmienia istniejącego układu opisu.
+.inwestycje-szczegoly-panel {
+	display: contents;
+}
+
+// Cztery parametry inwestycji w siatce 2x2
+.parametry {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 28px 50px;
+	margin: 56px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: flex-start;
+		gap: 19px;
+	}
+
+	img {
+		width: 34px;
+		height: 34px;
+		flex: 0 0 auto;
+		margin-top: 4px;
+	}
+
+	.nazwa {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16.4px;
+		font-weight: 300;
+		line-height: 30.8px;
+	}
+
+	.wartosc {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16.4px;
+		font-weight: 600;
+		line-height: 30.8px;
+	}
+
+	@media (max-width: @telefon) {
+		grid-template-columns: 1fr;
+		gap: 22px;
+	}
+}
+
+.inwestycje-przycisk {
+	margin-top: 88px;
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 40px;
+	}
+}
+
+.inwestycje-akcje {
+	display: block;
+}
+
+// --- kolaż zdjęć ---
+.inwestycje-galeria {
+	position: relative;
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	align-items: flex-end;
+
+	@media (max-width: @duzy-ekran) {
+		// Po przejściu kolumny tekstowej nad zdjęcie galeria ma zająć cały kontener
+		width: 100vw;
+		margin-inline: calc(50% - 50vw);
+		flex-direction: column;
+		align-items: stretch;
+		overflow: visible;
+	}
+}
+
+.galeria-glowna {
+	position: relative;
+
+	img {
+		width: 100%;
+		height: 674px;
+		object-fit: cover;
+		display: block;
+		clip-path: polygon(12% 0%, 100% 0%, 100% 100%, 0% 100%);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		img {
+			height: 520px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		img {
+			height: 320px;
+		}
+	}
+
+	// Na telefonie zachowujemy proporcję i oba skosy kadru desktopowego
+	@media (max-width: @duzy-ekran) {
+		z-index: 2;
+		width: calc(100vw - 40px);
+		align-self: center;
+
+		picture {
+			position: relative;
+			display: block;
+			width: 100%;
+			height: auto;
+			aspect-ratio: 963 / 674;
+			overflow: hidden;
+			clip-path: polygon(26.726% 0, 100% 0, 73.274% 100%, 0 100%);
+		}
+
+		> picture img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			object-fit: cover;
+			clip-path: none;
+		}
+	}
+}
+
+// plakietka "W SPRZEDAŻY" w prawym górnym rogu zdjęcia
+.plakietka-status {
+	position: absolute;
+	top: 40px;
+	right: 0;
+	.plakietka-w-sprzedazy(1);
+
+	@media (max-width: @duzy-ekran) {
+		top: clamp(16px, 4vw, 40px);
+		right: clamp(10px, 2vw, 15px);
+	}
+
+	@media (max-width: @telefon) {
+		.plakietka-w-sprzedazy((40 / 58));
+	}
+}
+
+// pasek z adresem u dołu zdjęcia
+.pasek-adresu {
+	position: absolute;
+	left: -51px;
+	bottom: 5px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	height: 72px;
+	padding: 0 35px;
+	background: @granat-obrys;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-sekcja;
+	line-height: 1;
+
+	img {
+		position: static;
+		width: 25px;
+		height: 25px;
+		max-width: 25px;
+		flex: 0 0 auto;
+		object-fit: contain;
+		clip-path: none;
+		filter: brightness(0) invert(1);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		left: 0;
+		right: auto;
+		// Szerokość z zawartości, a nie ułamek kadru
+		width: auto;
+		max-width: calc(100% - 24px);
+		box-sizing: border-box;
+		padding-inline: clamp(20px, 5vw, 35px);
+		clip-path: polygon(
+			clamp(18px, 4vw, 28px) 0,
+			100% 0,
+			calc(100% - clamp(18px, 4vw, 28px)) 100%,
+			0 100%
+		);
+		z-index: 3;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		left: 0;
+		height: 52px;
+		padding: 0 16px;
+		font-size: 14px;
+	}
+}
+
+.galeria-glowna picture {
+	transition: opacity .18s ease;
+
+	&.gasnie {
+		opacity: 0;
+	}
+}
+
+.galeria-miniatury {
+	display: flex;
+	gap: 0;
+	margin-top: 0;
+
+	img {
+		width: 469px;
+		height: 406px;
+		object-fit: cover;
+		opacity: .3;
+		transition: opacity @czas-animacji ease;
+		cursor: pointer;
+		.skos-zdjecia();
+
+		&:hover {
+			opacity: .6;
+		}
+	}
+
+	// Kadr pokazuje dwie kolejne inwestycje
+	picture:nth-child(n+3) {
+		display: none;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		// Ta sama geometria co w galerii realizacji
+		display: block;
+		position: absolute;
+		z-index: 1;
+		inset: 0;
+		pointer-events: none;
+
+		picture,
+		picture:nth-child(n+3) {
+			position: absolute;
+			top: 0;
+			display: none;
+			width: calc(100vw - 40px);
+			aspect-ratio: 963 / 674;
+			overflow: hidden;
+			clip-path: polygon(26.726% 0, 100% 0, 73.274% 100%, 0 100%);
+			transform-origin: center;
+			scale: .67;
+		}
+
+		picture:first-child {
+			left: calc(65vw - 6px);
+			display: block;
+		}
+
+		picture:last-child {
+			right: calc(65vw - 6px);
+			display: block;
+		}
+
+		img,
+		picture:nth-child(1) img,
+		picture:nth-child(2) img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			object-fit: cover;
+			opacity: 1;
+			clip-path: none;
+		}
+	}
+}
+
+// Ten sam próg 1400px steruje kompaktowym menu i wyśrodkowaną karuzelą
+@media (max-width: (@desktop-xxl - .02px)) {
+	.inwestycje .uklad {
+		align-items: stretch;
+		gap: 0;
+
+		.inwestycje-opis {
+			display: contents;
+			text-align: center;
+		}
+
+		.etykieta-sekcji {
+			order: 1;
+		}
+
+		.inwestycje-tytul-wiersz {
+			order: 2;
+		}
+
+		.inwestycje-szczegoly-panel {
+			order: 3;
+		}
+
+		.inwestycje-galeria {
+			order: 4;
+			margin-top: 28px;
+		}
+
+		.inwestycje-akcje {
+			order: 5;
+		}
+	}
+
+	.inwestycje-opis {
+		// Etykieta jest podpisem tego samego bloku co tytuł, a tytuł stoi tu na środku
+		.etykieta-sekcji {
+			display: flex;
+			width: 100%;
+			margin-bottom: 20px;
+			justify-content: center;
+			text-align: center;
+		}
+
+		.inwestycje-szczegoly-panel {
+			display: none;
+		}
+
+		.inwestycje-tytul-wiersz {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+		}
+
+		.tytul-sekcji {
+			margin: 0;
+			font-size: clamp(28px, 5vw, 42px);
+			line-height: 1.2;
+		}
+
+		&.ma-otwarte-szczegoly .inwestycje-szczegoly-panel {
+			display: block;
+			margin-top: 24px;
+			text-align: left;
+		}
+
+		&.ma-otwarte-szczegoly .inwestycje-podtytul {
+			display: block;
+			margin: 0 0 20px;
+			font-size: clamp(20px, 3.2vw, 28px);
+			line-height: 1.35;
+		}
+
+		&.ma-otwarte-szczegoly .parametry {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 18px 28px;
+			margin-top: 0;
+		}
+	}
+
+	.inwestycje-przelacznik-szczegolow {
+		width: 44px;
+		height: 44px;
+		flex: 0 0 44px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		background: transparent;
+		border: 0;
+		cursor: pointer;
+
+		&::before {
+			content: '';
+			width: 12px;
+			height: 12px;
+			border-right: 2px solid @pomaranczowy;
+			border-bottom: 2px solid @pomaranczowy;
+			transform: translateY(-3px) rotate(45deg);
+			transition: transform 180ms ease;
+		}
+
+		&[aria-expanded='true']::before {
+			transform: translateY(3px) rotate(225deg);
+		}
+
+		&:focus-visible {
+			outline: 2px solid @pomaranczowy;
+			outline-offset: 2px;
+		}
+	}
+
+	.inwestycje-akcje {
+		display: block;
+		margin-top: 24px;
+	}
+
+	.inwestycje-przycisk {
+		display: inline-flex;
+		width: min(100%, 379px);
+		height: clamp(52px, 8vw, 64px);
+		margin: 0;
+		padding: 0 clamp(10px, 2vw, 22px);
+		justify-content: center;
+		gap: 8px;
+		font-size: clamp(11px, 1.8vw, 16px);
+		white-space: nowrap;
+
+		img {
+			width: 12px;
+			height: 24px;
+		}
+	}
+}
+
+@media (max-width: @telefon) {
+	.inwestycje-opis.ma-otwarte-szczegoly .parametry {
+		grid-template-columns: 1fr;
+	}
+}
+
+// Panel ze szczegółami wchodzi ruchem, a nie skokiem
+@media (max-width: @duzy-ekran) {
+	.inwestycje-opis.ma-otwarte-szczegoly .inwestycje-szczegoly-panel {
+		animation: wejscie-komunikatu @czas-animacji @krzywa-zamalowania;
+	}
+}
+
+@media (max-width: (@desktop-xxl - .02px)) {
+	.inwestycje-opis.ma-otwarte-szczegoly .inwestycje-szczegoly-panel {
+		overflow: hidden;
+		transition: height @czas-animacji @krzywa-zamalowania;
+	}
+}
+
+// dwa duże prostokątne przyciski przewijania pod zdjęciem
+.galeria-nawigacja {
+	position: absolute;
+	right: 0;
+	bottom: -83px;
+	display: flex;
+
+	button {
+		width: 144px;
+		height: 83px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: url('../img/ramka-skos-biala.svg') center / 100% 100% no-repeat;
+		border: 0;
+		transition: background @czas-animacji ease;
+
+		&:hover,
+		&:focus-visible {
+			opacity: .8;
+		}
+
+		& + button {
+			width: 145px;
+			margin-left: -10px;
+		}
+
+		img {
+			// Plik SVG ma płótno 40x40, a sama strzałka zajmuje w nim połowę wysokości
+			width: 40px;
+			height: 40px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		position: static;
+		align-self: center;
+		justify-content: center;
+		margin-top: clamp(16px, 4vw, 32px);
+
+		button,
+		button + button {
+			width: 90px;
+			height: 56px;
+			margin-left: 0;
+		}
+	}
+}
+
+// Dokładny układ desktopowy z ramki 1920 px w Figmie. Miniatury nachodzą na główne
+// zdjęcie i wychodzą poza prawą krawędź sekcji.
+@media (min-width: @desktop-pelny) {
+	.inwestycje {
+		// W Figmie wyszukiwarka zachodzi na tę sekcję o 36 px.
+		margin-top: -36px;
+	}
+
+	.parametry {
+		width: 530px;
+		margin-left: -3px;
+		grid-template-columns: 251.22px 245.78px;
+		column-gap: 33px;
+
+		li {
+			gap: 18.86px;
+		}
+
+		img {
+			margin-top: 11px;
+		}
+
+		.nazwa,
+		.wartosc {
+			white-space: nowrap;
+		}
+	}
+
+	.inwestycje-opis .tytul-sekcji {
+		height: 77.5px;
+		white-space: nowrap;
+	}
+
+	.inwestycje-przycisk {
+		width: 379.6px;
+		justify-content: center;
+		margin-top: 81.3px;
+	}
+
+	.inwestycje-galeria {
+		align-items: flex-start;
+	}
+
+	.galeria-glowna {
+		width: 963px;
+		flex: 0 0 963px;
+
+		picture {
+			display: block;
+			position: relative;
+			width: 963px;
+			height: 674px;
+			clip-path: polygon(26.726% 0, 100% 0, 73.274% 100%, 0 100%);
+		}
+
+		img {
+			position: absolute;
+			left: -3px;
+			top: 3px;
+			width: 1120px;
+			height: 616px;
+			max-width: none;
+			object-fit: fill;
+			clip-path: none;
+		}
+	}
+
+	.plakietka-status {
+		right: 15px;
+	}
+
+	.pasek-adresu {
+		width: 540.43px;
+		margin: 0;
+		padding: 0 0 0 51px;
+		bottom: 5px;
+		background: @granat-obrys;
+		clip-path: polygon(5.057% 0, 100% 0, 94.943% 100%, 0 100%);
+		z-index: 3;
+		overflow: visible;
+
+		&::before {
+			content: none;
+		}
+
+		img,
+		.tekst-adresu {
+			position: relative;
+			z-index: 1;
+		}
+
+		img {
+			position: static;
+			width: 25px;
+			height: 25px;
+			max-width: 25px;
+			object-fit: contain;
+			filter: brightness(0) invert(1);
+		}
+	}
+
+	.galeria-miniatury {
+		flex: 0 0 auto;
+		margin-top: 134px;
+		margin-left: -171px;
+
+		picture {
+			display: block;
+			position: relative;
+			flex: 0 0 469px;
+			height: 406px;
+			clip-path: polygon(33.057% 0, 100% 0, 66.943% 100%, 0 100%);
+
+			& + picture {
+				margin-left: -120px;
+			}
+		}
+
+		img {
+			position: absolute;
+			top: 0;
+			height: 406px;
+			max-width: none;
+			object-fit: fill;
+			clip-path: none;
+		}
+
+		picture:nth-child(1) img {
+			left: -143px;
+			width: 721px;
+		}
+
+		picture:nth-child(2) img {
+			left: -68px;
+			width: 812px;
+		}
+	}
+
+	.galeria-nawigacja {
+		bottom: -41px;
+	}
+}
+
+// Wspólne dla całego płynnego desktopu
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycje {
+		margin-top: -36px;
+	}
+
+	.inwestycje-opis {
+		flex: 0 0 clamp(386px, 27.604vw, 530px);
+		min-width: 0;
+	}
+
+	.inwestycje-opis .tytul-sekcji {
+		height: auto;
+		white-space: normal;
+	}
+
+	.parametry {
+		width: 100%;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: clamp(24px, 2.4vw, 46px);
+
+		.nazwa,
+		.wartosc {
+			white-space: normal;
+		}
+	}
+
+	.plakietka-status {
+		top: clamp(20px, 2.1vw, 40px);
+		right: clamp(10px, 1vw, 15px);
+	}
+}
+
+// Poniżej 1400px kolaż z makiety nie ma gdzie stanąć
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.inwestycje-galeria {
+		// calc() jest konieczne: LESS liczy wnętrze min() jak zwykłe wyrażenie i z "100vw -
+		// 40px" robi "60vw". Wewnątrz calc() nic nie rusza.
+		--kadr: min(702px, calc(100vw - 40px));
+
+		position: relative;
+		min-width: 0;
+		flex-direction: column;
+		align-items: center;
+		overflow: visible;
+	}
+
+	.galeria-glowna {
+		position: relative;
+		z-index: 2;
+		width: var(--kadr);
+		flex: 0 0 auto;
+		align-self: center;
+
+		picture {
+			position: relative;
+			display: block;
+			width: 100%;
+			aspect-ratio: 963 / 674;
+			overflow: hidden;
+			clip-path: polygon(26.726% 0, 100% 0, 73.274% 100%, 0 100%);
+		}
+
+		> picture img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			object-fit: cover;
+			clip-path: none;
+		}
+	}
+
+	.galeria-miniatury {
+		position: absolute;
+		z-index: 1;
+		inset: 0;
+		display: block;
+		margin: 0;
+		pointer-events: none;
+
+		picture,
+		picture:nth-child(n+3) {
+			position: absolute;
+			top: 0;
+			display: none;
+			width: var(--kadr);
+			height: auto;
+			aspect-ratio: 963 / 674;
+			overflow: hidden;
+			clip-path: polygon(26.726% 0, 100% 0, 73.274% 100%, 0 100%);
+			transform-origin: center;
+			scale: .67;
+		}
+
+		picture:first-child {
+			left: calc(50% + .15 * var(--kadr));
+			display: block;
+		}
+
+		picture:last-child {
+			right: calc(50% + .15 * var(--kadr));
+			display: block;
+		}
+
+		img,
+		picture:nth-child(1) img,
+		picture:nth-child(2) img {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			max-width: none;
+			object-fit: cover;
+			opacity: 1;
+			clip-path: none;
+		}
+	}
+
+	// Adres nie może łamać paska na dwa wiersze
+	.pasek-adresu {
+		left: 0;
+		width: auto;
+		max-width: calc(100% - 24px);
+		box-sizing: border-box;
+		padding-inline: clamp(20px, 2.7vw, 51px);
+		clip-path: polygon(5.057% 0, 100% 0, 94.943% 100%, 0 100%);
+	}
+
+	.galeria-nawigacja {
+		position: static;
+		align-self: center;
+		justify-content: center;
+		margin-top: clamp(20px, 2vw, 32px);
+
+		button,
+		button + button {
+			width: clamp(90px, 7.5vw, 144px);
+			height: clamp(56px, 4.33vw, 83px);
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycje-opis {
+		padding-top: 2.1354vw;
+	}
+
+	.inwestycje-podtytul {
+		margin-top: 1.40625vw;
+		font-size: clamp(20px, 1.4583vw, @tekst-sekcja);
+	}
+
+	// Siatka parametrów wraca do podziału z makiety (251,22 i 245,78 z 1920px)
+	.parametry {
+		width: 27.604vw;
+		margin-top: 2.9167vw;
+		margin-left: -.15625vw;
+		grid-template-columns: 13.0844vw 12.801vw;
+		gap: 1.4583vw 1.71875vw;
+
+		li {
+			gap: .98229vw;
+		}
+
+		img {
+			width: 1.7708vw;
+			height: 1.7708vw;
+			margin-top: .5729vw;
+		}
+
+		.nazwa,
+		.wartosc {
+			font-size: clamp(13px, .85417vw, 16.4px);
+			line-height: 1.878;
+			white-space: nowrap;
+		}
+	}
+
+	// Kolaż wisi w makiecie na górnej krawędzi galerii
+	.inwestycje-galeria {
+		align-items: flex-start;
+	}
+
+	.galeria-glowna {
+		width: 50.156vw;
+		flex: 0 0 50.156vw;
+
+		picture {
+			position: relative;
+			display: block;
+			width: 50.156vw;
+			height: 35.104vw;
+			aspect-ratio: auto;
+			overflow: visible;
+			clip-path: polygon(26.726% 0, 100% 0, 73.274% 100%, 0 100%);
+		}
+
+		> picture img {
+			position: absolute;
+			inset: auto;
+			left: -.15625vw;
+			top: .15625vw;
+			width: 58.3333vw;
+			height: 32.0833vw;
+			max-width: none;
+			object-fit: fill;
+			clip-path: none;
+		}
+	}
+
+	.pasek-adresu {
+		gap: .52083vw;
+		left: -2.65625vw;
+		width: 28.147vw;
+		height: 3.75vw;
+		margin: 0;
+		padding: 0 0 0 2.65625vw;
+		bottom: .26vw;
+		font-size: 1.4583vw;
+		clip-path: polygon(5.057% 0, 100% 0, 94.943% 100%, 0 100%);
+		overflow: visible;
+
+		&::before {
+			content: none;
+		}
+
+		img {
+			position: static;
+			width: 1.302vw;
+			height: 1.302vw;
+			max-width: none;
+			object-fit: contain;
+		}
+	}
+
+	.galeria-miniatury {
+		display: flex;
+		flex: 0 0 auto;
+		margin-top: 6.9792vw;
+		margin-left: -8.9063vw;
+
+		picture {
+			display: block;
+			position: relative;
+			flex: 0 0 24.4271vw;
+			height: 21.1458vw;
+			overflow: hidden;
+			clip-path: polygon(33.057% 0, 100% 0, 66.943% 100%, 0 100%);
+
+			& + picture {
+				margin-left: -6.25vw;
+			}
+		}
+
+		img {
+			position: absolute;
+			top: 0;
+			width: auto;
+			height: 21.1458vw;
+			max-width: none;
+			object-fit: fill;
+			clip-path: none;
+		}
+
+		picture:nth-child(1) img {
+			left: -7.4479vw;
+			width: 37.5521vw;
+		}
+
+		picture:nth-child(2) img {
+			left: -3.5417vw;
+			width: 42.2917vw;
+		}
+	}
+
+	.galeria-nawigacja {
+		position: absolute;
+		right: 0;
+		bottom: -2.1354vw;
+		align-self: auto;
+		justify-content: flex-start;
+		margin-top: 0;
+
+		button {
+			width: 7.5vw;
+			height: 4.3229vw;
+
+			& + button {
+				width: 7.5521vw;
+				margin-left: -.5208vw;
+			}
+
+			img {
+				width: 2.0833vw;
+				height: 2.0833vw;
+			}
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.inwestycje {
+		padding-top: calc(6.611111vw + 2.236111px);
+		padding-bottom: calc(6.611111vw + 2.236111px);
+	}
+
+}
+
+// Poniżej 1400px kolumna opisu i karuzela stoją jedna nad drugą
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.inwestycje .uklad {
+		flex-direction: column;
+	}
+
+	.inwestycje-opis {
+		width: 100%;
+		flex: 1 1 auto;
+	}
+
+	// Galeria trzyma szerokość kontenera, ale jej wnętrze opisuje blok wyżej. Po zmianie
+	// kolejności stoi pierwsza, więc odstęp od opisu daje gap rodzica.
+	.inwestycje-galeria {
+		width: 100%;
+		margin-top: 0;
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycje {
+		padding-top: 6.77083vw;
+		padding-bottom: 6.77083vw;
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.plakietka-status {
+		top: 2.08333vw;
+		right: .78125vw;
+		.plakietka-w-sprzedazy-pasmo(1);
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.inwestycje-przycisk {
+		width: 19.77083vw;
+		justify-content: center;
+
+		margin-top: 4.23438vw;
+	}
+
+	// Odstęp między kolumną opisu a miniaturami
+	.inwestycje .uklad {
+		gap: 1.5625vw;
+	}
+
+	// Wyszukiwarka zachodzi na tę sekcję o 36px z makiety
+	.inwestycje {
+		margin-top: -1.875vw;
+	}
+}
+
+// ================= karuzela 1025-1399: wygląd taśmy z galerii inwestycji =================
+// Te same wymiary co .tasma-realizacji: boczny kadr 47.1354vw x 28.75vw, środkowy powiększony
+// 1.09834 raza, środki kadrów co 38.958vw. Tytuł stoi po lewej, jak nad galerią inwestycji.
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.inwestycje .uklad .inwestycje-opis {
+		text-align: left;
+	}
+
+	.inwestycje-opis {
+		.etykieta-sekcji {
+			justify-content: flex-start;
+			margin-bottom: 1.14583vw;
+			text-align: left;
+		}
+
+		.inwestycje-tytul-wiersz {
+			justify-content: flex-start;
+		}
+
+		.tytul-sekcji {
+			font-size: calc(1.066667vw + 27.066667px);
+			line-height: 1.21;
+		}
+	}
+
+	.inwestycje .uklad .inwestycje-galeria {
+		margin-top: calc(3.209vw + 22.6px);
+	}
+
+	.inwestycje-galeria {
+		--kadr: 51.77083vw;
+	}
+
+	.galeria-glowna picture,
+	.galeria-miniatury picture,
+	.galeria-miniatury picture:nth-child(n+3) {
+		aspect-ratio: 905 / 552;
+		.skos-zdjecia();
+	}
+
+	.galeria-miniatury {
+		picture,
+		picture:nth-child(n+3) {
+			scale: .91046;
+		}
+
+		picture:first-child {
+			left: calc(50% + 13.0729vw);
+		}
+
+		picture:last-child {
+			right: calc(50% + 13.0729vw);
+		}
+	}
+
+	// Plakietka, pasek z adresem i strzałki mają względem zdjęcia te same proporcje co na
+	// 1920px, gdzie kadr ma 963px: każdy wymiar z makiety razy 51.77083vw / 963
+	.plakietka-status {
+		top: 2.1504vw;
+		right: .8064vw;
+		height: 3.11808vw;
+		padding: 0 2.47296vw;
+		font-size: 1.29024vw;
+		clip-path: polygon(1.18272vw 0, 100% 0, calc(100% - 1.18272vw) 100%, 0 100%);
+	}
+
+	.pasek-adresu {
+		left: -2.74176vw;
+		bottom: .2688vw;
+		gap: .5376vw;
+		width: 29.05349vw;
+		max-width: none;
+		height: 3.87072vw;
+		margin: 0;
+		padding: 0 0 0 2.74176vw;
+		font-size: 1.50528vw;
+
+		img {
+			width: 1.344vw;
+			height: 1.344vw;
+			max-width: none;
+		}
+	}
+
+	.galeria-nawigacja {
+		margin-top: 2.44792vw;
+
+		button {
+			width: 7.74143vw;
+			height: 4.46208vw;
+
+			img {
+				width: 2.1504vw;
+				height: 2.1504vw;
+			}
+		}
+
+		button + button {
+			width: 7.79519vw;
+			height: 4.46208vw;
+			margin-left: -.5376vw;
+		}
+	}
+}
+
+// ================= karuzela do 1024px: wygląd taśmy z galerii inwestycji =================
+// Położenie kadrów już jest takie jak w .galeria-realizacji, różnią się proporcja, skos
+// i tytuł, który nad galerią inwestycji stoi po lewej
+@media (max-width: @duzy-ekran) {
+	.inwestycje .uklad .inwestycje-opis {
+		text-align: left;
+	}
+
+	.inwestycje-opis {
+		.etykieta-sekcji {
+			justify-content: flex-start;
+			margin-bottom: 22px;
+			text-align: left;
+		}
+
+		.inwestycje-tytul-wiersz {
+			justify-content: flex-start;
+		}
+
+		.tytul-sekcji {
+			font-size: 36px;
+			line-height: 1.21;
+
+			@media (max-width: (@telefon-duzy - 1px)) {
+				font-size: 28px;
+			}
+		}
+	}
+
+	.galeria-glowna picture,
+	.galeria-miniatury picture,
+	.galeria-miniatury picture:nth-child(n+3) {
+		aspect-ratio: 905 / 552;
+		.skos-zdjecia();
+	}
+}

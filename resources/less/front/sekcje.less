@@ -1,0 +1,208 @@
+// Elementy powtarzające się w kilku sekcjach: nagłówek sekcji i przycisk-pigułka.
+// Wyciągnięte tutaj, żeby nie kopiować tego samego w ośmiu plikach.
+
+// --- nagłówek sekcji: mała etykieta z pinezką + duży tytuł ---
+.etykieta-sekcji {
+	display: flex;
+	align-items: center;
+	// w makiecie ukośnik kończy się 15px przed napisem (np. 892+12 i 919 w "APARTAMENTY")
+	gap: 15px;
+	margin: 0 0 22px;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-podstawa;
+	line-height: 1.21;
+	letter-spacing: .5px;
+
+	img {
+		width: 12px;
+		height: 19px;
+		flex: 0 0 auto;
+	}
+}
+
+.tytul-sekcji {
+	margin: 0;
+	color: @granat-tytul;
+	font-size: @tekst-duzy;
+	font-weight: 700;
+	line-height: 1.21;
+
+	&.jasny {
+		color: var(--tekst-na-ciemnym);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		font-size: 48px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		font-size: 36px;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		font-size: 28px;
+	}
+
+	.akcent {
+		color: @pomaranczowy;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.tytul-sekcji {
+		font-size: clamp(44px, 3.334vw, @tekst-duzy);
+	}
+}
+
+// --- przycisk w kształcie pigułki (obrys, wielkie litery, strzałka po lewej) ---
+.przycisk-pigulka {
+	display: inline-flex;
+	align-items: center;
+	gap: 15px;
+	height: 75px;
+	padding: 0 45px;
+	border: 1px solid @bialy;
+	border-radius: 37.5px;
+	background: transparent;
+	color: var(--tekst-na-ciemnym);
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: border-color @czas-zamalowania @krzywa-zamalowania,
+		color @czas-zamalowania @krzywa-zamalowania;
+	.zamalowanie(@pomaranczowy);
+
+	img {
+		width: 16px;
+		height: 30px;
+		flex: 0 0 auto;
+	}
+
+	// stanu hover nie ma w projekcie - wypełnienie kolorem marki, po naszemu
+	&:hover,
+	&:focus-visible {
+		border-color: @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+	}
+
+	&.na-tle {
+		background: @granat;
+	}
+
+	@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+		height: 66px;
+		padding: 0 32px;
+		font-size: @m-tekst-podstawa;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		height: 58px;
+		padding: 0 26px;
+		gap: 16px;
+		font-size: 15px;
+	}
+
+	// Na najwęższych ekranach najdłuższe etykiety się łamią
+	@media (max-width: @telefon) {
+		max-width: 100%;
+		height: auto;
+		min-height: 58px;
+		padding: 12px 22px;
+		white-space: normal;
+	}
+}
+
+// --- odstępy między sekcjami ---
+.sekcja {
+	.kontener();
+	padding-top: 130px;
+	padding-bottom: 130px;
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 70px;
+		padding-bottom: 70px;
+	}
+}
+
+// --- karty sekcji na małych ekranach ---
+@media (max-width: @duzy-ekran) {
+	:where(main#tresc) > * {
+		position: relative;
+		background-color: var(--tlo-strony, @granat);
+	}
+
+	// Karta przycina zawartość do zaokrąglonych rogów, ale "hidden" robi z niej scrollport
+	main#tresc > .sekcja-karta {
+		overflow: clip;
+	}
+
+	.sekcja-karta {
+		border-radius: @rog-karty @rog-karty 0 0;
+		box-shadow: var(--cien-karty);
+		background-color: var(--tlo-strony, @granat);
+
+		// Uchwyt jak w arkuszu na telefonie
+		&::before {
+			content: '';
+			position: absolute;
+			z-index: 3;
+			top: 10px;
+			left: 50%;
+			width: 40px;
+			height: 4px;
+			margin-left: -20px;
+			border-radius: 2px;
+			background: var(--tekst-na-ciemnym);
+			opacity: .22;
+			pointer-events: none;
+		}
+	}
+}
+
+// ================= płynny desktop 1400-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.etykieta-sekcji {
+		gap: .78125vw;
+		margin-bottom: 1.14583vw;
+		.tekst-makiety(18; 15; 18);
+
+		img {
+			width: .625vw;
+			height: .98958vw;
+		}
+	}
+
+	.przycisk-pigulka {
+		gap: .78125vw;
+		height: max(54px, 3.90625vw);
+		padding: 0 max(32px, 2.34375vw);
+		border-radius: max(27px, 1.95313vw);
+		.tekst-makiety(20; 16; 18);
+
+		img {
+			width: max(11px, .83333vw);
+			height: max(20px, 1.5625vw);
+		}
+	}
+}
+
+// Tytuły sekcji mają własną, spokojniejszą skalę ekspozycyjną
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.tytul-sekcji {
+		font-size: calc(1.066667vw + 27.066667px);
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: 1727.98px) {
+	.tytul-sekcji {
+		font-size: calc(3.04878vw - .682927px);
+	}
+}
+
+@media (min-width: 1728px) and (max-width: (@desktop-pelny - .02px)) {
+	.tytul-sekcji {
+		font-size: calc(6.608187vw - 62.189474px);
+	}
+}

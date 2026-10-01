@@ -1,0 +1,119 @@
+// Elementy wspólne wszystkich podstron
+
+// ścieżka nawigacji "Strona główna / Aktualności"
+.okruszki {
+	margin: 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: 15px;
+	line-height: 1.21;
+	text-align: left;
+
+	a {
+		color: var(--tekst-na-ciemnym);
+		text-decoration: none;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	.rozdzielacz {
+		padding: 0 8.4px;
+		color: @pomaranczowy;
+		opacity: 1;
+	}
+}
+
+// Górna część podstrony. Nagłówek strony jest pozycjonowany absolutnie i leży na tej
+// sekcji, dlatego padding-top musi zrobić mu miejsce.
+.ma-pasek-boczny {
+	position: relative;
+}
+
+.naglowek-strony {
+	.kontener();
+	position: relative;
+	padding-top: 236px;
+
+	// Pasek zajmuje prawy skraj strony (69px kółka + 26px odstępu)
+	.wprowadzenie,
+	.wstep-strony {
+		padding-right: 115px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.wprowadzenie,
+		.wstep-strony {
+			padding-right: 0;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 180px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 130px;
+	}
+}
+
+
+// wariant wyśrodkowany - na podstronach etykieta bywa bez pinezki i na środku
+.etykieta-sekcji.na-srodku {
+	justify-content: center;
+	margin-top: 84px;
+	margin-bottom: 20px;
+}
+
+.tytul-sekcji.na-srodku {
+	text-align: center;
+}
+
+.wstep-strony {
+	max-width: 1108px;
+	margin: 35px auto 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: 21px;
+	font-weight: 300;
+	line-height: 1.9;
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		font-size: 17px;
+		line-height: 1.7;
+	}
+}
+
+// Nagłówek podstrony w płynnym desktopie
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-strony {
+		padding-top: 12.2917vw;
+
+		.wprowadzenie,
+		.wstep-strony {
+			padding-right: 5.9896vw;
+		}
+	}
+
+	.etykieta-sekcji.na-srodku {
+		margin-top: 4.375vw;
+		margin-bottom: 1.0417vw;
+	}
+
+	.wstep-strony {
+		max-width: 57.7083vw;
+		margin-top: 1.8229vw;
+		// Minimalny rozmiar pisma
+		.tekst-makiety(21; 16; 21);
+	}
+}
+
+// ================= płynny desktop 1400-1899 =================
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.okruszki {
+		.tekst-makiety(15; 12);
+
+		.rozdzielacz {
+			padding: 0 .4375vw;
+		}
+	}
+}

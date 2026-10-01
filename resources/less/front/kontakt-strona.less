@@ -1,0 +1,681 @@
+// Podstrona "Kontakt" (makieta KONTAKT, node 734:478, 1920x3564)
+
+// --- górna część: tekst po lewej, formularz po prawej ---
+.kontakt-gora {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding-bottom: 95px;
+
+	.kolumna-tekst {
+		flex: 1 1 0;
+		min-width: 0;
+		padding-top: 69px;
+	}
+
+	.karta-formularza {
+		margin-top: 89px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-bottom: 60px;
+
+		.kolumna-tekst {
+			width: 100%;
+			padding-top: 40px;
+		}
+
+		.karta-formularza {
+			margin-top: 30px;
+		}
+	}
+}
+
+// Blok schodzi do 1025px, a nie tylko do 1400px
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kontakt-gora {
+		gap: 1.04167vw;
+		padding-bottom: 4.94792vw;
+
+		.kolumna-tekst {
+			padding-top: 3.59375vw;
+		}
+
+		.karta-formularza {
+			flex: 0 0 43.2292vw;
+			margin-top: 4.63542vw;
+		}
+	}
+}
+
+// Rezerwa na pionowy pasek akcji
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kontakt-gora {
+		margin-right: ~"calc(@{rezerwa-paska-w-pasmie} - var(--kontener-wciecie, 24px))";
+	}
+}
+
+.kontakt-opis {
+	max-width: 792px;
+	margin: 44px 0 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: 21px;
+	font-weight: 300;
+	line-height: 1.9;
+
+	p + p {
+		margin-top: 40px;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		font-size: 17px;
+		line-height: 1.7;
+	}
+}
+
+// --- skrót danych kontaktowych: kwadratowa ramka z ikoną + dwa wiersze tekstu ---
+.skrot-kontaktu {
+	margin: 44px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 39px;
+
+		& + li {
+			// Wartość ma większy stopień pisma niż podpis, więc sam wiersz jest o 3,2 px wyższy.
+			// Zmniejszamy odstęp, aby kolejne ikony nadal stały co 122 px.
+			margin-top: 23.8px;
+		}
+	}
+
+	.ramka-ikony {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 95px;
+		height: 95px;
+		border: 1px solid @granat-ramka;
+		border-radius: 9px;
+
+		img {
+			width: 54px;
+			height: 54px;
+		}
+	}
+
+	.tresc {
+		min-width: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 400;
+		line-height: 47.1px;
+		// adres e-mail jest dłuższy niż wąski ekran - musi się łamać, inaczej rozpycha stronę
+		overflow-wrap: anywhere;
+	}
+
+	// W projekcie podpis jest zwykły, a wartość w drugim wierszu pogrubiona
+	a,
+	strong {
+		position: relative;
+		top: -3px;
+		font-size: 34px;
+		font-weight: 700;
+	}
+
+	a {
+		color: var(--tekst-na-ciemnym);
+		text-decoration: none;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		li {
+			gap: 24px;
+		}
+
+		.ramka-ikony {
+			width: 70px;
+			height: 70px;
+
+			img {
+				width: 38px;
+				height: 38px;
+			}
+		}
+
+		.tresc {
+			font-size: 20px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.ramka-ikony {
+			width: 54px;
+			height: 54px;
+
+			img {
+				width: 28px;
+				height: 28px;
+			}
+		}
+
+		.tresc {
+			font-size: 16px;
+			line-height: 1.5;
+		}
+	}
+}
+
+// --- sekcja "Nasze biura" ---
+.biura {
+	.kontener();
+	// marginesy wiersza z biurami mają zostać w środku sekcji
+	display: flow-root;
+	padding-top: 95px;
+	padding-bottom: 97px;
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 60px;
+		padding-bottom: 60px;
+	}
+}
+
+.biura-lista {
+	--bs-gutter-x: 20px;
+	--bs-gutter-y: 20px;
+	// Wiersz siatki ma własny ujemny margines górny równy gutterowi w pionie. Podając tu
+	// swój, trzeba tamten doliczyć: 72px z makiety to 72 - 20.
+	margin-top: 52px;
+	margin-bottom: 0;
+	padding: 0;
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 40px;
+
+		> li {
+			display: flex;
+		}
+	}
+}
+
+.karta-biura {
+	position: relative;
+	min-height: 605px;
+	padding: 44.65px 55px 51px;
+	background: @granat;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+	// znak w rogu wystaje poniżej karty i ma być tam ucięty
+	overflow: hidden;
+
+	// Karty biur mają obrys znaku
+	&::after {
+		content: '';
+		position: absolute;
+		// odsunięcia liczone od pudełka wypełnienia karty, czyli po ramce 1px
+		right: 49px;
+		bottom: -5px;
+		width: 103.25px;
+		height: 158px;
+		border: 3px solid @pomaranczowy;
+		transform-origin: top left;
+		transform: skewX(-20.71deg);
+		pointer-events: none;
+
+		@media (max-width: @duzy-ekran) {
+			right: 5.9%;
+			width: 12.44%;
+			height: auto;
+			aspect-ratio: 103.25 / 158;
+		}
+	}
+
+	h3 {
+		margin: 0;
+		color: @pomaranczowy;
+		font-size: 48px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	// miniatura mapki w prawym górnym rogu
+	.mapka-biura {
+		position: absolute;
+		right: 50px;
+		top: 51px;
+		width: 190px;
+		height: 190px;
+		padding: 19px;
+		border: 1px solid @bialy;
+		border-radius: 14px;
+
+		img {
+			width: 100%;
+			height: 100%;
+			// Kod nie może być kadrowany, bo przestanie się skanować
+			object-fit: contain;
+			image-rendering: pixelated;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 0;
+		// width wraz z height
+		width: 100%;
+		height: 100%;
+		padding: 34px;
+
+		h3 {
+			font-size: 34px;
+		}
+
+		.mapka-biura {
+			right: 30px;
+			top: 30px;
+			width: 130px;
+			height: 130px;
+			padding: 12px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		// Kod QR obok pierwszego wiersza listy, czyli adresu biura
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-content: start;
+
+		h3,
+		.dane-biura-lista {
+			grid-column: 1 / -1;
+		}
+
+		.mapka-biura {
+			position: static;
+			grid-column: 2;
+			grid-row: 2;
+			align-self: start;
+			// margines listy (39px) i górne wcięcie wiersza (18px)
+			margin-top: 57px;
+			width: 60px;
+			height: 60px;
+			padding: 6px;
+			border-radius: 8px;
+		}
+
+		.dane-biura-lista {
+			grid-row: 2;
+
+			li:first-child {
+				padding-right: 72px;
+			}
+		}
+
+		.odnosnik-trasy {
+			grid-column: 1;
+			justify-self: start;
+		}
+
+		h3 {
+			font-size: 26px;
+		}
+	}
+}
+
+@media (min-width: @telefon-duzy) and (max-width: @duzy-ekran) {
+	.karta-biura {
+		display: grid;
+		// Kod QR i odnośnik w lewej kolumnie, na dole karty obok znaku w rogu
+		grid-template-columns: max-content minmax(0, 1fr);
+		grid-template-rows: auto auto 1fr auto auto;
+
+		h3,
+		.dane-biura-lista {
+			grid-column: 1 / -1;
+		}
+
+		.mapka-biura {
+			position: static;
+			grid-column: 1;
+			grid-row: 4;
+			justify-self: center;
+		}
+
+		.odnosnik-trasy {
+			position: static;
+			grid-column: 1;
+			grid-row: 5;
+			justify-self: center;
+			margin-top: 10px;
+		}
+	}
+}
+
+.dane-biura-lista {
+	margin: 39px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+		gap: 21px;
+		padding: 26px 0;
+
+		> img {
+			margin-top: 12.6px;
+		}
+
+		& + li {
+			&::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 423px;
+				max-width: 100%;
+				height: 1px;
+				background: @granat-ramka;
+			}
+		}
+	}
+
+	img {
+		width: 46px;
+		height: 46px;
+		flex: 0 0 auto;
+	}
+
+	.tresc {
+		flex: 1 1 auto;
+		min-width: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 400;
+		line-height: 1.65;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		img {
+			width: 32px;
+			height: 32px;
+		}
+
+		.tresc {
+			font-size: 18px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		li {
+			gap: 14px;
+			padding: 18px 0;
+		}
+
+		img {
+			width: 26px;
+			height: 26px;
+		}
+
+		.tresc {
+			font-size: 15px;
+		}
+	}
+}
+
+.odnosnik-trasy {
+	position: absolute;
+	right: 50px;
+	top: 264px;
+	color: @pomaranczowy;
+	font-size: 32px;
+	font-weight: 700;
+	line-height: 1.58;
+	// jako jedyny link "Wyznacz trasę" w projekcie ten jest podkreślony - w Figmie ma
+	// textDecoration: UNDERLINE, na pozostałych stronach nie ma
+	text-decoration: underline;
+	text-underline-offset: 6px;
+
+	&:hover {
+		color: @pomaranczowy-jasny;
+		text-decoration: underline;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		right: 30px;
+		top: 176px;
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-size: 22px;
+	}
+
+	// na wąskich ekranach nie ma miniatury mapy, więc odnośnik wraca do zwykłego przepływu
+	@media (max-width: (@telefon-duzy - 1px)) {
+		position: static;
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		margin-top: 10px;
+		font-size: 18px;
+	}
+}
+
+// Na mapie na tej podstronie nie ma filtrów ani rozwijanych szczegółów - tylko dwie
+// pinezki z podpisami biur, dlatego dymki są od razu widoczne.
+.mapa-biur .dymek-mapy {
+	width: auto;
+	white-space: nowrap;
+}
+
+@media (max-width: @duzy-ekran) {
+	.mapa-biur .mapa-sterowanie {
+		left: 12px;
+		right: auto;
+	}
+
+	.mapa-biur .dymek-mapy {
+		width: auto;
+		padding: 8px 10px;
+		overflow-wrap: break-word;
+
+		.nazwa {
+			font-size: 12px;
+		}
+	}
+}
+
+// Pozycje i wysokości kart dla ramki desktopowej 1920 px.
+@media (min-width: (@duzy-ekran + 1px)) {
+	.kontakt-gora {
+		padding-bottom: 0;
+
+		.karta-formularza {
+			margin-top: 71px;
+		}
+	}
+
+	// 63px z makiety minus gutter wiersza
+	.biura-lista {
+		margin-top: 43px;
+	}
+
+	.karta-biura {
+		height: 605px;
+		min-height: 605px;
+		box-sizing: border-box;
+	}
+
+	.dane-biura-lista {
+		margin-top: 15px;
+		margin-left: 2px;
+
+		li {
+			padding: 18px 0 28px;
+
+			& + li {
+				padding-top: 20px;
+			}
+		}
+	}
+}
+
+// ================= płynny desktop 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	// Odstępy sekcji biur i wiersza kart stały w pikselach makiety.
+	.biura {
+		padding-top: 4.94792vw;
+		padding-bottom: 5.05208vw;
+	}
+
+	.biura-lista {
+		--bs-gutter-x: 1.04167vw;
+		--bs-gutter-y: 1.04167vw;
+		margin-top: 2.23958vw;
+	}
+
+	// Trzeci argument .tekst-makiety to rozmiar mobilny (patrz less/mixiny.less)
+	.kontakt-opis {
+		max-width: 41.25vw;
+		margin-top: 2.29167vw;
+		.tekst-makiety(21; 16; 21);
+
+		p + p {
+			margin-top: 2.08333vw;
+		}
+	}
+
+	.skrot-kontaktu {
+		margin-top: 2.29167vw;
+
+		li {
+			gap: 2.03125vw;
+		}
+
+		li + li {
+			margin-top: 1.23958vw;
+		}
+	}
+
+	.karta-biura {
+		min-height: 31.51042vw;
+		padding: 2.32552vw 2.86458vw 2.65625vw;
+		border-radius: .625vw;
+
+		h3 {
+			.tekst-makiety(48; 32; 34);
+		}
+
+		&::after {
+			right: 2.55208vw;
+			bottom: -.26042vw;
+			width: 5.3776vw;
+			height: 8.22917vw;
+		}
+
+		.mapka-biura {
+			right: 2.60417vw;
+			top: 2.65625vw;
+			width: 9.89583vw;
+			height: 9.89583vw;
+			padding: .98958vw;
+			border-radius: .72917vw;
+		}
+	}
+
+	.dane-biura-lista {
+		margin-top: .78125vw;
+
+		li {
+			gap: 1.09375vw;
+			padding: .9375vw 0 1.45833vw;
+
+			& + li {
+				padding-top: 1.04167vw;
+			}
+		}
+
+		li > img {
+			margin-top: .65625vw;
+		}
+
+		li + li::before {
+			width: 22.03125vw;
+		}
+
+		img {
+			width: 2.39583vw;
+			height: 2.39583vw;
+		}
+
+		.tresc {
+			.tekst-makiety(24; 18);
+		}
+	}
+
+	.odnosnik-trasy {
+		right: 2.60417vw;
+		top: 13.75vw;
+		text-underline-offset: .3125vw;
+		.tekst-makiety(32; 24);
+	}
+}
+
+// Przełącznik biur jest używany też poza kontakt.html
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.zakladki-biur {
+		gap: .20833vw;
+		margin-top: 4.84896vw;
+
+		// Kreska pod zakładką zostaje na 4px
+		button {
+			padding-bottom: 1.11458vw;
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.zakladki-biur button {
+		.tekst-makiety(24; 18);
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.skrot-kontaktu {
+		.ramka-ikony {
+			width: 4.94792vw;
+			height: 4.94792vw;
+			border-radius: .46875vw;
+
+			img {
+				width: 2.8125vw;
+				height: 2.8125vw;
+			}
+		}
+
+		.tresc {
+			line-height: max(2.45313vw, calc(81.977px - 3.40267vw));
+			.tekst-makiety(24; 18; 20);
+		}
+
+		a,
+		strong {
+			.tekst-makiety(34; 24; 34);
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kontakt-gora .karta-formularza {
+		margin-top: 3.69792vw;
+	}
+}

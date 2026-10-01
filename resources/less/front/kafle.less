@@ -1,0 +1,121 @@
+// Dwa kafle
+
+.kafle {
+	.kontener();
+	display: flow-root;
+	padding-bottom: 97px;
+
+	// Układ na siatce Bootstrapa (row + col-md-6)
+	> .row {
+		--bs-gutter-x: 20px;
+		--bs-gutter-y: 20px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 60px;
+		padding-bottom: 70px;
+	}
+}
+
+
+.kafel {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-height: 482px;
+	// Treść jest przypięta do dołu, więc ten padding ustawia całą kolumnę
+	padding: 0 0 84px 77px;
+	background: @granat-ciemny;
+	// ramka od razu 2px (w projekcie 1px), żeby przy hoverze układ nie przeskakiwał o piksel
+	border: 2px solid @granat-obrys;
+	overflow: hidden;
+	text-decoration: none;
+	transition: border-color @czas-animacji ease;
+
+	// zdjęcie w tle - opakowane w <picture>, więc pozycjonujemy sam <picture>
+	> picture {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform .4s ease;
+		}
+	}
+
+	> *:not(picture) {
+		position: relative;
+		z-index: 2;
+	}
+
+	&:hover,
+	&:focus-visible {
+		border-color: @pomaranczowy;
+
+		> picture img {
+			transform: scale(1.04);
+		}
+	}
+
+	.etykieta-sekcji {
+		margin-bottom: 20px;
+	}
+
+	.tytul-sekcji {
+		margin-bottom: 38px;
+		color: var(--tekst-na-ciemnym);
+	}
+
+	.przycisk-pigulka {
+		align-self: flex-start;
+		width: 379.6px;
+		max-width: 100%;
+		justify-content: center;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-height: 380px;
+		padding: 0 0 40px 40px;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		min-height: 300px;
+		padding: 0 0 28px 24px;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kafle {
+		padding-bottom: 5.0521vw;
+
+		> .row {
+			--bs-gutter-x: 1.0417vw;
+			--bs-gutter-y: 1.0417vw;
+		}
+	}
+
+	.kafel {
+		min-height: 25.1042vw;
+		padding: 0 0 4.375vw 4.0104vw;
+
+		.etykieta-sekcji {
+			margin-bottom: 1.0417vw;
+		}
+
+		.tytul-sekcji {
+			margin-bottom: 1.9792vw;
+		}
+	}
+}
+
+// Równa szerokość obu pigułek to element kompozycji z makiety, a nie skali
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.kafel .przycisk-pigulka {
+		// Podłoga z tego samego powodu, dla którego niżej stoi tu sztywna szerokość
+		width: max(284px, 19.7708vw);
+	}
+}

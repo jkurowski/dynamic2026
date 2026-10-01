@@ -55,6 +55,40 @@
 - `createIframeFromButton()` (app/Helpers/CreateIframeFromButton.php) ZOSTAJE — to osadzanie modelu 3D lokalu, nie moduł iframe.
 - Panel po zmianach: 534 trasy, brak nowych błędów.
 
+## Front (nowy szablon) — zasady i mapa sekcji
+Zasada: sekcje powtarzające się na kilku podstronach → komponenty Blade `x-...` (anonimowe, `resources/views/components`). Header i footer → `resources/views/layouts/partials`.
+
+### Zasoby (skopiowane z dynamic-front 2026-10-01)
+- `public/css/style.css` (+ `style.min.css`), `public/js/{glowny,animacje,formularz,kalkulator,karuzele,mapa,slider,aktualnosci,aktualnosci-domowa}.js`, `public/img/` (222 pliki), `public/fonty/` (Inter).
+- Źródła LESS: `resources/less/front/*.less` (31 plików, `style.less` = same importy). Kompilacja: `npx lessc resources/less/front/style.less public/css/style.css` (url-e `../img`, `../fonty` zostają bez zmian i pasują do public/css).
+- Bootstrap i jQuery z lokalnych plików CMS (`css/bootstrap.min.css` 5.3.8, `js/jquery.min.js` 3.7.1, `js/bootstrap.bundle.min.js`), nie z CDN.
+- W `slider.js`, `karuzele.js`, `aktualnosci.js` ścieżki `img/` zmienione na `/img/` (inaczej psują się na podstronach w podkatalogach).
+- Linki do podstron na razie `url('inwestycje')`, `url('finansowanie')`, `url('wykonczenie-pod-klucz')`, `url('poznaj-nas')`, `url('wyszukiwarka')`; istniejące trasy: `route('index')`, `route('contact')`, `route('aktualnosci.index')`.
+
+### Wspólne sekcje szablonu (analiza wszystkich 10 stron)
+| Sekcja | Gdzie w szablonie | W CMS |
+|---|---|---|
+| Nagłówek + menu mobilne (offcanvas) | wszystkie | `layouts/partials/header.blade.php` (menu z tablicy, aktywna pozycja z `request()->is()`) |
+| Stopka | wszystkie | `layouts/partials/footer.blade.php` |
+| Kontakt z formularzem (`section.kontakt`) — identyczna | index, finansowanie, inwestycja, lokal, poznaj-nas, wykończenie | `<x-sekcje.kontakt />` (form → `route('contact.send')` + @csrf; nazwy pól z szablonu: imie, telefon, email, wiadomosc, zgoda-rodo — NIE pasują jeszcze do ContactFormRequest) |
+| Kafle Finansowanie / Wykończenie | index (`div.kafle`), inwestycja (`section.kafle.oferta-uzupelniajaca`) | `<x-sekcje.kafle />`, na inwestycji `<x-sekcje.kafle tag="section" class="oferta-uzupelniajaca" aria-label="Dodatkowe usługi" />` |
+| Sterowanie mapy (GPS + zoom) — identyczne | index, inwestycja, kontakt | `<x-mapa-sterowanie />` |
+| Etykieta sekcji (pinezka + napis) | ~40× na wszystkich | `<x-etykieta class="...">TEKST</x-etykieta>` |
+| Przycisk „pigułka” ze strzałką | ~16× | `<x-przycisk-pigulka href="..." class="na-tle">TEKST</x-przycisk-pigulka>` (bez href → span) |
+| Ikony SVG: daszek, strzałka przycisku, telefon | nagłówek, wyszukiwarka, hero, formularz | `<x-ikona.daszek />`, `<x-ikona.strzalka />`, `<x-ikona.telefon />` |
+| Karta aktualności (karuzela) | index | `<x-karta-aktualnosci :tytul :zajawka :data :link :kategoria :obrazek :webp />` |
+| DO ZROBIENIA przy podstronach: hero podstrony `section.fin-hero` (ten sam szkielet, inna treść) | finansowanie, poznaj-nas, wykończenie (+ podobny `inwestycja-hero`) | planowany `<x-hero-podstrony>` ze slotami |
+| DO ZROBIENIA: nagłówek podstrony `section.naglowek-strony` + okruszki `nav.okruszki` | aktualnosci, inwestycje, kontakt, lokal, wyszukiwarka (+ okruszki też w fin-hero) | planowane `<x-naglowek-strony>`, `<x-okruszki>` |
+| DO ZROBIENIA: nagłówek galerii `naglowek-galerii` | inwestycja, wykończenie (różna treść) | do decyzji |
+| Liczby: `section.liczby` (index) vs `section.liczby-firmy` (poznaj-nas) | — | różne, NIE wspólne (index: inline) |
+| Wyszukiwarka-pasek (index) vs filtry (wyszukiwarka.html) | — | różne |
+
+### Strona główna (2026-10-01)
+- `layouts/homepage.blade.php` (body `strona-glowna` — wymagane przez motyw jasny), `front/homepage/index.blade.php`.
+- Treść statyczna z makiety (baza pusta). Do podpięcia: slider hero (`js/slider.js` ma tablicę slajdów), inwestycje w sprzedaży, mapa inwestycji, aktualności (`$aktualnosci` w @php na górze widoku), formularz kontaktowy.
+- Weryfikacja: HTML strony głównej ma tę samą strukturę co `dynamic-front/index.html` (622 znaczniki, 0 różnic w tekście; jedyna różnica — „Inwestycje” nie są aktywne na stronie głównej). 81 zasobów → 200.
+- Chrome nie ufa certyfikatowi Laragona dla https://dynamic-cms.test (strona błędu) — test w przeglądarce wymaga zaufania cert. Laragon (Menu → SSL).
+
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).
 - Pliki `.less` w `public/css` kompilowane są poza Mixem (watcher w IDE) do par `.css` / `.min.css` (+ `.map`). Skrypty CMS też mają pary `x.js` / `x.min.js`.

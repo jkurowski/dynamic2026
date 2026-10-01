@@ -1,0 +1,262 @@
+// Pojawianie się elementów przy przewijaniu strony
+
+@przesuniecie-animacji: 28px;
+@czas-pojawiania: .7s;
+
+.pojawia-sie {
+	opacity: 0;
+	transform: translateY(@przesuniecie-animacji);
+	transition: opacity @czas-pojawiania ease, transform @czas-pojawiania ease;
+	// podpowiedź dla przeglądarki, żeby przygotowała warstwę pod animację
+	will-change: opacity, transform;
+}
+
+.pojawia-sie.widoczny {
+	opacity: 1;
+	transform: none;
+	// po animacji zwalniamy warstwę - inaczej niepotrzebnie zżera pamięć
+	will-change: auto;
+}
+
+// Te dwa elementy są jednocześnie torami karuzeli
+.tasma-realizacji.pojawia-sie,
+.tasma-historii.pojawia-sie {
+	transform: none;
+	translate: 0 @przesuniecie-animacji;
+	transition: opacity @czas-pojawiania ease, translate @czas-pojawiania ease;
+	will-change: opacity, translate;
+}
+
+.tasma-realizacji.pojawia-sie.widoczny,
+.tasma-historii.pojawia-sie.widoczny {
+	translate: 0 0;
+}
+
+@wysuniecie-animacji: 60px;
+
+.pojawia-sie.z-lewej {
+	transform: translateX(-@wysuniecie-animacji);
+}
+
+.pojawia-sie.z-prawej {
+	transform: translateX(@wysuniecie-animacji);
+}
+
+.pojawia-sie.z-lewej.widoczny,
+.pojawia-sie.z-prawej.widoczny {
+	transform: none;
+}
+
+@media (max-width: @duzy-ekran) {
+	.pojawia-sie.z-lewej,
+	.pojawia-sie.z-prawej {
+		transform: translateY(@przesuniecie-animacji);
+	}
+
+	.pojawia-sie.z-lewej.widoczny,
+	.pojawia-sie.z-prawej.widoczny {
+		transform: none;
+	}
+}
+
+.kolejno > * {
+	opacity: 0;
+	transform: translateY(@przesuniecie-animacji);
+	transition: opacity @czas-pojawiania ease, transform @czas-pojawiania ease;
+}
+
+.kolejno.widoczny > * {
+	opacity: 1;
+	transform: none;
+	transition-delay: .56s;
+}
+
+.kolejno.widoczny > *:nth-child(1) { transition-delay: 0s; }
+.kolejno.widoczny > *:nth-child(2) { transition-delay: .08s; }
+.kolejno.widoczny > *:nth-child(3) { transition-delay: .16s; }
+.kolejno.widoczny > *:nth-child(4) { transition-delay: .24s; }
+.kolejno.widoczny > *:nth-child(5) { transition-delay: .32s; }
+.kolejno.widoczny > *:nth-child(6) { transition-delay: .4s; }
+.kolejno.widoczny > *:nth-child(7) { transition-delay: .48s; }
+
+// Schodkowe opóźnienia. Bez nich cała sekcja wskakuje jednym ruchem i wygląda sztucznie.
+.opoznienie-1 {
+	transition-delay: .12s;
+}
+
+.opoznienie-2 {
+	transition-delay: .24s;
+}
+
+.opoznienie-3 {
+	transition-delay: .36s;
+}
+
+// --- rozjaśnianie dużych nagłówków ---
+.rozjasnia-sie {
+	transition: color .9s ease;
+}
+
+.tytul-sekcji.rozjasnia-sie.widoczny {
+	color: var(--tekst-na-ciemnym);
+}
+
+// --- wejście rzadkiego komunikatu ---
+@keyframes wejscie-komunikatu {
+	from {
+		opacity: 0;
+		// połowa @przesuniecie-animacji: komunikat wchodzi krótszą drogą niż sekcja, bo staje
+		// tuż przy treści, a nie wjeżdża z dołu ekranu
+		transform: translateY((@przesuniecie-animacji / 2));
+	}
+}
+
+// --- głębia kolażu na ekranach dotykowych ---
+@media (max-width: @duzy-ekran) and (prefers-reduced-motion: no-preference) {
+	@supports (animation-timeline: view()) {
+		.o-nas-zdjecia picture:nth-of-type(1),
+		.opis-zdjecia .duze {
+			animation: kolaz-dalej linear both;
+			animation-timeline: view();
+		}
+
+		.o-nas-zdjecia picture:nth-of-type(2),
+		.opis-zdjecia .male {
+			animation: kolaz-blizej linear both;
+			animation-timeline: view();
+		}
+	}
+}
+
+@keyframes kolaz-dalej {
+	from { translate: 0 4%; }
+	to { translate: 0 -4%; }
+}
+
+@keyframes kolaz-blizej {
+	from { translate: 0 14%; }
+	to { translate: 0 -14%; }
+}
+
+// ================= wejście pozycji w rozwijanych menu =================
+@czas-pozycji-menu: .34s;
+@krok-pozycji-menu: .045s;
+
+@keyframes wjazd-pozycji-menu {
+	from {
+		opacity: 0;
+		// Połowa @przesuniecie-animacji: pozycja menu ma dołączyć do listy, a nie wjechać jak
+		// sekcja strony.
+		transform: translateY((@przesuniecie-animacji / 2));
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+// Opóźnienie kolejnych pozycji
+.opoznienia-pozycji-menu(@n; @start: 0s) when (@n > 0) {
+	&:nth-child(@{n}) {
+		animation-delay: (@start + @krok-pozycji-menu * (@n - 1));
+	}
+	.opoznienia-pozycji-menu((@n - 1); @start);
+}
+
+.wjazd-pozycji-menu(@ile; @start: 0s) {
+	animation: wjazd-pozycji-menu @czas-pozycji-menu ease both;
+	.opoznienia-pozycji-menu(@ile; @start);
+}
+
+// --- ustawienie systemowe "ogranicz animacje" ---
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--czas-zamalowania: 0s;
+	}
+
+	.pojawia-sie,
+	.pojawia-sie.widoczny {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+
+	.rozjasnia-sie {
+		transition: none;
+	}
+
+	.kolejno > *,
+	.kolejno.widoczny > * {
+		opacity: 1;
+		transform: none;
+		transition: none;
+		transition-delay: 0s;
+	}
+
+	// karuzela realizacji przestawia zdjęcia bez przejazdu (patrz js/karuzele.js) - razem z
+	// przejazdem odpada też przenoszenie powiększenia na sąsiedni kadr
+	.tasma-realizacji img,
+	.tasma-realizacji picture {
+		transition: none;
+	}
+
+	.tasma-realizacji.pojawia-sie,
+	.tasma-historii.pojawia-sie {
+		translate: none;
+	}
+
+	// Zmiana slajdu w hero (less/hero.less, js/slider.js)
+	.hero-tresc.slajd-przelacza {
+		transition: none;
+		// wejście nowego tekstu jest animacją (@keyframes slajdTekstPlynny), nie przejściem
+		animation: none;
+
+		&.slajd-ukryty {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.hero-tlo picture.zdjecie-wchodzi,
+	.hero-tlo picture.zdjecie-znika {
+		transition: none;
+	}
+
+	// Pozycje rozwijanych menu pojawiają się bez wjazdu
+	.menu-mobilne.show .offcanvas-body > ul > li,
+	.menu-mobilne.show .offcanvas-body > .telefon-mobilny,
+	.podmenu-inwestycji.otwarte > li,
+	.lista-filtru.show > li {
+		animation: none;
+	}
+
+	// Rozwijana lista inwestycji pojawia się i znika od razu
+	.podmenu-inwestycji {
+		transition-duration: 0s;
+		transition-delay: 0s;
+	}
+
+	// Odpowiedź na wciśnięcie znika w całości
+	.telefon-naglowek:active,
+	.przycisk-strzalka:active,
+	.przycisk-czytaj:active {
+		transform: none;
+	}
+
+	// Panel szczegółów (less/inwestycje.less) dokłada wejście poniżej 1024px
+	.komunikat-formularza.sukces,
+	.komunikat-formularza.blad,
+	.inwestycje-opis.ma-otwarte-szczegoly .inwestycje-szczegoly-panel {
+		animation: none;
+	}
+
+	// Wyżej znika wejście panelu klatkami, tu samo rozwijanie wysokością
+	.inwestycje-opis.ma-otwarte-szczegoly .inwestycje-szczegoly-panel {
+		transition: none;
+	}
+
+	// Rozszerzanie dymka na mapie wraca do skoku.
+	.dymek-mapy {
+		transition: none;
+	}
+}

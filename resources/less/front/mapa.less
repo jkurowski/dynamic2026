@@ -1,0 +1,783 @@
+// Mapa inwestycji - statyczna grafika mapy z pinezkami ustawionymi na procentach
+
+.mapa-sekcja {
+	position: relative;
+	padding-bottom: 130px;
+
+	@media (min-width: (@duzy-ekran + 1px)) {
+		padding-bottom: 0;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-bottom: 70px;
+	}
+}
+
+.mapa-gora {
+	.kontener();
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 40px;
+	padding-top: 95px;
+	padding-bottom: 68px;
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-top: 60px;
+		padding-bottom: 34px;
+	}
+}
+
+.mapa-kreska {
+	width: 46px;
+	height: 4px;
+	margin-top: 25px;
+	background: @pomaranczowy;
+}
+
+// filtry statusów - stylowane checkboxy
+.filtry-mapy {
+	display: flex;
+	align-items: center;
+	gap: 49px;
+	align-self: flex-end;
+	margin: 0 0 29px;
+
+	label {
+		display: inline-flex;
+		align-items: flex-start;
+		gap: 23px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 31px;
+		font-weight: 400;
+		line-height: 1.21;
+		cursor: pointer;
+		user-select: none;
+	}
+
+	input {
+		position: absolute;
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+
+	// kwadracik zastępujący natywny checkbox
+	.znacznik {
+		position: relative;
+		width: 36px;
+		height: 36px;
+		flex: 0 0 auto;
+		border: 1px solid @szary-tekst;
+		border-radius: 8px;
+		transition: background @czas-animacji ease, border-color @czas-animacji ease;
+
+		img {
+			position: absolute;
+			left: 8px;
+			top: 8px;
+			width: 20px;
+			height: 20px;
+			opacity: 0;
+			transition: opacity @czas-animacji ease;
+		}
+	}
+
+	input:checked + .znacznik img {
+		opacity: 1;
+	}
+
+	// kolor zaznaczenia zależy od statusu - tak jest w projekcie
+	.status-sprzedaz input:checked + .znacznik {
+		background: @pomaranczowy;
+		border-color: @pomaranczowy;
+	}
+
+	.status-zrealizowane input:checked + .znacznik {
+		background: @zielony;
+		border-color: @zielony;
+	}
+
+	.status-realizacja input:checked + .znacznik {
+		background: @granat-obrys;
+		border-color: @granat-obrys;
+	}
+
+	input:focus-visible + .znacznik {
+		outline: 2px solid @pomaranczowy-jasny;
+		outline-offset: 3px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		gap: 30px;
+
+		label {
+			align-items: center;
+			min-height: 44px;
+			font-size: 20px;
+			gap: 12px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		align-self: stretch;
+		margin-bottom: 0;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		flex-wrap: wrap;
+		gap: 14px 22px;
+
+		label {
+			font-size: 16px;
+		}
+
+		.znacznik {
+			width: 26px;
+			height: 26px;
+
+			img {
+				left: 4px;
+				top: 4px;
+				width: 16px;
+				height: 16px;
+			}
+		}
+	}
+}
+
+// W paśmie laptopowym tytuł i trzy pełne etykiety nie mieszczą się obok siebie
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	body.strona-glowna .mapa-gora {
+		flex-direction: column;
+		gap: 32px;
+	}
+
+	body.strona-glowna .filtry-mapy {
+		align-self: stretch;
+		flex-wrap: wrap;
+		gap: 20px 30px;
+		margin: 0;
+
+		label {
+			align-items: center;
+			min-height: 44px;
+			gap: 12px;
+			font-size: 20px;
+			white-space: nowrap;
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	body.strona-glowna .mapa-gora {
+		gap: 2.0833vw;
+		padding-top: 4.9479vw;
+		padding-bottom: 3.5417vw;
+	}
+
+	body.strona-glowna .mapa-kreska {
+		width: 2.3958vw;
+		margin-top: 1.3021vw;
+	}
+
+	body.strona-glowna .filtry-mapy {
+		gap: 2.5521vw;
+		margin-bottom: 1.5104vw;
+
+		label {
+			gap: 1.1979vw;
+			font-size: 1.6146vw;
+			white-space: nowrap;
+		}
+
+		.znacznik {
+			width: 1.875vw;
+			height: 1.875vw;
+			border-radius: .41667vw;
+
+			img {
+				left: 22.222%;
+				top: 22.222%;
+				width: 55.556%;
+				height: 55.556%;
+			}
+		}
+	}
+}
+
+
+// --- sama mapa ---
+.mapa-plansza {
+	position: relative;
+	height: 750px;
+	border-radius: 0;
+	background: @szary-separator;
+	overflow: hidden;
+	outline-offset: -3px;
+	container-type: inline-size;
+
+	&.ma-przesuwanie {
+		cursor: grab;
+		touch-action: none;
+		user-select: none;
+	}
+
+	&.przeciagana {
+		cursor: grabbing;
+	}
+
+	// Na ekranie dotykowym plansza zajmuje całą szerokość i przy touch-action
+	@media (max-width: @duzy-ekran) {
+		&.ma-przesuwanie {
+			touch-action: pan-y;
+		}
+	}
+
+	// Kadr mapy policzony z macierzy przycięcia z Figmy
+	> picture {
+		position: absolute;
+		left: -11.18%;
+		top: -36.59%;
+		display: block;
+		width: 130.31%;
+		height: 165.44%;
+		transform-origin: 46.95% 52.34%;
+
+		img {
+			width: 100%;
+			height: 100%;
+			// Wartość z desktopowej makiety zostaje bez zmian.
+			object-fit: fill;
+			display: block;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		height: 560px;
+
+		// Mobilna plansza ma inne proporcje niż plik
+		> picture img {
+			object-fit: cover;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		height: 420px;
+	}
+}
+
+// Pinezki pozycjonujemy w procentach, bo mapa się skaluje razem z ekranem
+.pinezka-na-punkcie() {
+	// Kotwicą jest czubek
+	transform: translate(-50%, -100%);
+	transform-origin: bottom center;
+	width: clamp(28px, 2.865cqw, 55px);
+	height: auto;
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+}
+
+.pinezka {
+	position: absolute;
+	.pinezka-na-punkcie();
+	padding: 0;
+	border: 0;
+	background: none;
+	transition: transform @czas-animacji ease;
+
+	&:hover,
+	&.aktywna {
+		// translate musi zostać powtórzony - inaczej samo scale skasowałoby kotwicę
+		transform: translate(-50%, -100%) scale(1.12);
+		z-index: 4;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		&::before {
+			content: '';
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 44px;
+			height: 44px;
+			transform: translate(-50%, -50%);
+		}
+	}
+}
+
+// biały dymek nad pinezką
+.dymek-mapy {
+	position: absolute;
+	// Pozycję wylicza js/mapa.js z pinezki i podaje tymi zmiennymi
+	left: var(--dymek-x, 0);
+	top: var(--dymek-y, 0);
+	z-index: 5;
+	width: 329px;
+	padding: 17px 21px;
+	background: @bialy;
+	border-radius: 5px;
+	box-shadow: 0 0 16px rgba(0, 0, 0, .05);
+	text-align: left;
+
+	transform: translateY(-50%);
+
+	// Nazwa i daszek stoją w jednym wierszu
+	.nazwa {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		color: @granat;
+		font-size: @tekst-podstawa;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	// Daszek tylko tam, gdzie nazwa jest przyciskiem, czyli gdy naprawdę jest co rozwijać
+	button.nazwa {
+		width: 100%;
+		min-height: 44px;
+		// Hitbox wypełnia pionowy padding dymka, ale nie zmienia jego wysokości ani położenia
+		// tekstu. Dzięki temu daszek jest wygodnym celem dotykowym.
+		margin-block: -13px;
+		padding: 0;
+		border: 0;
+		background: none;
+		font-family: inherit;
+		text-align: left;
+		cursor: pointer;
+
+		&::after {
+			content: '';
+			width: 12px;
+			height: 7px;
+			flex: 0 0 auto;
+			background: url('../img/ikona-daszek.svg') center / 12px 7px no-repeat;
+			transition: transform @czas-animacji ease;
+		}
+	}
+
+	&.rozwiniety button.nazwa::after {
+		transform: rotate(180deg);
+	}
+
+	// szczegóły pokazujemy dopiero po kliknięciu w pinezkę
+	.szczegoly {
+		display: none;
+		margin-top: 8px;
+		padding-top: 23px;
+		border-top: 1px solid @szary-separator;
+
+		.wiersz {
+			margin: 0 0 3.55px;
+		}
+	}
+
+	&.rozwiniety .szczegoly {
+		display: block;
+	}
+
+	// Aktywny opis zawsze wygrywa warstwą z sąsiednimi podpisami i pinezkami.
+	&.rozwiniety {
+		z-index: 8;
+	}
+
+	.wiersz {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		color: @granat;
+		font-size: 13px;
+		line-height: 1.65;
+
+		// liczbę mieszkań makieta nadpisuje na znakach: pomarańczowa i pogrubiona
+		.akcent {
+			font-weight: 700;
+		}
+
+		img {
+			width: 19px;
+			height: 19px;
+			flex: 0 0 auto;
+		}
+	}
+
+	.przyciski {
+		display: flex;
+		gap: 12px;
+		margin-top: 14.8px;
+	}
+
+	.mini-przycisk {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		width: 137px;
+		height: 35px;
+		border-radius: 2px;
+		background: @pomaranczowy;
+		border: 1px solid @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+		font-size: 11px;
+		font-weight: 700;
+		text-decoration: none;
+		transition: border-color @czas-zamalowania @krzywa-zamalowania,
+			color @czas-zamalowania @krzywa-zamalowania;
+		.zamalowanie(@pomaranczowy-jasny);
+
+		&.obrys {
+			background: transparent;
+			color: @pomaranczowy;
+		}
+
+		&:hover {
+			border-color: @pomaranczowy-jasny;
+			color: var(--tekst-na-ciemnym);
+		}
+
+		img {
+			width: 14px;
+			height: 14px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.mini-przycisk {
+			height: 44px;
+			font-size: @m-tekst-drobny;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		left: var(--dymek-x);
+		top: var(--dymek-y);
+		right: auto;
+		bottom: auto;
+		transform: translateY(-50%);
+		width: clamp(140px, 38vw, 329px);
+		max-width: calc(100% - 16px);
+		padding: 10px 12px;
+		white-space: normal;
+		overflow-wrap: normal;
+		// Dymek przy pinezce nie znika i nie wraca - on się rozszerza
+		transition: width @czas-animacji @krzywa-zamalowania;
+
+		.nazwa {
+			font-size: clamp(11px, 2.1vw, 15px);
+		}
+
+		&.rozwiniety {
+			width: clamp(180px, 55vw, 280px);
+		}
+	}
+}
+
+// Dymek odfiltrowanej inwestycji. Reguła stoi po media query, żeby wygrała kaskadą bez
+// uciekania się do !important.
+.dymek-mapy.ukryty {
+	display: none;
+}
+
+// Kółka sterowania mapą (GPS, przybliż, oddal) przy prawej krawędzi
+.mapa-sterowanie {
+	position: absolute;
+	right: 30px;
+	bottom: 30px;
+	z-index: 6;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+
+	button {
+		width: 48px;
+		padding: 0;
+		background: @bialy;
+		border: 0;
+		border-radius: 5px;
+		box-shadow: 0 0 16px rgba(0, 0, 0, .05);
+		color: @pomaranczowy;
+		font-size: 24px;
+		line-height: 1;
+		transition: background @czas-animacji ease;
+
+		&:hover {
+			background: @szary-linia;
+		}
+	}
+
+	.gps {
+		height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		img {
+			width: 27px;
+			height: 27px;
+		}
+	}
+
+	.zoom {
+		width: 48px;
+		height: 78px;
+		display: flex;
+		flex-direction: column;
+		background: @bialy;
+		border-radius: 5px;
+		box-shadow: 0 0 16px rgba(0, 0, 0, .05);
+		color: @pomaranczowy;
+		font-size: 24px;
+		line-height: 1;
+
+		span {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+
+			& + span {
+				border-top: 1px solid @szary-separator;
+			}
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		top: 12px;
+		right: 12px;
+		bottom: auto;
+		z-index: 9;
+
+		.zoom {
+			height: auto;
+
+			span {
+				min-height: 44px;
+			}
+		}
+	}
+}
+
+.mapa-inwestycji > picture {
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	transform-origin: 50% 50%;
+}
+
+// Punkty w okolicy
+.punkt-mapy {
+	position: absolute;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: clamp(30px, 2.375vw, 45.6px);
+	aspect-ratio: 1;
+	transform: translate(-50%, -100%);
+	background: @bialy;
+	border: 2px solid @pomaranczowy;
+	border-radius: 50%;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .18);
+	pointer-events: none;
+
+	img {
+		width: 61.4%;
+		height: auto;
+	}
+}
+
+.pinezka-inwestycji {
+	position: absolute;
+	z-index: 6;
+	display: block;
+	.pinezka-na-punkcie();
+	pointer-events: none;
+}
+
+// Dymek na tej mapie ma dziobek od strony pinezki
+.mapa-inwestycji .dymek-mapy {
+	display: flex;
+	align-items: center;
+	height: 57px;
+	padding: 0 19px;
+
+	.nazwa {
+		flex: 1 1 auto;
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		right: 100%;
+		top: 50%;
+		width: 0;
+		height: 0;
+		margin-top: -15px;
+		border: 15px solid transparent;
+		border-left: 0;
+		border-right: 11px solid @bialy;
+	}
+}
+
+// Plansza mapy ma w makiecie 750px wysokości przy oknie 1920px
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.mapa-plansza {
+		height: 39.0625vw;
+	}
+}
+
+// Dymek nad pinezką
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.dymek-mapy {
+		width: max(313px, 17.13542vw);
+		padding: .88542vw 1.09375vw;
+		border-radius: .26042vw;
+
+		.mapa-sekcja & {
+			width: 329px;
+			padding-inline: 21px;
+		}
+
+		.nazwa {
+			gap: 1.04167vw;
+			.tekst-makiety(18; 15);
+		}
+
+		// Wysokość zwiniętego dymka to wcięcie plus 18px wiersza nazwy z makiety
+		button.nazwa {
+			margin-block: calc((.9375vw - 44px) / 2);
+		}
+	}
+
+	.mapa-inwestycji .dymek-mapy {
+		height: 2.96875vw;
+		padding: 0 .98958vw;
+	}
+}
+
+// Wnętrze rozwiniętego dymka
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.dymek-mapy {
+		.szczegoly {
+			margin-top: .41667vw;
+			padding-top: 1.19792vw;
+
+			.wiersz {
+				margin: 0 0 .18490vw;
+			}
+		}
+
+		.wiersz {
+			gap: .36458vw;
+			.tekst-makiety(13; 11);
+
+			img {
+				width: .98958vw;
+				height: .98958vw;
+			}
+		}
+
+		.przyciski {
+			// Przerwa stoi na 12px z makiety, bo stoi na nich napis
+			gap: 12px;
+			margin-top: .77083vw;
+		}
+
+		.mini-przycisk {
+			gap: .3125vw;
+			width: 137px;
+			height: max(31.82px, 1.82292vw);
+			// Napis zostaje na 11px z makiety na całej długości pasma
+			.tekst-makiety(11; 11);
+
+			img {
+				width: .72917vw;
+				height: .72917vw;
+			}
+
+			&:first-child {
+				white-space: nowrap;
+			}
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.dymek-mapy button.nazwa::after {
+		width: .625vw;
+		height: .36458vw;
+		background-size: .625vw .36458vw;
+	}
+
+	.mapa-inwestycji .dymek-mapy::before {
+		margin-top: -.78125vw;
+		border-width: .78125vw;
+		border-left-width: 0;
+		border-right-width: .57292vw;
+	}
+}
+
+// Kontrolki mapy (GPS i para zoomu) skalowane z oknem
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.mapa-sterowanie {
+		right: max(27.5px, 1.5625vw);
+		bottom: max(27.5px, 1.5625vw);
+		gap: max(4.58px, .26042vw);
+
+		button {
+			width: max(44px, 2.5vw);
+			font-size: max(22px, 1.25vw);
+		}
+
+		.gps {
+			height: max(44px, 2.5vw);
+
+			img {
+				width: max(24.75px, 1.40625vw);
+				height: max(24.75px, 1.40625vw);
+			}
+		}
+
+		.zoom {
+			width: max(44px, 2.5vw);
+			height: max(71.5px, 4.0625vw);
+			font-size: max(22px, 1.25vw);
+		}
+	}
+}
+
+// ================= przyciski dymka: podłoga czytelności poniżej 1400px ============
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.dymek-mapy .mini-przycisk {
+		font-size: ~"max(11px, calc(22.2px - .8vw))";
+	}
+
+	// Pudełko zostaje na 137px - ale tylko dla krótszego napisu
+	.mapa-sekcja .dymek-mapy {
+		width: ~"max(329px, calc(474.1px - 11.429vw))";
+	}
+
+	.dymek-mapy .przyciski .mini-przycisk {
+		white-space: nowrap;
+	}
+
+	// Dłuższy bierze tyle, ile potrzebuje, krótszy resztę
+	.dymek-mapy .przyciski .mini-przycisk:first-child {
+		flex: 0 0 auto;
+		width: ~"max(137px, calc(252.2px - 8.235vw))";
+	}
+
+	// Kurczy się o tyle, o ile urósł sąsiad
+	.dymek-mapy .przyciski .mini-przycisk:last-child {
+		flex: 1 1 auto;
+	}
+}

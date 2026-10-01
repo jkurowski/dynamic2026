@@ -1,0 +1,905 @@
+
+.hero-poznaj .para-przyciskow {
+	margin-top: 56.4px;
+}
+
+.hero-poznaj .fin-hero-kolumna {
+	margin-top: 168px;
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 90px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 40px;
+	}
+}
+
+// ================= cztery kafle z liczbami =================
+.liczby-firmy {
+	.kontener();
+	padding-top: 96px;
+	padding-bottom: 112px;
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 50px;
+		padding-bottom: 60px;
+	}
+}
+
+// Kształt kafla jest taki sam jak .kafel-korzysci (405x420, #222236, r=12), ale środek
+// inny: ikona, duża liczba, opis i pomarańczowa kreska pod spodem.
+.kafel-liczby {
+	.kafel-korzysci();
+	gap: 0;
+
+	img {
+		width: 75px;
+		height: 75px;
+		margin-bottom: 28px;
+	}
+
+	.duza-liczba {
+		display: block;
+		color: @pomaranczowy;
+		font-size: 82px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	h2 {
+		margin: 10.4px 0 21px;
+
+		&::after {
+			content: none;
+		}
+	}
+
+	// kreska zamykająca kafel
+	.kreska {
+		display: block;
+		width: 46px;
+		height: 3px;
+		margin-bottom: 14.6px;
+		background: @pomaranczowy;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		img {
+			width: 52px;
+			height: 52px;
+			margin-bottom: 16px;
+		}
+
+		.duza-liczba {
+			font-size: 48px;
+		}
+
+		h2 {
+			margin: 12px 0 16px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.duza-liczba {
+			font-size: 38px;
+		}
+	}
+}
+
+// ================= wyróżniony cytat =================
+.cytat {
+	.kontener();
+	margin-bottom: 112px;
+
+	blockquote {
+		position: relative;
+		display: flex;
+		align-items: center;
+		min-height: 462px;
+		margin: 0;
+		padding: 60px 116px 60px 425px;
+		background: @granat-karta;
+		border: 1px solid @granat-ramka;
+		border-radius: 12px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 43px;
+		font-style: italic;
+		font-weight: 500;
+		line-height: 1.53;
+	}
+
+	p {
+		margin: 0;
+	}
+
+	.akcent {
+		color: @pomaranczowy;
+	}
+
+	// znak cudzysłowu narysowany po lewej stronie karty
+	.cudzyslow {
+		position: absolute;
+		left: 98px;
+		top: 167px;
+		width: 193px;
+		height: 129px;
+
+		img {
+			display: block;
+			width: 193px;
+			height: 129px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 50px;
+		blockquote {
+			min-height: 0;
+			padding: 44px 44px 44px 240px;
+			font-size: 26px;
+		}
+
+		.cudzyslow {
+			left: 44px;
+			top: 44px;
+			width: 130px;
+			height: 87px;
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		margin-bottom: 60px;
+
+		blockquote {
+			padding: 24px;
+			font-size: 17px;
+		}
+
+		.cudzyslow {
+			display: none;
+		}
+	}
+}
+
+// ================= nagrody: tekst po lewej, zdjęcie wychodzi w prawo =================
+.nagrody {
+	position: relative;
+	overflow: hidden;
+	padding-bottom: 112px;
+
+	.tresc {
+		.kontener();
+		position: relative;
+		z-index: 2;
+		padding-top: 125px;
+	}
+
+	.kolumna {
+		max-width: 700px;
+	}
+
+	.etykieta-sekcji {
+		gap: 15px;
+	}
+
+	p:not(.etykieta-sekcji) {
+		margin: 34px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	// Próg do 1024px
+	@media (max-width: @duzy-ekran) {
+		.kolumna {
+			max-width: 40%;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.tlo-strony(
+			~".nagrody-zdjecie";
+			~"> .tresc";
+			~"1100 / 619";
+		// kąt skosu
+			~"polygon(calc(23.76% * var(--skos)) 0, 100% 0, 100% 100%, 0 100%)"
+		);
+
+		.nagrody-zdjecie::after {
+			content: '';
+			position: absolute;
+			// Zdjęcie leży przy górze sekcji, a ramka musi zmieścić pochylenie w ekranie,
+			// więc siedzi przy górze skosu, równolegle do niego
+			left: 14.19%;
+			top: 4%;
+			width: 15.33%;
+			height: 45.73%;
+			z-index: 0;
+			border: 3px solid @pomaranczowy;
+			transform-origin: top left;
+			transform: skewX(-22.9deg);
+			pointer-events: none;
+		}
+
+		.nagrody-zdjecie picture {
+			z-index: 1;
+		}
+
+		> .tresc {
+			padding-top: 60px;
+			padding-bottom: 60px;
+		}
+
+		// Kolumna bierze całą szerokość w układzie mobilnym.
+		.kolumna {
+			max-width: none;
+		}
+
+		p:not(.etykieta-sekcji) {
+			font-size: 17px;
+			line-height: 1.7;
+		}
+	}
+}
+
+.strona-poznaj-nas .nagrody {
+	--parallaks: 0;
+}
+
+.nagrody-zdjecie {
+	position: absolute;
+	left: 46.3%;
+	top: 0;
+	width: 53.7%;
+	height: 750px;
+	z-index: 1;
+
+	picture {
+		// Ta maska jest trapezem
+		clip-path: polygon(30.9% 0, 100% 0, 100% 100%, 0 100%);
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		// relative, nie static
+		position: relative;
+		left: 0;
+		width: 100%;
+		height: auto;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+}
+
+@media (min-width: (@duzy-ekran + 1px)) {
+	.nagrody-zdjecie img {
+		position: absolute;
+		left: -150px;
+		top: 0;
+		width: 1333px;
+		height: 750px;
+		max-width: none;
+	}
+
+	.hero-poznaj .fin-hero-zdjecie img {
+		position: absolute;
+		left: -24px;
+		top: 0;
+		width: 1251px;
+		height: 750px;
+		max-width: none;
+	}
+
+	.partner-misja .partner-zdjecie img {
+		position: absolute;
+		left: 117px;
+		top: 0;
+		width: 1333px;
+		height: 750px;
+		max-width: none;
+	}
+
+	.partner-o-nas .partner-zdjecie img {
+		position: absolute;
+		left: 321px;
+		top: -37px;
+		width: 1049px;
+		height: 787px;
+		max-width: none;
+	}
+}
+
+// Pomarańczowa obwódka nachodząca na lewy dolny róg zdjęcia nagród
+.ramka-nagrod {
+	position: absolute;
+	left: 49.9%;
+	top: 450px;
+	width: 158px;
+	height: 343px;
+	border: 3px solid @pomaranczowy;
+	transform-origin: top left;
+	transform: skewX(-22.9deg);
+	pointer-events: none;
+	// pod zdjęciem, tak jak w projekcie - widać ją tylko poza kadrem
+	z-index: 0;
+
+	// od tabletu zdjęcie wraca do zwykłego przepływu, więc dekoracja nie ma się czego trzymać
+	@media (max-width: @duzy-ekran) {
+		display: none;
+	}
+}
+
+// ================= historia firmy =================
+.historia {
+	.kontener();
+	padding-bottom: 40px;
+
+	.gora {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 40px;
+	}
+
+	.opis {
+		flex: 0 0 auto;
+		max-width: 485px;
+		padding-top: 31px;
+
+		p {
+			margin: 0;
+			color: var(--tekst-na-ciemnym);
+			font-size: 21px;
+			font-weight: 300;
+			line-height: 1.9;
+		}
+	}
+
+	.logo-zwiazku {
+		width: 312px;
+		height: auto;
+		margin-top: 32px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.gora {
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.opis {
+			max-width: none;
+			padding-top: 20px;
+
+			p {
+				font-size: 17px;
+				line-height: 1.7;
+			}
+		}
+
+		.logo-zwiazku {
+			width: 220px;
+			margin-top: 10px;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.historia {
+		.gora {
+			flex-direction: column;
+			gap: 24px;
+		}
+
+		.opis {
+			width: 100%;
+			max-width: none;
+			padding-top: 0;
+		}
+	}
+}
+
+// Kadr taśmy z historią
+.kadr-historii {
+	overflow-x: clip;
+	overflow-y: visible;
+}
+
+// Taśma zdjęć z historii firmy. Skrajne kafle wystają poza ekran, tak jak w makiecie.
+.tasma-historii {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	margin-top: 55px;
+	padding-bottom: 112px;
+
+	picture {
+		display: block;
+		flex: 0 0 auto;
+	}
+
+	img {
+		display: block;
+		width: 405px;
+		height: 500px;
+		max-width: none;
+		object-fit: cover;
+		border: 1px solid @granat-ramka;
+		border-radius: 12px;
+	}
+
+	// W makiecie szersze są zdjęcia pierwsze i trzecie (547 i 546px), reszta ma 405px
+	.szerokie img {
+		width: 546px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		img {
+			width: 260px;
+			height: 330px;
+		}
+
+		.szerokie img {
+			width: 340px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		gap: 12px;
+		padding-bottom: 60px;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		img {
+			width: 42vw;
+			height: auto;
+			aspect-ratio: 405 / 500;
+		}
+
+		// Selektor po klasie, nie po numerze dziecka
+		.szerokie img {
+			width: 56.62vw;
+			aspect-ratio: 546 / 500;
+		}
+	}
+}
+
+.nawigacja-historii {
+	display: flex;
+	justify-content: center;
+	margin-top: 67px;
+	// makieta: sekcja kontaktu zaczyna się 10px wyżej
+	margin-bottom: 8px;
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 144px;
+		height: 83px;
+		padding: 0;
+		background: url('../img/ramka-skos-biala.svg') center / 100% 100% no-repeat;
+		border: 0;
+
+		& + button {
+			width: 145px;
+			margin-left: -10px;
+		}
+
+		img {
+			// Plik SVG ma płótno 40x40, a sama strzałka zajmuje w nim połowę wysokości
+			width: 40px;
+			height: 40px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 24px;
+		margin-bottom: 64px;
+
+		button,
+		button + button {
+			width: 90px;
+			height: 56px;
+			margin-left: 0;
+		}
+	}
+
+	@media (max-width: @telefon) {
+		margin-bottom: 40px;
+	}
+}
+
+@media (min-width: (@duzy-ekran + 1px)) {
+	.hero-poznaj {
+		height: 1130px;
+		padding-bottom: 0;
+	}
+
+	.liczby-firmy {
+		padding-top: 96px;
+		padding-bottom: 112px;
+
+		.korzysci-lista {
+			margin-top: 0;
+		}
+	}
+
+	.liczby-firmy + .partner-wykonczenia {
+		height: 917px;
+		padding-bottom: 0;
+	}
+
+	.cytat {
+		margin-bottom: 112px;
+	}
+
+	.nagrody {
+		height: 917px;
+		padding-bottom: 0;
+	}
+
+	.nagrody + .partner-wykonczenia {
+		height: 915px;
+		padding-bottom: 0;
+	}
+
+	.historia {
+		// Treść po prawej z logo jest wyższa od nagłówka. Naturalna wysokość sekcji zostawia jej
+		// miejsce i oddziela ją od taśmy zdjęć.
+		height: auto;
+		padding-bottom: 64px;
+	}
+
+	.tasma-historii {
+		position: relative;
+		height: 500px;
+		margin-top: 0;
+		padding-bottom: 0;
+		justify-content: flex-start;
+
+		> picture:first-child {
+			margin-left: -304.5px;
+		}
+	}
+
+	.kadr-historii + .kontakt {
+		padding-bottom: 94px;
+	}
+}
+@media (min-width: (@duzy-ekran + 1px)) {
+	.strona-poznaj-nas main {
+		padding-bottom: 1px;
+	}
+
+	// W makiecie akapit i logo związku stoją obok siebie, a nie jedno pod drugim
+	.historia .opis {
+		display: flex;
+		align-items: flex-start;
+		gap: 82px;
+		width: 879px;
+		max-width: none;
+		margin-right: 93px;
+		padding-top: 75px;
+
+		p {
+			flex: 0 0 485px;
+		}
+
+		.logo-zwiazku {
+			margin-top: 0;
+		}
+	}
+}
+
+// ================= płynny desktop 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.tasma-historii {
+		height: 26.0417vw;
+		gap: 1.0417vw;
+
+		img {
+			width: 21.0938vw;
+			height: 26.0417vw;
+		}
+
+		.szerokie img {
+			width: 28.4375vw;
+		}
+
+		> picture:first-child {
+			margin-left: -15.8594vw;
+		}
+	}
+}
+
+// ================= płynny desktop 1400-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	// ----- sztywne wysokości sekcji z makiety -----
+	.hero-poznaj {
+		height: auto;
+		min-height: 58.85417vw;
+	}
+
+	.hero-poznaj .para-przyciskow {
+		margin-top: 2.9375vw;
+	}
+
+	.liczby-firmy {
+		padding-top: 5vw;
+		padding-bottom: 5.83333vw;
+	}
+
+	.liczby-firmy + .partner-wykonczenia {
+		height: auto;
+		min-height: 47.76042vw;
+	}
+
+	.cytat {
+		margin-bottom: 5.83333vw;
+	}
+
+	// Minimalna wysokość, nie sztywna
+	.nagrody {
+		height: auto;
+		min-height: 47.76042vw;
+	}
+
+	.nagrody + .partner-wykonczenia {
+		height: auto;
+		min-height: 47.65625vw;
+	}
+
+	.historia {
+		padding-bottom: 3.33333vw;
+	}
+
+	.kadr-historii + .kontakt {
+		padding-bottom: 4.89583vw;
+	}
+
+	// ----- zdjęcia: kontener jedzie procentami okna, więc bitmapa w środku też -----
+	.hero-poznaj .fin-hero-zdjecie img {
+		left: -1.25vw;
+		width: 65.15625vw;
+		height: 39.0625vw;
+	}
+
+	.partner-misja .partner-zdjecie img {
+		left: 6.09375vw;
+		width: 69.42708vw;
+		height: 39.0625vw;
+	}
+
+	.partner-o-nas .partner-zdjecie img {
+		left: 16.71875vw;
+		top: -1.92708vw;
+		width: 54.63542vw;
+		height: 40.98958vw;
+	}
+
+	// ----- nagrody -----
+	.nagrody {
+		.tresc {
+			padding-top: 6.51042vw;
+		}
+
+		.kolumna {
+			max-width: 36.45833vw;
+		}
+
+		p:not(.etykieta-sekcji) {
+			margin-top: 1.77083vw;
+			.tekst-makiety(21; 16; 17);
+		}
+	}
+
+	.nagrody-zdjecie {
+		height: auto;
+		aspect-ratio: 1100 / 619;
+
+		// kąt skosu
+		picture {
+			clip-path: polygon(23.76% 0, 100% 0, 100% 100%, 0 100%);
+		}
+	}
+
+	.nagrody-zdjecie img {
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	// Obwódka jest dekoracją przypiętą do zdjęcia - jedzie razem z nim
+	.ramka-nagrod {
+		top: 18.13107vw;
+		width: 8.22917vw;
+		height: 13.81992vw;
+	}
+
+	// ----- historia firmy -----
+	.historia .opis p {
+		.tekst-makiety(21; 16; 17);
+	}
+}
+
+@media (min-width: @desktop-xl) and (max-width: (@desktop-pelny - .02px)) {
+	.historia .opis {
+		gap: 4.27083vw;
+		width: 45.78125vw;
+		margin-right: 4.84375vw;
+		padding-top: 3.90625vw;
+
+		p {
+			flex: 0 0 25.26042vw;
+		}
+	}
+
+	.historia .logo-zwiazku {
+		width: 16.25vw;
+	}
+}
+
+// Kafle liczb i karta cytatu
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.korzysci-lista {
+		gap: 1.04167vw;
+		margin-top: 2.39583vw;
+	}
+
+	.kafel-liczby {
+		min-height: max(300px, 21.875vw);
+		gap: 0;
+		padding: 1.92708vw .36458vw;
+		border-radius: .625vw;
+
+		img {
+			width: clamp(52px, 3.90625vw, 75px);
+			height: clamp(52px, 3.90625vw, 75px);
+			margin-bottom: 1.45833vw;
+		}
+
+		.duza-liczba {
+			.tekst-makiety(82; 54);
+		}
+
+		h2 {
+			margin: .54167vw 0 1.09375vw;
+		}
+
+		.kreska {
+			width: 2.39583vw;
+			margin-bottom: .76042vw;
+		}
+	}
+
+	.cytat blockquote {
+		min-height: max(300px, 24.0625vw);
+		padding: 3.125vw 6.04167vw 3.125vw 22.13542vw;
+		border-radius: .625vw;
+		.tekst-makiety(43; 30);
+	}
+
+	.cytat .cudzyslow {
+		left: 5.10417vw;
+		top: 8.69792vw;
+		width: 10.05208vw;
+		height: 6.71875vw;
+
+		img {
+			width: 10.05208vw;
+			height: 6.71875vw;
+		}
+	}
+}
+
+// Ramka strzałki 144x83 i odstępy 67/8px skalowane z oknem
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.nawigacja-historii {
+		margin-top: 3.48958vw;
+		margin-bottom: .41667vw;
+
+		button {
+			width: 7.5vw;
+			height: 4.32292vw;
+
+			// Druga ramka ma w makiecie 145px i ujemny margines
+			& + button {
+				width: 7.55208vw;
+				margin-left: -.52083vw;
+			}
+
+			// Płótno strzałki 40x40 z makiety
+			img {
+				width: 2.08333vw;
+				height: 2.08333vw;
+			}
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kafel-liczby h2 {
+		.tekst-makiety(30; 22);
+
+		&::after {
+			bottom: -.83333vw;
+			width: 3.22917vw;
+			height: max(2px, .15625vw);
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.hero-poznaj .fin-hero-kolumna {
+		margin-top: 8.75vw;
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.nagrody .etykieta-sekcji {
+		gap: .78125vw;
+	}
+}
+
+// Odstęp między opisem a taśmą historii
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.historia .gora {
+		gap: 2.08333vw;
+	}
+}
+
+// ================= kolumna tekstu obok zdjęcia: 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.strona-poznaj-nas .partner-wykonczenia,
+	.strona-poznaj-nas .nagrody {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		align-items: center;
+		align-content: start;
+		padding-bottom: 8.69792vw;
+
+		> * {
+			grid-area: 1 / 1;
+		}
+
+		// Odstęp nad etykietą należał do układu "zdjęcie przy górnej krawędzi". Przy
+		// wyśrodkowaniu przesuwałby tekst o połowę swojej wartości.
+		> .tresc {
+			padding-top: 0;
+		}
+	}
+
+	// W przepływie siatki `left` przesuwa blok względem komórki, więc te same procenty co
+	// przy pozycjonowaniu bezwzględnym dają to samo miejsce w poziomie.
+	.strona-poznaj-nas .partner-zdjecie,
+	.strona-poznaj-nas .nagrody-zdjecie {
+		position: relative;
+		top: 0;
+	}
+
+	// Obwódka nagród trzyma się zdjęcia
+	.strona-poznaj-nas .ramka-nagrod {
+		position: relative;
+		top: 9.93173vw;
+	}
+}

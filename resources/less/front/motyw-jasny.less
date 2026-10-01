@@ -1,0 +1,474 @@
+// Motyw jasny
+
+// --- odczytane z porównania makiet ---
+@j-tlo:          #F1F1F7;   // tło strony            (#25253A, 11 wystąpień)
+@j-tlo-pas:      #F5F5F9;
+@j-tlo-kafel:    #F1F1F7;   // kafle i wnętrza kart  (#222236, 2 wystąpienia)
+@j-tlo-karta:    #EDEDF4;   // karty                 (#2C304C)
+@j-tekst:        #25253A;   // tekst                 (#FFFFFF, 161 wystąpień)
+@j-tekst-menu:   #222236;   // menu w nagłówku podstron (#FFFFFF)
+
+// --- decyzje projektowe ---
+@j-ramka:        #D8D8E2;   // obrysy kart i separatory; w makiecie wyszło #FFFFFF,
+                            // co na jasnym tle byłoby niewidoczne - to na pewno efekt rozjazdu struktury przy
+                            // porównaniu
+@j-tekst-slaby:  #6B6A75;   // teksty drugorzędne i podpowiedzi w polach
+
+// Przyciemnienie białych grafik (kod QR, ikony wnętrza lokalu)
+@j-przyciemnienie: brightness(.173);
+
+// Pomarańczowy zostaje bez zmian - to kolor marki i w jasnych makietach nadal pełni tę samą rolę.
+
+html.motyw-jasny {
+
+	--tekst-na-ciemnym: @j-tekst;
+
+	--tlo-strony: @j-tlo;
+
+	// Krawędź karty sekcji (less/sekcje.less)
+	--cien-karty: 0 -10px 24px fade(@granat, 14%);
+
+	// ================= podstawa =================
+	body {
+		background: @j-tlo;
+		color: @j-tekst;
+	}
+
+	// Treść przesuwa się nad stopką (patrz stopka.less), więc musi mieć własne,
+	// nieprzezroczyste tło - inaczej stopka prześwitywałaby przez całą stronę.
+	main {
+		background: @j-tlo;
+	}
+
+	// ================= nagłówek i menu =================
+	body:not(.strona-glowna) {
+
+		// Tylko pozycje pierwszego poziomu - rozwijane podmenu ma własne ciemne tło, którego
+		// motyw nie zmienia, więc napisy w nim zostają białe.
+		.menu-glowne > ul > li > a,
+		.menu-glowne .przelacznik-inwestycji {
+			color: @j-tekst-menu;
+		}
+
+		.logo img {
+			content: url('../img/logo-jasny.png');
+			content: image-set(url('../img/logo-jasny.webp') type('image/webp'),
+			                   url('../img/logo-jasny.png') type('image/png'));
+		}
+
+		// Hamburgera nie ma w makiecie, na jasnym tle kreski są ciemne
+		.hamburger span {
+			background: @j-tekst;
+		}
+
+		@media (max-width: @duzy-ekran) {
+			.naglowek.przypiety {
+				background: fade(@j-tlo, 96%);
+				box-shadow: 0 8px 24px fade(@granat, 14%);
+			}
+		}
+	}
+
+	// Hero zostaje ciemne - leży na zdjęciu, więc biały tekst jest tam nadal właściwy.
+	// Dlatego nic w .hero nie nadpisujemy.
+
+	// ================= nagłówki sekcji =================
+
+	// ================= karty i kafle =================
+	.karta-wpisu,
+	.karta-formularza,
+	.karta-biura,
+	.karta-lokalu,
+	.karta-kalkulatora,
+	.karta-partnera,
+	.karta-mieszkania,
+	.kafel-korzysci,
+	.kafel-liczby,
+	.wizytowka,
+	// tło okna historii siedzi na .historia-okno, a nie na całym wysuwanym bloku
+	.historia-ceny .historia-okno {
+		background: @j-tlo-karta;
+		border-color: @j-ramka;
+		color: @j-tekst;
+	}
+
+	.kafel-korzysci,
+	.kafel-liczby,
+	.wizytowka {
+		background: @j-tlo-kafel;
+	}
+
+	// tabela w oknie historii ceny
+	.historia-ceny table {
+		color: @j-tekst;
+	}
+
+	.historia-ceny th {
+		background: @j-tlo-kafel;
+	}
+
+	.historia-ceny td {
+		border-bottom-color: @j-ramka;
+	}
+
+	.historia-ceny .historia-zamknij::before,
+	.historia-ceny .historia-zamknij::after {
+		background: @j-tekst;
+	}
+
+	.lista-lokali {
+		background: @j-tlo-kafel;
+		border-color: @j-ramka;
+	}
+
+	// Pasy sekcji
+	.aktualnosci,
+	.lokalizacja-inwestycji {
+		background: @j-tlo-pas;
+	}
+
+	// ================= karta aktualności =================
+	.karta-aktualnosci {
+		--tekst-na-ciemnym: @j-tekst;
+
+		&::before {
+			background: linear-gradient(to bottom, fade(@bialy, 0%), fade(@bialy, 85%) 53%, @bialy 86%);
+		}
+
+		&::after {
+			background: @bialy;
+		}
+
+		.przycisk-strzalka {
+			border-color: @j-tekst;
+		}
+	}
+
+	// Wszystko, co w motywie ciemnym jest białym tekstem na granacie
+	.karta-lokalu,
+	.karta-mieszkania,
+	.wiersz-lokalu,
+	.karta-wpisu-tresc,
+	.dane-biura-lista .tresc,
+	.dane-doradcy .tresc,
+	.kontakt-partnera .tresc,
+	.skrot-kontaktu .tresc,
+	.lista-atutow,
+	.kafel-atutu,
+	.zalety,
+	.parametry-inwestycji .tresc,
+	.wstep-strony,
+	.kontakt-opis,
+	.opis-tresc p,
+	.atuty-naglowek .atuty-wstep {
+		color: @j-tekst;
+	}
+
+	// ================= pas z liczbami =================
+	.liczby-tlo {
+		// kolor pod spodem widać tylko zanim zdjęcie się wczyta
+		background-color: @j-tlo-pas;
+		background-image: url('../img/tlo-liczby-jasne.jpg');
+		background-image: image-set(url('../img/tlo-liczby-jasne.webp') type('image/webp'),
+		                            url('../img/tlo-liczby-jasne.jpg') type('image/jpeg'));
+		background-position: center;
+		background-size: cover;
+
+		picture {
+			display: none;
+		}
+	}
+
+	.liczba {
+		border-color: @j-tekst;
+	}
+
+	// ================= obrysy i separatory =================
+	.parametry-lokalu li + li,
+	.cechy-lokalu li,
+	.lista-wsparcia li + li,
+	.wiersz-lokalu + .wiersz-lokalu,
+	.parametry-mieszkania,
+	.stopka-wizytowki,
+	.podsumowanie-raty {
+		border-color: @j-ramka;
+	}
+
+	.dane-biura-lista li + li::before {
+		background: @j-ramka;
+	}
+
+	.filtr + .filtr::before {
+		background: @j-ramka;
+	}
+
+	// ================= formularz =================
+	.pole {
+		background: @j-tlo-karta;
+		border-color: @j-ramka;
+
+		input,
+		textarea {
+			background: transparent;
+			color: @j-tekst;
+		}
+
+		input::placeholder,
+		textarea::placeholder {
+			color: @j-tekst-slaby;
+		}
+	}
+
+	.zgoda {
+		color: @j-tekst;
+	}
+
+	// ================= filtry i pola wyboru =================
+	.pole-filtru,
+	.przelacznik-widoku,
+	.filtry-mapy-inwestycji label {
+		background: @j-tlo-karta;
+		border-color: @j-ramka;
+		color: @j-tekst-slaby;
+	}
+
+	.pasek-wyszukiwarki {
+		background: @bialy;
+	}
+
+	// Ikony przełącznika widoku są pomarańczowe w obu motywach - o wyborze mówi ramka.
+	.przelacznik-widoku {
+		color: @pomaranczowy;
+	}
+
+	// Kafle atutów: w jasnej makiecie białe z obrysem, podświetlony jaśniejszy szary.
+	.kafel-atutu {
+		background: @bialy;
+		border: 1px solid @j-ramka;
+
+		&:hover {
+			background: @j-tlo-kafel;
+		}
+	}
+
+	// ================= przyciski z obrysem =================
+	.przycisk-pigulka,
+	.przycisk-czytaj,
+	.oblicz-rate,
+	.przycisk-historii,
+	.akcje-lokalu .dodatkowy,
+	.zakladki-galerii button,
+	.baner-grupy .przycisk-inwestycji,
+	.wiersz-lokalu .do-ulubionych,
+	.wiersz-lokalu .przycisk-sprawdz,
+	.stopka-mieszkania .strzalka,
+	.nawigacja-realizacji button,
+	.paginacja .poprzednia,
+	.paginacja .nastepna {
+		border-color: var(--tekst-na-ciemnym);
+		color: var(--tekst-na-ciemnym);
+	}
+
+	// Przyciski z własnym ciemnym wypełnieniem - w jasnym motywie zostaje sam obrys.
+	.przycisk-pigulka.na-tle,
+	.akcje-lokalu .dodatkowy {
+		background: transparent;
+	}
+
+	.przycisk-pigulka.na-tle:hover,
+	.przycisk-pigulka.na-tle:focus-visible {
+		background: @pomaranczowy;
+	}
+
+	// Pasek zakładek inwestycji przechodzi na jasne tło
+	.zakladki-inwestycji {
+		background: @j-tlo-karta;
+		border-color: @j-ramka;
+	}
+
+	// Szarość #91929D jest odczytana z ciemnej makiety - na jasnym tle daje kontrast 2,7:1
+	// przy wymaganych 4,5:1. W jasnym motywie idzie nasza szarość.
+	.widok,
+	.pasek-wynikow,
+	.pasek-wynikow .pole-sortowania {
+		color: @j-tekst-slaby;
+	}
+
+	// wypełnione pomarańczowe przyciski zostają bez zmian - kolor marki na białym tekście
+	.przycisk-pigulka.pelny,
+	.przycisk-pomaranczowy,
+	.przycisk-szukaj-pigulka,
+	.przycisk-szukaj,
+	.formularz-przycisk,
+	.akcje-lokalu .glowny {
+		color: @bialy;
+	}
+
+	.paginacja a,
+	.paginacja span {
+		color: @j-tekst;
+	}
+
+	.paginacja .biezaca {
+		color: @bialy;
+	}
+
+	// ================= strzałki karuzel poza kadrem zdjęcia =================
+	.galeria-nawigacja button,
+	.nawigacja-historii button,
+	.nawigacja-realizacji button {
+		background-image: url('../img/ramka-skos-ciemna.svg');
+	}
+
+	.aktualnosci-nawigacja button {
+		border-color: @j-tekst;
+	}
+
+	// ================= kafle finansowania i wykończenia =================
+	.kafel {
+		--tekst-na-ciemnym: @j-tekst;
+
+		picture img {
+			content: url('../img/kafel-finansowanie-jasny.jpg');
+			content: image-set(url('../img/kafel-finansowanie-jasny.webp') type('image/webp'),
+			                   url('../img/kafel-finansowanie-jasny.jpg') type('image/jpeg'));
+		}
+	}
+
+	a[href$="wykonczenie-pod-klucz.html"].kafel picture img {
+		content: url('../img/kafel-wykonczenie-jasny.jpg');
+		content: image-set(url('../img/kafel-wykonczenie-jasny.webp') type('image/webp'),
+		                   url('../img/kafel-wykonczenie-jasny.jpg') type('image/jpeg'));
+	}
+
+	// ================= biała grafika na jasnym tle =================
+	.kod-qr,
+	.cechy-lokalu img {
+		filter: @j-przyciemnienie;
+	}
+
+	.logo-zwiazku {
+		filter: @j-przyciemnienie;
+	}
+
+	// Serce ulubionych to biała ikona - na jasnym tle przyciemniona do koloru tekstu,
+	// a biała wraca, gdy przycisk wypełnia się pomarańczem (hover, zaznaczone)
+	.wiersz-lokalu .do-ulubionych img,
+	.akcje-lokalu .ulubione img {
+		filter: @j-przyciemnienie;
+		transition: filter @czas-zamalowania @krzywa-zamalowania;
+	}
+
+	.wiersz-lokalu .do-ulubionych:hover img,
+	.wiersz-lokalu .do-ulubionych:focus-visible img,
+	.wiersz-lokalu .do-ulubionych.aktywne img,
+	.akcje-lokalu .ulubione:hover img,
+	.akcje-lokalu .ulubione:focus-visible img,
+	.akcje-lokalu .ulubione.aktywne img {
+		filter: none;
+	}
+
+	// Obrysowe przyciski lokalu tracą tu tło, ale zaznaczone serce zostaje pomarańczowe
+	.akcje-lokalu .ulubione.aktywne {
+		background: @pomaranczowy;
+	}
+
+	// Ramka kodu QR
+	.ramka-kodu,
+	.mapka-biura {
+		border-color: @j-tekst;
+	}
+
+	// ================= mapa =================
+	.mapa-plansza .dymek-mapy {
+		background: @bialy;
+		color: @j-tekst;
+	}
+
+	// ================= stopka =================
+
+	// ================= boczny pasek ikon =================
+	.przelacznik-motywu .dymek {
+		background: @j-tlo-karta;
+		color: @j-tekst;
+	}
+}
+
+// ================= gdzie biel zostaje bielą =================
+html.motyw-jasny.motyw-jasny.motyw-jasny {
+
+	// --- sekcje leżące na zdjęciu albo na granacie ---
+	body.strona-glowna .naglowek,
+	.menu-mobilne,
+	.hero,
+	// stopka jest w obu jasnych makietach taka sama jak w ciemnych
+	.stopka,
+	// karta na liście inwestycji i kafel kalkulatora są w całości wypełnione zdjęciem - obie
+	// podstrony bez własnej jasnej makiety (patrz niżej przy .kafel)
+	.karta-inwestycji,
+	.kafel-kalkulatora,
+	.pasek-adresu,
+	.baner-grupy,
+	// --- elementy na pomarańczowym wypełnieniu ---
+	.przycisk-pomaranczowy,
+	.przycisk-pigulka.pelny,
+	.przycisk-szukaj-pigulka,
+	.przycisk-szukaj,
+	.formularz-przycisk,
+	.akcje-lokalu .glowny,
+	.paginacja .biezaca,
+	.plakietka-status,
+	.plakietka-karty,
+	.karta-mieszkania .status,
+	.wiersz-lokalu .status,
+	.plakietki-lokalu .promocja,
+	.ikona-okragla,
+	.hero-nawigacja button,
+	.stopka-social a,
+	.pasek-boczny a,
+	.przelacznik-motywu,
+	// plakietki i przyciski na pomarańczowym wypełnieniu w listach i dymkach mapy
+	.plakietka-inwestycji,
+	.dymek-mapy .mini-przycisk,
+	// kafle "sprawdź ratę" / "sprawdź ofertę" na podstronie inwestycji - tak samo jak .kafel
+	// na stronie głównej są w całości wypełnione zdjęciem
+	.karta-oferty,
+	// cytat na "poznaj nas" ma własne ciemne tło (#2C304C), którego motyw nie zmienia
+	.cytat blockquote {
+		--tekst-na-ciemnym: @bialy;
+	}
+
+	// Przyciski z obrysem wypełniają się pomarańczem dopiero po najechaniu - wtedy napis
+	// musi być biały niezależnie od motywu.
+	.przycisk-pigulka:hover,
+	.przycisk-pigulka:focus-visible,
+	.przycisk-obrys:hover,
+	.przycisk-obrys:focus-visible,
+	.przycisk-czytaj:hover,
+	.przycisk-czytaj:focus-visible,
+	.przycisk-inwestycji:hover,
+	.przycisk-inwestycji:focus-visible {
+		--tekst-na-ciemnym: @bialy;
+	}
+
+
+	// Odwrotny przypadek: nagłówek inwestycji ma modyfikator .jasny, który w motywie ciemnym
+	// wymusza biel - na jasnym tle musi ustąpić.
+	.inwestycje-opis .tytul-sekcji.jasny,
+	.inwestycje-opis .tytul-sekcji.rozjasnia-sie.widoczny {
+		color: @j-tekst;
+	}
+
+	.zakladki-biur button:not(.aktywna) {
+		color: @j-tekst-slaby;
+	}
+
+	.zgoda a {
+		color: @j-tekst;
+	}
+
+	.atuty li,
+	.parametry-inwestycji li {
+		border-color: @j-ramka;
+	}
+}

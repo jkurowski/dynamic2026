@@ -1,0 +1,423 @@
+// Sekcja "Dlaczego warto?" - duże zdjęcie wychodzące poza lewą krawędź ekranu i trzy
+// punkty z ikonami po prawej.
+
+.dlaczego-warto {
+	position: relative;
+	padding: 111px 0 97px;
+	overflow: hidden;
+
+	.uklad {
+		.kontener();
+		display: flex;
+		align-items: center;
+		gap: 90px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding: 70px 0;
+
+		.uklad {
+			flex-direction: column;
+			gap: 40px;
+		}
+	}
+}
+
+.dlaczego-zdjecie {
+	position: relative;
+	flex: 0 0 912px;
+	min-width: 0;
+	display: flex;
+	justify-content: flex-end;
+
+	// <picture> jest kadrem (maską) - to on ma ukośne cięcie i to on przycina zdjęcie
+	picture {
+		position: relative;
+		z-index: 1;
+		flex: 0 0 auto;
+		display: block;
+		width: ~"max(1370px, calc((100vw - 1728px) * 0.652 + 1240px))";
+		height: 836px;
+		overflow: hidden;
+		.skos-zdjecia();
+	}
+
+	// Samo zdjęcie jest w makiecie większe od kadru i przesunięte
+	img {
+		position: absolute;
+		left: 12.92%;
+		top: -30.62%;
+		width: 105.69%;
+		height: auto;
+		max-width: none;
+		display: block;
+	}
+
+	// Pomarańczowa obwódka nachodząca na zdjęcie
+	&::after {
+		content: '';
+		position: absolute;
+		left: 617.1px;
+		top: 445.4px;
+		width: 204.9px;
+		height: 443px;
+		border: 2px solid @pomaranczowy;
+		transform-origin: top left;
+		transform: skewX(@kat-skosu);
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 640px;
+
+		picture {
+			width: 940px;
+			height: 620px;
+		}
+
+		&::after {
+			left: 432px;
+			top: 320px;
+			width: 148px;
+			height: 320px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+
+		picture {
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1370 / 836;
+		}
+
+		img {
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		// Obwódka wraca na ekrany dotykowe
+		&::after {
+			left: 78.49%;
+			top: 53.28%;
+			width: 14.95%;
+			height: 52.99%;
+		}
+	}
+}
+
+.dlaczego-tresc {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.zalety {
+	margin: 65px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: flex-start;
+		gap: 75px;
+
+		& + li {
+			margin-top: 108px;
+		}
+	}
+
+	img {
+		width: 70px;
+		height: 70px;
+		flex: 0 0 auto;
+		margin-top: 2px;
+	}
+
+	h3 {
+		margin: 0 0 22px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 27px;
+		font-weight: 600;
+		line-height: 1.35;
+	}
+
+	p {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 19px;
+		font-weight: 300;
+		line-height: 1.74;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		li {
+			gap: 34px;
+
+			& + li {
+				margin-top: 50px;
+			}
+		}
+
+		img {
+			width: 52px;
+			height: 52px;
+		}
+
+		h3 {
+			font-size: 22px;
+			margin-bottom: 12px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		margin-top: 34px;
+
+		li {
+			gap: 20px;
+
+			& + li {
+				margin-top: 32px;
+			}
+		}
+
+		img {
+			width: 40px;
+			height: 40px;
+		}
+
+		h3 {
+			font-size: 19px;
+		}
+
+		p {
+			font-size: 16px;
+		}
+	}
+}
+
+// Układ desktopowy zgodny z ramką 1920 px w Figmie.
+@media (min-width: (@duzy-ekran + 1px)) {
+	.dlaczego-warto {
+		padding-top: 97px;
+		padding-bottom: 150px;
+
+		.uklad {
+			align-items: flex-start;
+			gap: 77px;
+		}
+	}
+
+	.dlaczego-tresc {
+		padding-top: 77px;
+	}
+
+	.zalety {
+		margin-left: 6px;
+
+		li + li {
+			margin-top: 64px;
+		}
+
+		h3 {
+			margin-bottom: 9px;
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.dlaczego-warto {
+		padding-top: 5.0521vw;
+		padding-bottom: 7.8125vw;
+	}
+
+	.dlaczego-tresc {
+		padding-top: 4.0104vw;
+	}
+
+	.zalety {
+		margin-top: 3.3854vw;
+
+		li {
+			gap: 3.9063vw;
+		}
+
+		li + li {
+			margin-top: 3.3333vw;
+		}
+
+		img {
+			width: 3.6458vw;
+			height: 3.6458vw;
+		}
+
+		h3 {
+			margin-bottom: .46875vw;
+			font-size: clamp(20px, 1.40625vw, 27px);
+		}
+
+		p {
+			font-size: clamp(15px, .98958vw, 19px);
+		}
+	}
+}
+
+// ================= płynny desktop 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.dlaczego-warto .uklad {
+		gap: clamp(32px, 4vw, 77px);
+	}
+
+	.dlaczego-zdjecie {
+		// 912 z 1680px kontenera w makiecie
+		flex: 0 0 54.3%;
+
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.dlaczego-zdjecie img {
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+// Dwie kolumny
+@media (min-width: @desktop-xl) and (max-width: (@desktop-pelny - .02px)) {
+	@kadr: 71.35417vw;
+	@kadr-wysokosc: (@kadr * 836 / 1370);
+	@ramka-od-prawej: (@kadr * .215255);
+
+	.dlaczego-zdjecie {
+		picture {
+			width: @kadr;
+			height: @kadr-wysokosc;
+		}
+
+		&::after {
+			left: calc(100% - @ramka-od-prawej);
+			top: (@kadr-wysokosc * .532775);
+			width: (@kadr * .1495555);
+			height: (@kadr-wysokosc * .529904);
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.dlaczego-warto .uklad {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.dlaczego-zdjecie {
+		flex: 1 1 auto;
+		width: 100%;
+
+		picture {
+			width: 100%;
+			height: auto;
+			aspect-ratio: 1370 / 836;
+		}
+
+		&::after {
+			left: 78.47%;
+			top: 53.28%;
+			width: 14.96%;
+			height: 52.99%;
+		}
+	}
+
+	.dlaczego-tresc {
+		padding-top: 0;
+	}
+}
+
+@media (min-width: @desktop-xl) and (max-width: (@desktop-xxl - .02px)) {
+	.dlaczego-warto {
+		padding-top: calc(.364583vw + 65.625px);
+		padding-bottom: calc(6.6875vw + 15.75px);
+	}
+
+	.dlaczego-zdjecie {
+		flex-basis: calc(59.449204vw - 167.113856px);
+	}
+
+	.dlaczego-tresc {
+		padding-top: calc(8.072917vw - 56.875px);
+	}
+
+	.zalety {
+		margin-top: calc(4.697917vw - 18.375px);
+
+		li {
+			gap: calc(6.34375vw - 34.125px);
+		}
+
+		li + li {
+			margin-top: calc(4.333333vw - 14px);
+		}
+
+		img {
+			width: calc(1.520833vw + 29.75px);
+			height: calc(1.520833vw + 29.75px);
+		}
+
+		h3 {
+			margin-bottom: calc(-.71875vw + 16.625px);
+			font-size: 20px;
+		}
+
+		p {
+			font-size: 15px;
+		}
+	}
+}
+
+// ============ duże zdjęcie jako tło strony (układ stosowy 1025-1199) ============
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.dlaczego-warto {
+		.tlo-strony(
+			~".dlaczego-zdjecie";
+			~".dlaczego-tresc";
+			~"1370 / 836";
+			~"polygon(calc(23.31% * var(--skos)) 0, 100% 0, calc(100% - 23.31% * var(--skos)) 100%, 0 100%)"
+		);
+
+		--parallaks: 0;
+	}
+
+	.dlaczego-tresc {
+		padding-top: 56px;
+		padding-bottom: 150px;
+	}
+}
+
+// ========= to samo tło strony w układzie mobilnym (do 1024px) =========
+@media (max-width: @duzy-ekran) {
+	.dlaczego-warto {
+		.tlo-strony(
+			~".dlaczego-zdjecie";
+			~".dlaczego-tresc";
+			~"1370 / 836";
+			~"polygon(calc(23.31% * var(--skos)) 0, 100% 0, calc(100% - 23.31% * var(--skos)) 100%, 0 100%)"
+		);
+
+		// Odstęp między zdjęciem a tekstem przenosi się z gapa układu do wnętrza panelu
+		.uklad {
+			gap: 0;
+		}
+	}
+
+	// Mixin zeruje dolny padding sekcji, żeby nieprzezroczyste tło panelu sięgało dokładnie
+	// początku następnej sekcji - odstęp przechodzi więc do kolumny.
+	.dlaczego-tresc {
+		padding-top: 40px;
+		padding-bottom: 70px;
+	}
+}

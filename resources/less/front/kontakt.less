@@ -1,0 +1,795 @@
+// Sekcja "Kontakt" - dane biur po lewej, formularz w karcie po prawej
+
+.kontakt {
+	.kontener();
+	padding-top: 130px;
+	padding-bottom: 118px;
+	display: flex;
+	align-items: flex-start;
+	gap: 50px;
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-top: 70px;
+		padding-bottom: 70px;
+	}
+}
+
+.kontakt-lewa {
+	flex: 1 1 0;
+	min-width: 0;
+
+	@media (max-width: @duzy-ekran) {
+		width: 100%;
+	}
+}
+
+.kontakt-wstep {
+	margin: 19px 0 0;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-sekcja;
+	font-weight: 400;
+	line-height: 1.57;
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		font-size: 18px;
+	}
+}
+
+// przełącznik biur - dwie zakładki z paskiem pod spodem
+.zakladki-biur {
+	display: flex;
+	gap: 4px;
+	margin-top: 93.1px;
+
+	button {
+		flex: 1 1 0;
+		padding: 0 0 21.4px;
+		background: none;
+		border: 0;
+		border-bottom: 4px solid @szary-separator;
+		color: @szary-separator;
+		font-size: @tekst-srodek;
+		font-weight: 700;
+		line-height: 1.21;
+		transition: color @czas-animacji ease, border-color @czas-animacji ease;
+	}
+
+	button.aktywna {
+		border-bottom-color: @pomaranczowy;
+		color: @pomaranczowy;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 40px;
+	}
+}
+
+// dane jednego biura
+.dane-biura {
+	display: none;
+
+	&.widoczne {
+		display: block;
+	}
+}
+
+.lista-danych {
+	// makieta: pierwsza ramka z ikoną zaczyna się 9px niżej
+	margin: 9px 0 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+		gap: 50px;
+		padding: 51px 0;
+
+		& + li {
+			border-top: 2px solid @granat-ramka;
+		}
+	}
+
+	.ikona-ramka {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 122px;
+		height: 122px;
+		border: 1px solid @granat-ramka;
+		border-radius: 12px;
+
+		img {
+			width: 69px;
+			height: 69px;
+		}
+	}
+
+	.tresc {
+		flex: 1 1 auto;
+		min-width: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-sekcja;
+		font-weight: 400;
+		line-height: 1.57;
+	}
+
+	.mocny {
+		font-weight: 700;
+
+		a {
+			color: @pomaranczowy;
+			font-size: 36px;
+			line-height: 50px;
+			text-decoration: none;
+		}
+	}
+
+	a {
+		color: var(--tekst-na-ciemnym);
+		text-decoration: underline;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	.tresc > a[href*="google.com/maps"] {
+		color: @pomaranczowy;
+		text-decoration: underline;
+		text-underline-offset: 6px;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+			text-decoration: underline;
+		}
+	}
+
+	.ramka-kodu {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 165px;
+		height: 165px;
+		flex: 0 0 auto;
+		border: 1px solid @bialy;
+		border-radius: 12px;
+	}
+
+	.kod-qr {
+		width: 131px;
+		height: 130px;
+		object-fit: contain;
+	}
+
+	.znak-kontaktu {
+		position: absolute;
+		right: 0;
+		top: 119px;
+		width: 147px;
+		height: 173px;
+		background: url('../img/znak-dynamic.svg') center / 100% 100% no-repeat;
+		pointer-events: none;
+
+		&::before {
+			content: none;
+		}
+
+		@media (max-width: @duzy-ekran) {
+			top: 58.06%;
+			width: auto;
+			height: 79.72%;
+			aspect-ratio: 147 / 173;
+		}
+
+		@media (max-width: (@telefon-duzy - 1px)) {
+			display: none;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		li {
+			gap: 24px;
+			padding: 30px 0;
+		}
+
+		.ikona-ramka {
+			width: 84px;
+			height: 84px;
+
+			img {
+				width: 44px;
+				height: 44px;
+			}
+		}
+
+		.tresc {
+			font-size: 18px;
+		}
+
+		.ramka-kodu {
+			width: 110px;
+			height: 110px;
+		}
+
+		.kod-qr {
+			width: 88px;
+			height: 88px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		// Kod QR zostaje obok adresu biura, bliżej tekstu niż ikona
+		.ramka-kodu {
+			width: 60px;
+			height: 60px;
+			margin-left: -12px;
+			border-radius: 8px;
+		}
+
+		.kod-qr {
+			width: 48px;
+			height: 48px;
+		}
+
+		.ikona-ramka {
+			width: 60px;
+			height: 60px;
+
+			img {
+				width: 30px;
+				height: 30px;
+			}
+		}
+
+		.tresc {
+			font-size: 16px;
+		}
+	}
+}
+
+// --- formularz ---
+.karta-formularza {
+	flex: 0 0 830px;
+	padding: 57px 66px 66px;
+	background: @granat-karta;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+
+	h3 {
+		margin: 0 0 36px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 39px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 620px;
+		padding: 40px;
+
+		h3 {
+			font-size: 30px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		padding: 24px;
+	}
+}
+
+.pole {
+	position: relative;
+	margin-bottom: 19px;
+
+	input,
+	textarea {
+		width: 100%;
+		padding: 18px 60px 18px 32px;
+		background: @granat-karta;
+		border: 1px solid @granat-ramka;
+		border-radius: 12px;
+		color: var(--tekst-na-ciemnym);
+		font-family: @font;
+		font-size: 20px;
+		line-height: 1.6;
+		transition: border-color @czas-animacji ease;
+
+		&::placeholder {
+			color: @szary-etykieta;
+		}
+
+		&:focus {
+			border-color: @pomaranczowy;
+			outline: none;
+		}
+	}
+
+	input {
+		height: 72px;
+	}
+
+	textarea {
+		height: 182px;
+		resize: vertical;
+	}
+
+	// ikona po prawej stronie pola
+	> img {
+		position: absolute;
+		right: 32px;
+		top: 21px;
+		width: 31px;
+		height: 31px;
+		pointer-events: none;
+	}
+
+	.blad {
+		display: none;
+	}
+
+	&.ma-blad {
+		input,
+		textarea {
+			border-color: @pomaranczowy-jasny;
+		}
+	}
+
+	&.poprawne {
+		input,
+		textarea {
+			border-color: @zielony;
+		}
+	}
+
+	// Ikona stoi na stałym odsunięciu od góry (21px), policzonym pod pole wysokie na 72px
+	@media (max-width: @duzy-ekran) {
+		input + img {
+			top: 50%;
+			transform: translateY(-50%);
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		input,
+		textarea {
+			padding: 14px 50px 14px 18px;
+			font-size: 16px;
+		}
+
+		input {
+			height: 56px;
+		}
+
+		textarea + img {
+			top: 14px;
+		}
+	}
+}
+
+.zgoda {
+	display: flex;
+	align-items: flex-start;
+	// makieta: napis zaczyna się 12px za kwadratem zgody
+	gap: 12px;
+	margin-top: 33px;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-drobny;
+	font-weight: 300;
+	line-height: 1.79;
+	cursor: pointer;
+
+	input {
+		width: 15px;
+		height: 15px;
+		flex: 0 0 auto;
+		margin-top: 5px;
+		accent-color: @pomaranczowy;
+	}
+
+	// Etykieta dostaje swoją wysokość z treści (line-height razy liczba wierszy)
+	@media (max-width: @duzy-ekran) {
+		min-height: 44px;
+	}
+
+	a {
+		color: var(--tekst-na-ciemnym);
+		text-decoration: underline;
+		text-decoration-color: @pomaranczowy;
+	}
+
+	&.ma-blad {
+		color: @pomaranczowy-jasny;
+	}
+}
+
+.formularz-przycisk {
+	.przycisk-pomaranczowy();
+	margin-top: 47.7px;
+}
+
+// Pozycje desktopowe z ramki 1920 px. Opis nad formularzem pozostaje w jednym DOM, ale
+// na dużym ekranie trafia do prawej kolumny zgodnie z projektem.
+@media (min-width: @desktop-pelny) {
+	.kontakt {
+		position: relative;
+		gap: 162px;
+		padding-top: 94px;
+		padding-bottom: 97px;
+	}
+
+	.kontakt-wstep {
+		position: absolute;
+		left: 874px;
+		top: 157px;
+		width: 751px;
+		height: 200px;
+		margin: 0;
+	}
+
+	.kontakt-lewa,
+	.zakladki-biur,
+	.dane-biura {
+		flex: 0 0 688px;
+		width: 688px;
+	}
+
+	.kontakt-lewa .tytul-sekcji {
+		width: 774px;
+	}
+
+	.karta-formularza {
+		// min-height, a nie height
+		min-height: 946px;
+		margin-top: 309px;
+		padding: 56px 65px 65px;
+
+		h3 {
+			margin-bottom: 34px;
+		}
+	}
+
+	.pole textarea {
+		display: block;
+	}
+
+	.zgoda + .zgoda {
+		margin-top: 16px;
+	}
+
+	.formularz-przycisk {
+		margin-top: 41.7px;
+	}
+
+	.lista-danych {
+		li {
+			padding-top: 42px;
+			padding-bottom: 51px;
+		}
+
+		li:first-child {
+			padding-bottom: 44px;
+		}
+
+		li:nth-child(2) {
+			padding-top: 47px;
+			padding-bottom: 24px;
+
+			.ikona-ramka {
+				margin-top: 4px;
+			}
+
+			.tresc {
+				min-height: 191px;
+			}
+		}
+
+		li:last-child {
+			padding-right: 150px;
+			padding-bottom: 42px;
+
+			.ikona-ramka {
+				margin-top: 9px;
+			}
+
+			.mocny {
+				margin-top: 18.7px;
+				line-height: 50px;
+			}
+
+			.znak-kontaktu {
+				top: 126px;
+			}
+		}
+	}
+}
+
+// Kompozycja z makiety - dwie kolumny obok siebie - liczona z szerokości okna
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	// Wszystko jest zagnieżdżone w .kontakt, a nie zapisane luzem
+	.kontakt {
+		position: relative;
+		gap: 8.4375vw;
+
+		.kontakt-wstep {
+			position: absolute;
+			left: 50.5208vw;
+			top: 8.1771vw;
+			width: 39.1146vw;
+			height: auto;
+			min-height: 10.4167vw;
+			margin: 0;
+		}
+
+		.kontakt-lewa,
+		.zakladki-biur,
+		.dane-biura {
+			flex: 0 0 35.8333vw;
+			width: 35.8333vw;
+		}
+
+		.kontakt-lewa .tytul-sekcji {
+			width: 40.3125vw;
+		}
+
+		// Karta ma w makiecie 830 z 1920px
+		.karta-formularza {
+			flex: 1 0 43.2292vw;
+			min-height: 49.2708vw;
+			// Escape jest konieczny, bo Less ma własną funkcję max() i zgubiłby jednostkę vw
+			margin-top: ~"calc(16.0938vw + max(0px, 602px - 43.05vw))";
+		}
+	}
+}
+
+// ================= skala pasma 1025-1899 =================
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.kontakt {
+		padding-top: max(56px, 4.8958vw);
+		padding-bottom: max(56px, 5.0521vw);
+	}
+
+	// Trzeci argument .tekst-makiety to rozmiar mobilny - patrz less/mixiny.less
+	.kontakt-wstep {
+		.tekst-makiety(@tekst-sekcja; 20; 28);
+	}
+
+	// Wcięcie karty ma własną, doprecyzowaną wartość w bloku na końcu pliku.
+	.karta-formularza {
+		h3 {
+			margin-bottom: 1.7708vw;
+			.tekst-makiety(39; 28; 30);
+		}
+	}
+
+	// Blok danych biura schodzi razem z kolumną
+	.lista-danych {
+		li {
+			gap: 2.6042vw;
+			padding: 2.6563vw 0;
+		}
+
+		.ikona-ramka {
+			width: 6.3542vw;
+			height: 6.3542vw;
+			border-radius: .625vw;
+
+			img {
+				width: 3.5938vw;
+				height: 3.5938vw;
+			}
+		}
+
+		.ramka-kodu {
+			width: 8.5938vw;
+			height: 8.5938vw;
+			border-radius: .625vw;
+		}
+
+		.kod-qr {
+			width: 6.8229vw;
+			height: 6.7708vw;
+		}
+
+		.tresc {
+			font-size: clamp(20px, 1.4583vw, @tekst-sekcja);
+
+			> a[href*="google.com/maps"] {
+				text-underline-offset: .3125vw;
+			}
+		}
+
+		// Telefon i adres e-mail biura to na telefonie 36px - dokładnie tyle, ile w makiecie
+		.mocny a {
+			.tekst-makiety(36; 26; 36);
+			line-height: 1.389;
+		}
+	}
+
+	.zakladki-biur {
+		margin-top: 4.849vw;
+	}
+
+	// Pola formularza mają w makiecie 72px wysokości i 20px tekstu przy karcie 830px
+	.pole {
+		margin-bottom: .9896vw;
+
+		input,
+		textarea {
+			padding: max(12px, .9375vw) 3.125vw max(12px, .9375vw) 1.6667vw;
+			border-radius: .625vw;
+			.tekst-makiety(20; 16; 20);
+		}
+
+		input {
+			height: max(46px, 3.75vw);
+		}
+
+		textarea {
+			height: max(110px, 9.4792vw);
+		}
+
+		> img {
+			right: 1.6667vw;
+			top: max(15px, 1.0938vw);
+			width: 1.6146vw;
+			height: 1.6146vw;
+		}
+	}
+
+	.formularz-przycisk {
+		gap: 1.0417vw;
+		min-width: 16.9271vw;
+		height: max(50px, 3.6979vw);
+		margin-top: 2.1719vw;
+		padding: 0 1.3542vw 0 1.6146vw;
+		// jak w .hero-przycisk
+		.tekst-makiety(22; 18; 22);
+
+		// jak w .hero-przycisk
+		svg {
+			width: 1.71875vw;
+			height: 1.82292vw;
+		}
+	}
+
+	.pole textarea {
+		display: block;
+	}
+}
+
+// komunikat po wysłaniu - nie ma go w projekcie
+.komunikat-formularza {
+	display: none;
+	margin-top: 20px;
+	padding: 14px 18px;
+	border-radius: 12px;
+	font-size: @tekst-maly;
+
+	&.sukces {
+		display: block;
+		background: fade(@zielony, 15%);
+		color: @zielony;
+	}
+
+	&.blad {
+		display: block;
+		background: fade(@pomaranczowy, 15%);
+		color: @pomaranczowy-jasny;
+
+		ul {
+			margin: 0;
+			padding-left: 20px;
+		}
+
+		li + li {
+			margin-top: 5px;
+		}
+	}
+
+	// Komunikat po wysłaniu formularza
+	&.sukces,
+	&.blad {
+		animation: wejscie-komunikatu @czas-animacji @krzywa-zamalowania;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	// Karta jest ramką wokół formularza - pod 32/38px robi się ciasna niezależnie od proporcji
+	.karta-formularza {
+		padding: max(32px, 2.91667vw) max(38px, 3.38542vw) max(38px, 3.38542vw);
+	}
+
+	.zgoda {
+		gap: .625vw;
+		margin-top: 1.71875vw;
+		.tekst-makiety(14; 12; 14);
+
+		input {
+			// poniżej 12px kwadrat zgody przestaje być celem, w który da się trafić
+			width: max(12px, .78125vw);
+			height: max(12px, .78125vw);
+			margin-top: .26042vw;
+		}
+	}
+
+	.zgoda + .zgoda {
+		margin-top: .83333vw;
+	}
+
+	.formularz-przycisk {
+		margin-top: 2.17188vw;
+	}
+
+	.komunikat-formularza {
+		margin-top: 1.04167vw;
+		padding: .72917vw .9375vw;
+		font-size: clamp(14px, .88542vw, @tekst-maly);
+
+		&.blad ul {
+			padding-left: 1.04167vw;
+		}
+
+		&.blad li + li {
+			margin-top: .26042vw;
+		}
+	}
+
+	.lista-danych {
+		margin-top: .46875vw;
+
+		li {
+			padding-top: 2.1875vw;
+			padding-bottom: 2.65625vw;
+		}
+
+		li:first-child {
+			padding-bottom: 2.29167vw;
+		}
+
+		li:nth-child(2) {
+			padding-top: 2.44792vw;
+			padding-bottom: 1.25vw;
+
+			.ikona-ramka {
+				margin-top: .20833vw;
+			}
+
+			.tresc {
+				min-height: 9.94792vw;
+			}
+		}
+
+		li:last-child {
+			padding-right: 7.8125vw;
+			padding-bottom: 2.1875vw;
+
+			.ikona-ramka {
+				margin-top: .46875vw;
+			}
+
+			.mocny {
+				margin-top: .97396vw;
+				line-height: 2.60417vw;
+			}
+
+			.znak-kontaktu {
+				top: 6.5625vw;
+			}
+		}
+
+		.znak-kontaktu {
+			top: 6.19792vw;
+			width: 7.65625vw;
+			height: 9.01042vw;
+		}
+	}
+}

@@ -1,0 +1,516 @@
+// Sekcja z listą kart potrzebuje szerokości treści
+.kontener-inwestycji {
+	.kontener();
+	// marginesy wiersza z kartami mają zostać w środku kontenera
+	display: flow-root;
+}
+
+// nagłówek podstrony: tytuł po lewej, zdanie wprowadzające po prawej
+.naglowek-inwestycji {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding-top: 69px;
+	padding-bottom: 65px;
+
+	.tytul {
+		flex: 0 0 830px;
+	}
+
+	.wprowadzenie {
+		flex: 1 1 0;
+		min-width: 0;
+		margin: 28px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-sekcja;
+		font-weight: 400;
+		line-height: 1.57;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.tytul {
+			flex-basis: 620px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		gap: 0;
+		padding-top: 50px;
+		padding-bottom: 40px;
+
+		.tytul {
+			flex: 1 1 auto;
+		}
+
+		.wprowadzenie {
+			font-size: 18px;
+		}
+	}
+}
+
+@media (min-width: @desktop-xl) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-inwestycji .tytul {
+		flex: 0 1 50%;
+		min-width: 0;
+	}
+}
+
+// --- siatka kart ---
+.siatka-inwestycji {
+	// wiersz siatki Bootstrapa
+	--bs-gutter-x: 20px;
+	--bs-gutter-y: 37px;
+	margin-bottom: 0;
+	padding: 0 0 97px;
+
+	@media (max-width: @duzy-ekran) {
+		--bs-gutter-y: 20px;
+		padding-bottom: 60px;
+	}
+}
+
+.karta-inwestycji {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: @granat;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	box-shadow: 0 0 11px rgba(0, 0, 0, .25);
+	overflow: hidden;
+
+	// zdjęcie zajmuje górę karty, reszta miejsca idzie na opis
+	.zdjecie {
+		position: relative;
+		height: 399px;
+		flex: 0 0 auto;
+		// zdjęcie jest wyższe od kadru i musi być ucięte tutaj, a nie dopiero na krawędzi karty
+		// - inaczej wchodzi na opis pod spodem
+		overflow: hidden;
+
+		picture {
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+
+		// W makiecie każde z czterech zdjęć jest większe od kadru 828x399 i inaczej przesunięte
+		img {
+			position: absolute;
+			left: -0.72%;
+			top: -24.06%;
+			width: 100.97%;
+			height: 125.81%;
+			// bez tego Bootstrap przycina szerokość swoim max-width: 100%
+			max-width: none;
+			// przy 1920 kadr ma proporcje pliku, więc cover niczego nie obcina, a na węższych
+			// ekranach chroni zdjęcie przed rozciągnięciem
+			object-fit: cover;
+			display: block;
+			transition: transform .5s ease;
+		}
+
+		img[src*="lista-hygge"] {
+			left: -0.36%;
+			top: -8.5%;
+			width: 101.82%;
+			height: 116.24%;
+		}
+
+		img[src*="lista-konstancin"] {
+			left: -0.36%;
+			top: -24.56%;
+			width: 100.85%;
+			height: 125.56%;
+		}
+
+		img[src*="lista-lake-village"] {
+			left: -0.24%;
+			top: -7.52%;
+			width: 100.72%;
+			height: 125.56%;
+		}
+	}
+
+	&:hover .zdjecie img {
+		transform: scale(1.04);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.zdjecie {
+			// Kadr zachowuje proporcję 828x399 z ramki 1920px
+			height: auto;
+			aspect-ratio: 828 / 399;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.zdjecie {
+			height: auto;
+		}
+	}
+}
+
+// plakietka statusu w prawym górnym rogu zdjęcia
+.plakietka-inwestycji {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	.plakietka-w-sprzedazy((46 / 58));
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		right: 12px;
+		top: 12px;
+		.plakietka-w-sprzedazy((34 / 58));
+	}
+}
+
+// dolna część karty: po lewej nazwa i przycisk, po prawej parametry 2x2
+.karta-inwestycji-dol {
+	display: flex;
+	align-items: flex-start;
+	gap: 55px;
+	flex: 1 1 auto;
+	padding: 30px 45px 41px;
+
+	h2 {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	// 0 1, a nie 0 0
+	.opis {
+		flex: 0 1 299px;
+		min-width: 0;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		gap: 26px;
+		padding: 30px;
+
+		h2 {
+			font-size: 24px;
+		}
+
+		.opis {
+			flex-basis: 200px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		gap: 22px;
+		padding: 24px;
+
+		.opis {
+			flex: 1 1 auto;
+			width: 100%;
+		}
+	}
+}
+
+// mały przycisk-pigułka wewnątrz karty
+.przycisk-inwestycji {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 288px;
+	height: 50px;
+	margin-top: 17px;
+	padding: 0 24px;
+	border: 1px solid fade(@bialy, 70%);
+	border-radius: 25px;
+	color: var(--tekst-na-ciemnym);
+	font-size: 15.53px;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	transition: border-color @czas-zamalowania @krzywa-zamalowania;
+	.ukos-przycisku(12px; 23.3px; 11.3px);
+	.zamalowanie(@pomaranczowy);
+
+	&:hover,
+	&:focus-visible {
+		border-color: @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		min-width: 0;
+		width: 100%;
+		margin-top: 22px;
+	}
+}
+
+// cztery parametry inwestycji w układzie 2x2
+.parametry-karty {
+	display: grid;
+	grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+	gap: 34px 29px;
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		display: flex;
+		align-items: flex-start;
+		// to samo piętro niżej - bez tego nie zawija się tekst wewnątrz pozycji
+		min-width: 0;
+		gap: 15px;
+	}
+
+	img {
+		width: 27px;
+		height: 27px;
+		flex: 0 0 auto;
+		margin-top: 10.4px;
+	}
+
+	.nazwa {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 13px;
+		font-weight: 300;
+		line-height: 24.5px;
+	}
+
+	.wartosc {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 13px;
+		font-weight: 600;
+		line-height: 24.5px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		grid-template-columns: 1fr 1fr;
+		gap: 20px;
+
+		.nazwa,
+		.wartosc {
+			font-size: 15px;
+		}
+	}
+
+	@media (max-width: @telefon) {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+}
+
+// Wymiary kart z makiety desktopowej 1920 px.
+@media (min-width: @desktop-pelny) {
+	.naglowek-inwestycji {
+		padding-bottom: 65px;
+
+		.wprowadzenie {
+			padding-right: 0;
+		}
+	}
+
+	.karta-inwestycji-dol {
+		height: 214px;
+		box-sizing: border-box;
+
+		h2 {
+			display: flex;
+			align-items: center;
+			height: 78px;
+			margin-top: -4px;
+		}
+
+		.opis {
+			// 299px z ramki Figmy
+			flex: 0 0 299px;
+		}
+
+		.przycisk-inwestycji {
+			margin-top: 19.2px;
+		}
+	}
+
+	.parametry-karty {
+		margin-top: 7px;
+		grid-template-columns: 200px 113px;
+		grid-template-rows: repeat(2, 49px);
+		row-gap: 30px;
+		flex: 0 0 342px;
+
+		.nazwa,
+		.wartosc {
+			white-space: nowrap;
+		}
+	}
+}
+
+// ================= płynny desktop 1400-1899 =================
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-inwestycji {
+		padding-top: 3.5938vw;
+		padding-bottom: 3.3854vw;
+		gap: 1.0417vw;
+
+		.wprowadzenie {
+			margin-top: 1.4583vw;
+			font-size: clamp(20px, 1.4583vw, @tekst-sekcja);
+		}
+	}
+
+	.siatka-inwestycji {
+		--bs-gutter-x: 1.0417vw;
+		--bs-gutter-y: 1.9271vw;
+		padding-bottom: 5.0521vw;
+	}
+
+	.karta-inwestycji .zdjecie {
+		height: auto;
+		aspect-ratio: 828 / 399;
+	}
+
+	.karta-inwestycji-dol {
+		height: 11.1458vw;
+		box-sizing: border-box;
+		gap: 2.8646vw;
+		padding: 1.5625vw 2.3438vw 2.1354vw;
+
+		h2 {
+			display: flex;
+			align-items: center;
+			height: 4.0625vw;
+			margin-top: -.2083vw;
+			font-size: clamp(22px, 1.6667vw, 32px);
+		}
+
+		.opis {
+			flex: 0 1 15.5729vw;
+		}
+
+		.przycisk-inwestycji {
+			margin-top: 1vw;
+		}
+	}
+
+	.parametry-karty {
+		margin-top: .36458vw;
+		grid-template-columns: 10.4167vw 5.8854vw;
+		grid-template-rows: repeat(2, 2.5521vw);
+		row-gap: 1.5625vw;
+		flex: 0 0 17.8125vw;
+
+		.nazwa,
+		.wartosc {
+			white-space: nowrap;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xl - .02px)) {
+	.naglowek-inwestycji {
+		flex-direction: column;
+		gap: 24px;
+
+		.tytul,
+		.wprowadzenie {
+			flex: 1 1 auto;
+			width: 100%;
+			margin-top: 0;
+		}
+	}
+}
+
+// Dolna część karty w zakresie 1200-1399px
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.karta-inwestycji-dol {
+		flex-direction: column;
+		gap: 22px;
+		padding: 24px;
+
+		h2 {
+			font-size: 24px;
+		}
+
+		.opis {
+			flex: 1 1 auto;
+			width: 100%;
+		}
+	}
+
+	.parametry-karty {
+		grid-template-columns: 1fr 1fr;
+		gap: 20px;
+
+		.nazwa,
+		.wartosc {
+			font-size: 15px;
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-inwestycji .tytul {
+		flex: 0 0 43.2292vw;
+	}
+}
+
+// Miejsce na pasek boczny
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-inwestycji .wprowadzenie {
+		padding-right: 0;
+	}
+}
+
+// Karta inwestycji
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.plakietka-inwestycji {
+		right: 1.04167vw;
+		top: 1.04167vw;
+		.plakietka-w-sprzedazy-pasmo((46 / 58));
+	}
+
+	.przycisk-inwestycji {
+		min-width: 15vw;
+		height: 2.60417vw;
+		margin-top: .88542vw;
+		padding: 0 1.25vw;
+		border-radius: 1.30208vw;
+		.tekst-makiety(15.53; 13);
+		.ukos-przycisku(.625vw; 1.21354vw; .58854vw);
+	}
+}
+
+// Parametry 2x2 w karcie inwestycji
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.parametry-karty {
+		// Tylko kolumny
+		column-gap: 1.51042vw;
+
+		li {
+			gap: .78125vw;
+		}
+
+		img {
+			width: 1.40625vw;
+			height: 1.40625vw;
+			margin-top: .54167vw;
+		}
+
+		.nazwa,
+		.wartosc {
+			.tekst-makiety(13; 11);
+			line-height: 1.27604vw;
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-inwestycji {
+		padding-top: 3.5938vw;
+		padding-bottom: 3.3854vw;
+	}
+}

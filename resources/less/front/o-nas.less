@@ -1,0 +1,262 @@
+// Sekcja "O nas" - kolaż dwóch zdjęć w pomarańczowej ramce po lewej, tekst po prawej.
+
+.o-nas {
+	.kontener();
+	padding-top: 130px;
+	padding-bottom: 100px;
+	display: flex;
+	align-items: flex-start;
+	gap: 35px;
+
+	// Do 1024px wchodzi układ mobilny. Kolaż dostaje wtedy wymiary procentowe, a tekst
+	// schodzi pod niego, więc żaden z bloków nie wypycha strony na boki.
+	@media (max-width: @duzy-ekran) {
+		flex-direction: column;
+		padding-top: 70px;
+		padding-bottom: 70px;
+		overflow: hidden;
+	}
+}
+
+// Ramka jest osobnym prostokątem przesuniętym względem zdjęć - stąd position: relative
+// na kontenerze i absolutne zdjęcie mniejsze.
+.o-nas-zdjecia {
+	position: relative;
+	flex: 0 0 813px;
+	padding: 130px 0 123px;
+
+	// pomarańczowa obwódka wokół całego kolażu (w projekcie prostokąt 813x1045)
+	&::before {
+		content: '';
+		position: absolute;
+		left: 49%;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		border: 3px solid @pomaranczowy;
+		.skos-ramki();
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	// <picture> jest kadrem, <img> bitmapą w środku
+	picture {
+		display: block;
+		position: relative;
+		overflow: hidden;
+	}
+
+	picture:nth-of-type(1) {
+		z-index: 1;
+		width: 540px;
+		height: 561px;
+	}
+
+	picture:nth-of-type(2) {
+		position: absolute;
+		z-index: 1;
+		left: 567px;
+		top: 464px;
+		width: 355px;
+		height: 458px;
+	}
+
+	.duze {
+		position: absolute;
+		left: -42.59%;
+		top: -0.71%;
+		width: 175%;
+		height: auto;
+		max-width: none;
+		display: block;
+	}
+
+	.male {
+		position: absolute;
+		left: -43.74%;
+		top: -54.51%;
+		width: 199.15%;
+		height: auto;
+		max-width: none;
+		display: block;
+	}
+
+	// Niżej wymiary dostaje kadr, a nie samo zdjęcie - ono siedzi w kadrze na procentach i
+	// skaluje się razem z nim.
+	@media (max-width: @duzy-ekran) {
+		flex-basis: 620px;
+		padding: 90px 0;
+
+		picture:nth-of-type(1) {
+			width: 420px;
+			height: 440px;
+		}
+
+		picture:nth-of-type(2) {
+			left: 430px;
+			top: 330px;
+			width: 260px;
+			height: 340px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		flex: 1 1 auto;
+		width: 100%;
+		height: auto;
+		aspect-ratio: 813 / 1045;
+		padding: 0;
+
+		picture:nth-of-type(1) {
+			position: absolute;
+			left: 0;
+			top: 12.44%;
+			width: 66.42%;
+			height: 53.68%;
+		}
+
+		picture:nth-of-type(2) {
+			left: 58.33%;
+			right: auto;
+			top: 44.4%;
+			width: 41.67%;
+			height: 43.83%;
+		}
+	}
+}
+
+.o-nas-tresc {
+	flex: 1 1 auto;
+	min-width: 0;
+	padding-top: 130px;
+
+	// w projekcie akapit i przycisk są wcięte o 147px względem nagłówka
+	.wciecie {
+		padding-left: 147px;
+	}
+
+	.wciecie > p {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 21px;
+		font-weight: 300;
+		line-height: 1.9;
+	}
+
+	.przycisk-pigulka {
+		margin-top: 45px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 60px;
+
+		.wciecie {
+			padding-left: 60px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 0;
+
+		.wciecie {
+			padding-left: 0;
+		}
+
+		.wciecie > p {
+			font-size: 17px;
+			line-height: 1.7;
+		}
+	}
+}
+
+// Pozycje z ramki desktopowej 1920 px. Pomarańczowa ramka leży pod zdjęciami.
+@media (min-width: (@duzy-ekran + 1px)) {
+	.o-nas {
+		padding-top: 8px;
+		padding-bottom: 97px;
+	}
+
+	.o-nas-zdjecia {
+		height: 1045px;
+		padding: 130px 0 0;
+
+		&::before {
+			left: 199px;
+			right: auto;
+			width: 414px;
+		}
+	}
+
+	.o-nas-tresc {
+		.wciecie {
+			margin-top: 57px;
+		}
+
+		.wciecie > p {
+			min-height: 455px;
+		}
+
+		.przycisk-pigulka {
+			width: 270px;
+			margin-top: 33px;
+			padding-right: 45px;
+			padding-left: 45px;
+		}
+	}
+}
+
+// Od 1025px kolaż zostaje obok tekstu, tak jak w makiecie, ale musi schodzić razem z oknem
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.o-nas {
+		gap: 1.8229vw;
+		padding-top: .4167vw;
+		padding-bottom: 5.0521vw;
+	}
+
+	.o-nas-zdjecia {
+		flex: 0 0 42.3438vw;
+		height: 54.4271vw;
+		padding: 6.7708vw 0 0;
+
+		&::before {
+			left: 10.3646vw;
+			width: 21.5625vw;
+		}
+
+		picture:nth-of-type(1) {
+			width: 28.125vw;
+			height: 29.2188vw;
+		}
+
+		picture:nth-of-type(2) {
+			left: 29.5313vw;
+			top: 24.1667vw;
+			width: 18.4896vw;
+			height: 23.8542vw;
+		}
+	}
+
+	// Kolumna tekstu jedzie tą samą proporcją
+	.o-nas-tresc {
+		padding-top: 6.7708vw;
+
+		.wciecie {
+			margin-top: 2.9688vw;
+			padding-left: 7.6563vw;
+		}
+
+		.wciecie > p {
+			min-height: 23.6979vw;
+			.tekst-makiety(21; 16; 17);
+		}
+
+		// Pudełko jedzie proporcją okna, ale napis nie
+		.przycisk-pigulka {
+			width: ~"max(212px, 14.0625vw)";
+			margin-top: 1.7188vw;
+			padding-right: 2.3438vw;
+			padding-left: 2.3438vw;
+		}
+	}
+}
+

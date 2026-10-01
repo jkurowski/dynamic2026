@@ -1,0 +1,1083 @@
+
+// --- pasek filtrów ---
+.filtry-wynikow {
+	.kontener();
+	display: flex;
+	gap: 20px;
+	padding-top: 59px;
+
+	.pole-filtru {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		flex: 1 1 0;
+		min-width: 0;
+		height: 71px;
+		padding: 0 32px;
+		background: @granat;
+		border: 1px solid #6B6A75;
+		border-radius: 36px;
+		color: #91929D;
+		font-size: 18px;
+		text-align: left;
+
+		&:hover,
+		&[aria-expanded='true'] {
+			border-color: @pomaranczowy;
+			color: var(--tekst-na-ciemnym);
+		}
+	}
+
+	.ikona-filtru {
+		width: 12px;
+		height: 12px;
+		flex: 0 0 auto;
+		border-right: 3px solid @pomaranczowy;
+		border-bottom: 3px solid @pomaranczowy;
+		transform: translateY(-3px) rotate(45deg);
+	}
+
+	.przycisk-szukaj-pigulka {
+		flex: 0 0 263px;
+		height: 70px;
+		border: 0;
+		border-radius: 35px;
+		background: @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+		font-size: 19px;
+		font-weight: 600;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 17px;
+		.zamalowanie(@pomaranczowy-jasny);
+	}
+
+	.ikona-lupy {
+		width: 22px;
+		height: 22px;
+		filter: brightness(0) invert(1);
+	}
+
+	@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+		flex-wrap: wrap;
+		gap: 10px;
+		padding-top: 30px;
+
+		.pole-filtru {
+			flex: 1 1 30%;
+			height: 56px;
+			padding: 0 22px;
+			font-size: 15px;
+		}
+
+		.przycisk-szukaj-pigulka {
+			flex: 1 1 100%;
+			height: 56px;
+		}
+	}
+
+	@media (max-width: (@tablet - 1px)) {
+		flex-wrap: wrap;
+		gap: 10px;
+		padding-top: 30px;
+
+		.pole-filtru {
+			flex: 1 1 100%;
+			height: 56px;
+			padding: 0 22px;
+			font-size: 15px;
+		}
+
+		.przycisk-szukaj-pigulka {
+			flex: 1 1 100%;
+			height: 56px;
+		}
+	}
+}
+
+@media (min-width: (@duzy-ekran + 1px)) {
+	.naglowek-wynikow {
+		padding-top: 241.4px;
+		margin-bottom: -5.4px;
+	}
+}
+
+// --- pasek nad wynikami: liczba wyników i sortowanie ---
+.pasek-wynikow {
+	.kontener();
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	flex-wrap: wrap;
+	padding-top: 63px;
+	padding-bottom: 18px;
+	color: #91929D;
+	font-size: 18px;
+
+	.sortowanie {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+
+		// w makiecie podpis i pole wyboru stoją wyżej niż liczba wyników; na wąskich ekranach
+		// pasek jest kolumną i przesunięcie nie ma sensu
+		@media (min-width: (@duzy-ekran + 1px)) {
+			margin-top: -20.7px;
+
+			// pole wyboru w makiecie
+			.pole-sortowania {
+				width: 211px;
+			}
+
+			label {
+				position: relative;
+				top: 1.5px;
+				line-height: 22px;
+			}
+		}
+	}
+
+	// Kontrolka sortowania
+	.pole-sortowania {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		height: 39px;
+		padding: 0 14px;
+		background: transparent;
+		border: 1px solid @granat-ramka;
+		border-radius: 7px;
+		color: #91929D;
+		font-size: 14px;
+		text-align: left;
+	}
+
+	// Daszek w kolorze napisu, nie pomarańczowy jak w filtrach
+	.ikona-sortowania {
+		width: 8px;
+		height: 8px;
+		flex: 0 0 auto;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: translateY(-2px) rotate(45deg);
+		transition: transform @czas-animacji ease;
+	}
+
+	.pole-sortowania[aria-expanded='true'] .ikona-sortowania {
+		transform: translateY(1px) rotate(225deg);
+	}
+
+	// Lista jest tak szeroka jak kontrolka, a nie jak filtry (240px) - inaczej wystawałaby
+	// poza pole, od którego się rozwija.
+	.lista-sortowania {
+		min-width: 211px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.pole-sortowania {
+			width: 202px;
+			height: 44px;
+		}
+
+		// Lista rozwijana ma szerokość pola
+		.lista-sortowania {
+			min-width: 202px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		font-size: 15px;
+		padding-top: 30px;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	// Prawy przycisk filtrów i sortowanie były dokładnie pod czterema ikonami paska
+	.filtry-wynikow,
+	.pasek-wynikow {
+		padding-right: @rezerwa-paska-w-pasmie;
+	}
+}
+
+// --- grupa inwestycji ---
+.grupa-wynikow {
+	.kontener();
+	margin-bottom: 46px;
+}
+
+// baner ze zdjęciem, nazwą inwestycji i przyciskiem
+.baner-grupy {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	min-height: 150px;
+	padding: 26px 60px;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px 12px 0 0;
+	overflow: hidden;
+
+	> picture {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.opis {
+		position: relative;
+		z-index: 2;
+		margin-top: -2.8px;
+	}
+
+	h2 {
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 42px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.lokalizacja {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		margin: 6px 0 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 20px;
+
+		img {
+			width: 26px;
+			height: 26px;
+		}
+	}
+
+	// Przycisk banera jest większy niż ten w kartach listy inwestycji
+	.przycisk-inwestycji {
+		position: relative;
+		z-index: 2;
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-start;
+		flex: 0 0 auto;
+		min-width: 305px;
+		height: 60px;
+		margin-top: 0;
+		// strzałka z makiety
+		padding: 0 0 0 44.8px;
+		.ukos-przycisku(12.4px; 24.2px; 11.9px);
+		border: 1px solid fade(@bialy, 70%);
+		border-radius: 30px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16.11px;
+		font-weight: 600;
+		line-height: 25.96px;
+		text-decoration: none;
+		white-space: nowrap;
+		transition: background @czas-animacji ease, border-color @czas-animacji ease;
+
+		&:hover,
+		&:focus-visible {
+			background: @pomaranczowy;
+			border-color: @pomaranczowy;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding: 20px 30px;
+
+		.przycisk-inwestycji {
+			// Ogólna reguła kart ustawia do 1024px width: 100%. W banerze przycisk nadal stoi obok
+			// tytułu, więc zachowuje własne 305px.
+			width: 305px;
+		}
+
+		h2 {
+			font-size: 28px;
+		}
+
+		.lokalizacja {
+			font-size: 16px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		flex-direction: column;
+		align-items: flex-start;
+
+		h2 {
+			font-size: 22px;
+		}
+
+		.przycisk-inwestycji {
+			// bez tego szerokość 305px z makiety rozpycha kolumnę na telefonie
+			width: 100%;
+			min-width: 0;
+			height: 46px;
+			padding: 0 12px;
+			font-size: 13px;
+		}
+	}
+}
+
+.lista-lokali {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	background: #292942;
+	border: 1px solid @granat-ramka;
+	border-top: 0;
+	border-radius: 0 0 12px 12px;
+}
+
+// Jeden wiersz mieszkania. Szerokości kolumn wzięte z odstępów w makiecie (45 / 268 /
+// 501 / 695 / 920 / 1210 / 1407 px od lewej krawędzi listy).
+.wiersz-lokalu {
+	display: grid;
+	grid-template-columns: 223px 233px 194px 225px 290px 197px 76px auto;
+	align-items: center;
+	gap: 0;
+	min-height: 102px;
+	padding: 0 45px;
+
+	& + .wiersz-lokalu {
+		border-top: 1px solid @granat-ramka;
+	}
+
+	.nazwa-lokalu {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 1.5;
+		text-decoration: none;
+
+		.akcent {
+			color: @pomaranczowy;
+		}
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	.inwestycja {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 12px;
+		font-weight: 300;
+		line-height: 2.55;
+		letter-spacing: .5px;
+	}
+
+	// dwuwierszowa komórka: ikona + tekst, jedna pod drugą
+	.komorka {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.linia {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16px;
+		line-height: 1.98;
+
+		img {
+			width: 19px;
+			height: 19px;
+			flex: 0 0 auto;
+		}
+
+		&.pietro strong {
+			font-size: 18px;
+			font-weight: 700;
+			// własna interlinia, żeby większa cyfra nie podnosiła wiersza
+			line-height: 1;
+		}
+
+		// wartość ma w makiecie ciaśniejszą interlinię niż podpis nad nią
+		&.mocna {
+			font-size: 18px;
+			font-weight: 700;
+			line-height: 25.1px;
+		}
+	}
+
+	// W makiecie kolumny nie są jednakowe
+	.komorka:nth-child(2) .linia {
+		gap: 6px;
+	}
+
+	.komorka:nth-child(3) .linia,
+	.komorka:nth-child(4) .linia {
+		gap: 13px;
+
+		img {
+			width: 24px;
+			height: 24px;
+		}
+
+		&.mocna {
+			padding-left: 37px;
+		}
+	}
+
+	.cena {
+		color: @pomaranczowy;
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 1.21;
+	}
+
+	.cena-metr {
+		color: var(--tekst-na-ciemnym);
+		font-size: 18px;
+		line-height: 1.76;
+	}
+
+	.status {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 169px;
+		height: 40px;
+		padding: 0 14px;
+		border-radius: 6px;
+		background: #457C52;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-drobny;
+		font-weight: 700;
+	}
+
+	.status.rezerwacja {
+		background: @pomaranczowy;
+	}
+
+	.status.sprzedane {
+		background: #AC2B2B;
+	}
+
+	.do-ulubionych,
+	.przycisk-sprawdz {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+		border: 1px solid fade(@bialy, 70%);
+		border-radius: 20px;
+		background: transparent;
+		color: var(--tekst-na-ciemnym);
+		text-decoration: none;
+		transition: border-color @czas-zamalowania @krzywa-zamalowania;
+		.zamalowanie(@pomaranczowy);
+
+		&:hover,
+		&:focus-visible {
+			border-color: @pomaranczowy;
+		}
+	}
+
+	.do-ulubionych {
+		width: 71px;
+
+		img {
+			width: 25px;
+			height: 25px;
+		}
+	}
+
+	.przycisk-sprawdz {
+		padding: 0 24px;
+		font-size: 13px;
+		font-weight: 600;
+		.ukos-przycisku();
+	}
+
+	.do-ulubionych.aktywne {
+		background: @pomaranczowy;
+		border-color: @pomaranczowy;
+	}
+
+	// Serce ulubionych
+	@media (max-width: (@desktop-pelny - .02px)) {
+		.do-ulubionych {
+			transition:
+				border-color @czas-zamalowania @krzywa-zamalowania,
+				background-color @czas-animacji @krzywa-zamalowania,
+				transform @czas-wcisniecia @krzywa-zamalowania;
+
+			// mocniej niż .97 na przyciskach: serce jest małe i okrągłe, więc ten sam procent byłby
+			// na nim niewidoczny
+			&:active {
+				transform: scale(.94);
+			}
+
+			// Ograniczenie ruchu obsłużone tutaj, a nie w less/animacje.less
+			@media (prefers-reduced-motion: reduce) {
+				transition: none;
+
+				&:active {
+					transform: none;
+				}
+			}
+		}
+	}
+
+	// Pionowy układ komórek wprost z makiety
+	@media (min-width: (@duzy-ekran + 1px)) {
+		.komorka {
+			gap: 0;
+			min-height: 62.6px;
+		}
+
+		.komorka:first-child {
+			height: 68.6px;
+		}
+
+		.inwestycja {
+			margin-top: -1.4px;
+		}
+
+		.komorka:nth-child(2) .linia:first-child {
+			line-height: 1.4;
+		}
+
+		.komorka:nth-child(2) .linia + .linia {
+			margin-top: -3.7px;
+		}
+
+		.komorka:nth-child(3) .mocna,
+		.komorka:nth-child(4) .mocna {
+			margin-top: -1.2px;
+		}
+
+		.cena-metr {
+			margin-top: .9px;
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		.nazwa-lokalu {
+			min-height: 44px;
+			display: flex;
+			align-items: center;
+			font-size: 18px;
+		}
+
+		.inwestycja {
+			font-size: @m-tekst-drobny;
+		}
+
+		.linia {
+			font-size: 13px;
+
+			&.mocna {
+				font-size: 15px;
+			}
+		}
+
+		.cena {
+			font-size: 18px;
+		}
+
+		.cena-metr {
+			font-size: 13px;
+		}
+
+		.do-ulubionych,
+		.przycisk-sprawdz {
+			height: 44px;
+		}
+	}
+
+	// tablet (768-1024)
+	@media (min-width: @tablet) and (max-width: @duzy-ekran) {
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr) minmax(0, 1.1fr) minmax(0, 1.1fr);
+		grid-template-areas:
+			"nazwa adres metraz pokoje"
+			"cena status ulubione sprawdz";
+		column-gap: 14px;
+		row-gap: 16px;
+		min-height: 170px;
+		padding: 18px 24px;
+
+		> :nth-child(1) { grid-area: nazwa; }
+		> :nth-child(2) { grid-area: adres; }
+		> :nth-child(3) { grid-area: metraz; }
+		> :nth-child(4) { grid-area: pokoje; }
+		> :nth-child(5) { grid-area: cena; }
+		> :nth-child(6) { grid-area: status; }
+		> :nth-child(7) { grid-area: ulubione; }
+		> :nth-child(8) { grid-area: sprawdz; }
+
+		.komorka,
+		.linia {
+			min-width: 0;
+			overflow-wrap: anywhere;
+		}
+
+		.status {
+			width: 100%;
+			max-width: 169px;
+		}
+
+		.status,
+		.do-ulubionych,
+		.przycisk-sprawdz {
+			justify-self: start;
+		}
+	}
+
+	// duży telefon i telefon (<768): karta - dwie kolumny wewnątrz karty
+	@media (max-width: (@tablet - 1px)) {
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+		padding: 20px 24px;
+		min-width: 0;
+		max-width: 100%;
+
+		> * {
+			min-width: 0;
+			max-width: 100%;
+		}
+
+		.linia,
+		.cena,
+		.cena-metr {
+			overflow-wrap: anywhere;
+		}
+
+		.status {
+			width: 100%;
+			max-width: 169px;
+		}
+
+		.status,
+		.do-ulubionych,
+		.przycisk-sprawdz {
+			justify-self: start;
+		}
+	}
+
+	// mały telefon (<430)
+	@media (max-width: @telefon) {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.strona-wynikow .wiersz-lokalu {
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr) minmax(0, 1.1fr) minmax(0, 1.1fr);
+		grid-template-areas:
+			"nazwa adres metraz pokoje"
+			"cena status ulubione sprawdz";
+		column-gap: clamp(12px, 1.25vw, 20px);
+		row-gap: 8px;
+		min-height: 165px;
+		padding: 12px clamp(24px, 2.7vw, 45px);
+
+		> :nth-child(1) { grid-area: nazwa; }
+		> :nth-child(2) { grid-area: adres; }
+		> :nth-child(3) { grid-area: metraz; }
+		> :nth-child(4) { grid-area: pokoje; }
+		> :nth-child(5) { grid-area: cena; }
+		> :nth-child(6) { grid-area: status; }
+		> :nth-child(7) { grid-area: ulubione; }
+		> :nth-child(8) { grid-area: sprawdz; }
+
+		.komorka,
+		.linia {
+			min-width: 0;
+			overflow-wrap: anywhere;
+		}
+
+		.komorka:first-child {
+			height: auto;
+		}
+
+		.status {
+			width: 100%;
+			max-width: 169px;
+		}
+
+		.status,
+		.do-ulubionych,
+		.przycisk-sprawdz {
+			justify-self: start;
+		}
+	}
+
+	.strona-wynikow .grupa-wynikow {
+		height: auto;
+		overflow: visible;
+	}
+}
+
+.brak-ulubionych {
+	.kontener();
+	margin-top: 40px;
+	margin-bottom: 80px;
+	color: var(--tekst-na-ciemnym);
+	font-size: @tekst-sekcja;
+
+	// Pusta lista ulubionych to stan rzadki i całą stronę zmieniający
+	animation: wejscie-komunikatu @czas-animacji @krzywa-zamalowania;
+
+	// Ograniczenie ruchu obsłużone przy regule, a nie w less/animacje.less
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
+}
+
+// Wymiary czterech grup wyników w desktopowej ramce projektu.
+@media (min-width: @wyniki-osiem-kolumn) {
+	.strona-wynikow main {
+		padding-bottom: 54px;
+	}
+
+	.strona-wynikow .baner-grupy {
+		height: 150px;
+		min-height: 150px;
+		box-sizing: border-box;
+	}
+
+	.strona-wynikow .grupa-wynikow {
+		height: 864px;
+		box-sizing: border-box;
+		overflow: hidden;
+		margin-bottom: 43px;
+	}
+
+	.strona-wynikow .grupa-wynikow:nth-last-of-type(2) {
+		margin-bottom: 42px;
+	}
+}
+
+// ================= osiem kolumn w płynnym desktopie (1400-1899) =================
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.strona-wynikow .wiersz-lokalu,
+	.kontener-mieszkan .wiersz-lokalu {
+		grid-template-columns:
+			minmax(0, 223fr) minmax(0, 233fr) minmax(0, 194fr) minmax(0, 225fr)
+			minmax(0, 290fr) minmax(0, 197fr) minmax(0, 76fr) minmax(0, 152fr);
+		min-height: 5.3125vw;
+		padding: 0 2.3438vw;
+
+		.nazwa-lokalu {
+			font-size: clamp(17px, 1.25vw, 24px);
+		}
+
+		.inwestycja {
+			font-size: clamp(10px, .625vw, 12px);
+		}
+
+		.linia {
+			gap: .625vw;
+			font-size: clamp(12px, .83333vw, 16px);
+
+			img {
+				width: .98958vw;
+				height: .98958vw;
+			}
+
+			&.pietro strong,
+			&.mocna {
+				font-size: clamp(13px, .9375vw, 18px);
+			}
+
+			// Ciasniejsza interlinia wartosci byla podana w pikselach makiety, wiec kazda z czterech
+			// komorek wiersza byla o 5px za wysoka.
+			&.mocna {
+				line-height: 1.30729vw;
+			}
+		}
+
+		.komorka:nth-child(2) .linia {
+			gap: .3125vw;
+		}
+
+		.komorka:nth-child(3) .linia,
+		.komorka:nth-child(4) .linia {
+			gap: .67708vw;
+
+			img {
+				width: 1.25vw;
+				height: 1.25vw;
+			}
+
+			&.mocna {
+				padding-left: 1.9271vw;
+			}
+		}
+
+		.cena {
+			font-size: clamp(17px, 1.25vw, 24px);
+		}
+
+		.cena-metr {
+			font-size: clamp(13px, .9375vw, 18px);
+		}
+
+		// Długa nazwa inwestycji może zawinąć się przy dolnej krawędzi tego pasma
+		.komorka {
+			min-height: 3.26042vw;
+		}
+
+		.komorka:first-child {
+			height: auto;
+			min-height: 3.57292vw;
+		}
+
+		.status {
+			width: 100%;
+			max-width: 8.8021vw;
+			height: 2.0833vw;
+			padding: 0 .72917vw;
+			border-radius: .3125vw;
+			font-size: clamp(11px, .72917vw, @tekst-drobny);
+		}
+
+		.do-ulubionych,
+		.przycisk-sprawdz {
+			height: 2.0833vw;
+			border-radius: 1.0417vw;
+		}
+
+		.do-ulubionych {
+			width: 3.6979vw;
+
+			img {
+				width: 1.3021vw;
+				height: 1.3021vw;
+			}
+		}
+
+		.przycisk-sprawdz {
+			padding: 0 clamp(12px, 1.25vw, 24px);
+			font-size: clamp(11px, .67708vw, 13px);
+		}
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek-wynikow {
+		padding-top: 12.57292vw;
+		margin-bottom: -.28125vw;
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.filtry-wynikow {
+		gap: 1.04167vw;
+		padding-top: 3.07292vw;
+
+		.pole-filtru {
+			height: 3.69792vw;
+			padding: 0 1.66667vw;
+			.tekst-makiety(18; 14);
+		}
+
+		.przycisk-szukaj-pigulka {
+			flex: 0 0 13.69792vw;
+			height: 3.64583vw;
+			gap: .88542vw;
+			.tekst-makiety(19; 15);
+		}
+	}
+
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.pasek-wynikow {
+		gap: 1.04167vw;
+		padding-top: 3.28125vw;
+		padding-bottom: .9375vw;
+		.tekst-makiety(18; 14);
+
+		.sortowanie {
+			gap: .72917vw;
+			margin-top: -1.07813vw;
+
+			.pole-sortowania {
+				width: 10.98958vw;
+				padding-inline: .72917vw;
+			}
+
+			label {
+				top: .07813vw;
+				line-height: 1.14583vw;
+			}
+		}
+
+		.pole-sortowania {
+			height: 2.03125vw;
+			border-radius: .36458vw;
+		}
+
+		.ikona-sortowania {
+			width: .41667vw;
+			height: .41667vw;
+			border-right-width: max(1px, .10417vw);
+			border-bottom-width: max(1px, .10417vw);
+		}
+
+		.lista-sortowania {
+			min-width: 10.98958vw;
+		}
+	}
+
+	.grupa-wynikow {
+		margin-bottom: 2.39583vw;
+	}
+
+	.baner-grupy {
+		gap: 1.04167vw;
+		min-height: 7.8125vw;
+		padding: 1.35417vw 3.125vw;
+		border-radius: .625vw .625vw 0 0;
+
+		h2 {
+			.tekst-makiety(42; 28);
+		}
+
+		.lokalizacja {
+			margin-top: .3125vw;
+			// Trzeci argument to rozmiar mobilny
+			.tekst-makiety(20; 15; 16);
+
+			img {
+				width: 1.35417vw;
+				height: 1.35417vw;
+			}
+		}
+
+		// Skos w przycisku rysuje mixin .ukos-przycisku w pikselach - zostaje, bo przeskalowany
+		// schodzi poniżej piksela i robi się poszarpany.
+		.przycisk-inwestycji {
+			min-width: 15.88542vw;
+			height: 3.125vw;
+			padding-left: 2.33333vw;
+			// Poniżej około 1650px szerokość wynika z zawartości, stąd prawe wcięcie
+			padding-right: 12px;
+			border-radius: 1.5625vw;
+			.tekst-makiety(16.11; 14; 16.11);
+			line-height: 1.35208vw;
+		}
+	}
+}
+
+@media (min-width: @wyniki-osiem-kolumn) and (max-width: (@desktop-pelny - .02px)) {
+	.strona-wynikow .baner-grupy {
+		height: 7.8125vw;
+		min-height: 7.8125vw;
+	}
+
+	.strona-wynikow .grupa-wynikow {
+		height: 45vw;
+		margin-bottom: 2.23958vw;
+	}
+
+	.strona-wynikow .grupa-wynikow:nth-last-of-type(2) {
+		margin-bottom: 2.1875vw;
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.strona-wynikow main {
+		padding-bottom: 2.8125vw;
+	}
+}
+
+// ============ płynny desktop 1400-1899: wnętrze paska filtrów ============
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.filtry-wynikow {
+		.pasmo-wnetrza-filtrow();
+	}
+}
+
+.pasmo-wnetrza-filtrow() {
+		.pole-filtru {
+			gap: .83333vw;
+			height: 3.69792vw;
+			padding: 0 1.66667vw;
+			border-radius: 1.875vw;
+			.tekst-makiety(18; 14);
+		}
+
+		.ikona-filtru {
+			width: .625vw;
+			height: .625vw;
+			border-right-width: max(2px, .15625vw);
+			border-bottom-width: max(2px, .15625vw);
+		}
+
+		.przycisk-szukaj-pigulka {
+			gap: .88542vw;
+			height: 3.64583vw;
+			border-radius: 1.82292vw;
+			.tekst-makiety(19; 15);
+		}
+
+		.ikona-lupy {
+			width: 1.14583vw;
+			height: 1.14583vw;
+		}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.brak-ulubionych {
+		margin-top: 2.08333vw;
+		margin-bottom: 4.16667vw;
+		line-height: 2.1875vw;
+		.tekst-makiety(28; 20);
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.baner-grupy .przycisk-inwestycji {
+		.ukos-przycisku(.64583vw; 1.26042vw; .61979vw);
+	}
+
+	.wiersz-lokalu .przycisk-sprawdz {
+		.ukos-przycisku(.36458vw; .72917vw; .52083vw);
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.filtry-wynikow {
+		gap: 1.04167vw;
+		padding-top: 3.07292vw;
+		.pasmo-wnetrza-filtrow();
+
+		.pole-filtru {
+			height: max(44px, 3.69792vw);
+			border-radius: max(22px, 1.875vw);
+		}
+
+		.ikona-filtru {
+			width: max(8px, .625vw);
+			height: max(8px, .625vw);
+		}
+
+		.przycisk-szukaj-pigulka {
+			flex: 0 0 13.69792vw;
+			height: max(44px, 3.64583vw);
+			border-radius: max(22px, 1.82292vw);
+		}
+	}
+}

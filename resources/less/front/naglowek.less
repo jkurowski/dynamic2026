@@ -1,0 +1,628 @@
+// Nagłówek - leży na hero, dlatego jest absolutny i przezroczysty
+
+.naglowek {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	padding-top: 48px;
+
+	// Przyciemnienie należy do zdjęcia hero. Nagłówek nie może dokładać własnej warstwy, bo
+	// w Figmie jej nie ma.
+	&::before {
+		display: none;
+		content: none;
+	}
+
+	.kontener-naglowka {
+		.kontener();
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 30px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		position: fixed;
+		z-index: 1030;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		transform: translateY(0);
+		transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease;
+
+		&.przypiety {
+			transform: translateY(0);
+			background: fade(@granat, 96%);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+		}
+
+		&.odpiety {
+			transform: translateY(-100%);
+		}
+
+		.kontener-naglowka {
+			align-items: center;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			transition: none;
+		}
+	}
+}
+
+.logo {
+	display: block;
+	flex: 0 0 auto;
+
+	img {
+		width: 275px;
+		height: auto;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		img {
+			width: 170px;
+		}
+	}
+}
+
+// Menu główne - w Figmie cały pasek menu to jedna warstwa tekstu
+.menu-glowne {
+	position: absolute;
+	top: 33.8px;
+	left: (380px + @margines-boczny);
+	width: 960px;
+
+	> ul {
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		// Rząd nigdy się nie łamie
+		flex-wrap: nowrap;
+		gap: 47.3px;
+		margin: 0;
+		padding: 0 5.9px 0 0;
+		list-style: none;
+	}
+
+	a {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		padding-bottom: 8px;
+		color: var(--tekst-na-ciemnym);
+		font-size: @tekst-menu;
+		line-height: 1.21;
+		text-decoration: none;
+		white-space: nowrap;
+
+		// Pomarańczowa kreska pod pozycją menu
+		&::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: -0.8px;
+			width: 0;
+			height: 1px;
+			background: @pomaranczowy;
+			transition: width @czas-animacji ease, left @czas-animacji ease;
+		}
+
+		&:hover,
+		&:focus-visible {
+			color: var(--tekst-na-ciemnym);
+
+			&::after {
+				width: 100%;
+			}
+		}
+	}
+
+	> ul > li.aktywna > a::after {
+		width: 100%;
+	}
+
+	> ul > li:first-child > a::after {
+		left: 6.4px;
+		width: 32px;
+	}
+
+	> ul > li:first-child > a:hover::after,
+	> ul > li:first-child > a:focus-visible::after {
+		left: 0;
+		width: 100%;
+	}
+
+	.daszek {
+		width: 12px;
+		height: 7px;
+		flex: 0 0 auto;
+		transition: transform @czas-animacji ease;
+	}
+
+	.pozycja-inwestycje {
+		position: relative;
+		display: flex;
+		align-items: flex-start;
+	}
+
+	.przelacznik-inwestycji {
+		position: absolute;
+		top: 1.2px;
+		left: 100%;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 2.2px;
+		padding: 10px;
+		border: 0;
+		background: transparent;
+		color: var(--tekst-na-ciemnym);
+
+		&[aria-expanded='true'] .daszek {
+			transform: rotate(180deg);
+		}
+	}
+
+	// Rozwijana lista inwestycji
+	.podmenu-inwestycji {
+		--wciecie-wiersza: 20px;
+		position: absolute;
+		left: -20px;
+		top: 48px;
+		z-index: 20;
+		width: 310px;
+		padding: 12px 20px;
+		border: 1px solid @granat-ramka;
+		border-radius: @rog-maly;
+		background: @granat;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, .28);
+		list-style: none;
+
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-10px);
+		transition: opacity @czas-animacji ease, transform @czas-animacji ease,
+			visibility 0s linear @czas-animacji;
+
+		&.otwarte {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+			transition: opacity @czas-animacji ease, transform @czas-animacji ease,
+				visibility 0s;
+		}
+
+		li + li {
+			border-top: 1px solid fade(@bialy, 10%);
+		}
+
+		a {
+			display: block;
+			padding: 12px 0;
+			font-size: 15px;
+
+			// pozioma kreska spod pozycji menu głównego nie ma tu czego podkreślać
+			&::after {
+				display: none;
+			}
+		}
+	}
+
+	@media (max-width: @menu-chowane) {
+		display: none;
+	}
+}
+
+// Telefon w nagłówku - w projekcie ramka ma stałe 235x52, więc wymuszamy szerokość
+.telefon-naglowek {
+	.przycisk-obrys();
+	min-width: 235px;
+	justify-content: center;
+	margin-top: 21px;
+
+	// Odpowiedź na wciśnięcie
+	transition: transform @czas-wcisniecia @krzywa-zamalowania;
+
+	&:active {
+		transform: scale(.97);
+	}
+
+	@media (max-width: @duzy-ekran) {
+		margin-top: 0;
+	}
+}
+
+// Hamburger - w projekcie go nie ma, bo nie ma makiet mobilnych. Nasze rozwiązanie.
+.hamburger {
+	width: 52px;
+	height: 52px;
+	padding: 0;
+	border: 2px solid @pomaranczowy;
+	border-radius: @rog-maly;
+	background: transparent;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 5px;
+
+	span {
+		display: block;
+		width: 22px;
+		height: 2px;
+		background: @bialy;
+	}
+
+	@media (max-width: @menu-chowane) {
+		display: flex;
+	}
+}
+
+// Płynny desktop pośredni. Reguły są ograniczone z obu stron: nie zmieniają ani
+// istniejącego układu <=1024px, ani referencyjnej makiety 1920px.
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.naglowek {
+		padding-top: clamp(28px, 2.5vw, 48px);
+
+		.kontener-naglowka {
+			align-items: center;
+			gap: clamp(18px, 1.6vw, 30px);
+		}
+	}
+
+	.logo img {
+		width: clamp(210px, 14.323vw, 275px);
+	}
+
+	// Menu wraca do przepływu
+	.menu-glowne {
+		position: static;
+		// flex-basis auto = szerokość treści, ale grow/shrink pozwalają zająć całe wolne miejsce
+		// między logo a telefonem i oddać je, kiedy pasmo się zwęża.
+		flex: 1 1 auto;
+		min-width: 0;
+		width: auto;
+		margin-top: 0;
+
+		> ul {
+			gap: clamp(24px, 2.46354vw, 47.3px);
+			padding-right: .30729vw;
+		}
+
+		a {
+			padding-bottom: .41667vw;
+			font-size: clamp(16px, 1.09375vw, @tekst-menu);
+		}
+
+		> ul > li:first-child > a::after {
+			left: .33333vw;
+			width: 1.66667vw;
+		}
+	}
+
+	.telefon-naglowek {
+		min-width: clamp(205px, 12.24vw, 235px);
+		margin-top: 0;
+		padding-inline: clamp(18px, 1.45vw, 28px);
+		// Bez własnego font-size
+	}
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-xxl - .02px)) {
+	.telefon-naglowek {
+		width: clamp(44px, 3.6vw, 52px);
+		height: clamp(44px, 3.6vw, 52px);
+		min-width: 0;
+		padding-inline: 0;
+		border-radius: 50%;
+		gap: 0;
+		text-indent: 999px;
+
+		svg {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: clamp(18px, 1.5vw, 21px);
+			height: clamp(18px, 1.5vw, 21px);
+		}
+	}
+
+	.menu-glowne {
+		.pozycja-inwestycje {
+			align-items: center;
+		}
+
+		.przelacznik-inwestycji {
+			position: static;
+			margin-left: 2px;
+			padding: 6px;
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.telefon-naglowek {
+		min-width: clamp(205px, 12.23958vw, 235px);
+		padding-inline: clamp(16px, 1.14583vw, 22px);
+		// Reszta ramki skalowana z oknem
+		height: clamp(44px, 2.70833vw, 52px);
+		gap: .52083vw;
+
+		svg {
+			width: 1.09375vw;
+			height: 1.09375vw;
+		}
+	}
+}
+
+// Menu mobilne - offcanvas Bootstrapa
+.menu-mobilne {
+	--bs-offcanvas-width: min(88vw, 390px);
+	background: @granat;
+	color: var(--tekst-na-ciemnym);
+	box-shadow: -18px 0 50px rgba(0, 0, 0, .28);
+
+	.offcanvas-header {
+		min-height: 72px;
+		padding: 18px 24px;
+		border-bottom: 1px solid fade(@bialy, 12%);
+
+		span {
+			font-size: 13px;
+			font-weight: 600 !important;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+		}
+	}
+
+	.offcanvas-body {
+		padding: 12px 24px 28px;
+	}
+
+	&.show .offcanvas-body > ul > li {
+		.wjazd-pozycji-menu(7; .1s);
+	}
+
+	&.show .offcanvas-body > .telefon-mobilny {
+		animation: wjazd-pozycji-menu @czas-pozycji-menu ease both;
+		animation-delay: (.1s + @krok-pozycji-menu * 7);
+	}
+
+	.btn-close {
+		filter: invert(1);
+	}
+
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	li + li {
+		border-top: 1px solid fade(@bialy, 7%);
+	}
+
+	.pozycja-inwestycje {
+		display: grid;
+		grid-template-columns: 1fr auto;
+	}
+
+	.przelacznik-inwestycji {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+
+		.daszek {
+			width: 12px;
+			height: 7px;
+			transition: transform @czas-animacji ease;
+		}
+
+		&[aria-expanded='true'] .daszek {
+			transform: rotate(180deg);
+		}
+	}
+
+	.podmenu-inwestycji {
+		grid-column: 1 / -1;
+		max-height: 0;
+		padding-left: 20px;
+		overflow: hidden;
+		border-top: 1px solid transparent;
+		opacity: 0;
+		visibility: hidden;
+		transition: max-height .3s ease, opacity .3s ease, border-color .3s ease,
+			visibility 0s linear .3s;
+
+		&.otwarte {
+			max-height: 320px;
+			border-top-color: fade(@bialy, 8%);
+			opacity: 1;
+			visibility: visible;
+			transition: max-height .3s ease, opacity .3s ease, border-color .3s ease,
+				visibility 0s;
+		}
+
+		a {
+			padding: 12px 0;
+			font-size: 15px;
+		}
+	}
+
+	a {
+		display: block;
+		padding: 15px 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 16px;
+		font-weight: 500;
+		line-height: 1.35;
+		text-decoration: none;
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	.telefon-mobilny {
+		.przycisk-obrys();
+		margin-top: 20px;
+		width: 100%;
+		height: 50px;
+		justify-content: center;
+		font-size: 16px;
+	}
+
+	// Na mniejszych ekranach pasek nie może zasłaniać tekstu ani przycisków. Skrypt przenosi
+	// ten sam element do menu, bez tworzenia jego drugiej kopii.
+	.pasek-boczny {
+		position: static;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 10px;
+		margin-top: 20px;
+		padding-top: 20px;
+		border-top: 1px solid fade(@bialy, 12%);
+
+		> .przelacznik-motywu {
+			display: block;
+			width: 100%;
+		}
+
+		.ikona-okragla {
+			width: 100%;
+			height: 58px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			position: relative;
+			padding: 0 10px;
+			border: 1px solid fade(@bialy, 22%);
+			border-radius: @rog-maly;
+			background: fade(@bialy, 3%);
+			color: @bialy;
+			transition: border-color @czas-animacji ease, background @czas-animacji ease;
+
+			&:hover,
+			&:focus-visible {
+				border-color: @pomaranczowy;
+				background: fade(@pomaranczowy, 15%);
+			}
+
+			svg,
+			picture,
+			picture img {
+				width: 26px;
+				height: 26px;
+				flex: 0 0 26px;
+			}
+
+			.licznik-ulubionych {
+				position: static;
+			}
+
+			&::after {
+				content: attr(aria-label);
+				font-size: 12px;
+				font-weight: 600;
+				line-height: 1.2;
+				text-align: left;
+			}
+		}
+
+		.przelacznik-motywu .dymek {
+			display: none;
+		}
+	}
+}
+
+@media (min-width: @desktop-xxl) and (max-width: (@desktop-pelny - .02px)) {
+	.przelacznik-inwestycji {
+		.daszek {
+			width: .625vw;
+			height: .36458vw;
+		}
+	}
+
+}
+
+@media (min-width: @desktop) and (max-width: (@desktop-pelny - .02px)) {
+	.menu-glowne .podmenu-inwestycji {
+		--wciecie-wiersza: clamp(14px, 1.04167vw, 20px);
+		left: ~"calc(var(--wciecie-wiersza) * -1)";
+		top: ~"max(34px, 2.5vw)";
+		width: clamp(240px, 16.14583vw, 310px);
+		padding: .52083vw 0;
+		border: 1px solid @granat-obrys;
+		border-top: 2px solid @pomaranczowy;
+		border-radius: @rog-duzy;
+		background: @granat-karta;
+		box-shadow: 0 18px 34px rgba(0, 0, 0, .34);
+
+		// Dzióbek jest trójkątem wyciętym z prostokąta, a nie obróconym kwadratem
+		&::before {
+			content: '';
+			position: absolute;
+			top: -7px;
+			left: ~"calc(var(--wciecie-wiersza) + 42px)";
+			width: 14px;
+			height: 8px;
+			background: @pomaranczowy;
+			clip-path: polygon(50% 0, 100% 100%, 0 100%);
+		}
+
+		li {
+			position: relative;
+
+			// Kreska dzieląca wiersze ustępuje miejsca rytmowi odstępów.
+			& + li {
+				border-top: 0;
+			}
+
+			&::before {
+				content: '';
+				position: absolute;
+				left: 8px;
+				top: 50%;
+				width: 2px;
+				height: 0;
+				border-radius: 1px;
+				background: @pomaranczowy;
+				transform: translateY(-50%);
+				transition: height @czas-animacji ease;
+			}
+
+			&:hover::before,
+			&:focus-within::before {
+				height: 18px;
+			}
+		}
+
+		a {
+			padding-block: .57292vw;
+			padding-inline: var(--wciecie-wiersza);
+			border-radius: @rog-maly;
+			transition: background @czas-animacji ease, padding-left @czas-animacji ease;
+			.tekst-makiety(15; 14);
+
+			&:hover,
+			&:focus-visible {
+				padding-left: ~"calc(var(--wciecie-wiersza) + 6px)";
+				background: fade(@pomaranczowy, 12%);
+			}
+		}
+	}
+}
+
+.podmenu-inwestycji.otwarte > li {
+	.wjazd-pozycji-menu(8; .12s);
+}
