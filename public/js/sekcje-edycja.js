@@ -25,6 +25,8 @@
 			if (stary) {
 				stary.remove();
 			}
+			// data-edytor="linie" - bez akapitów, Enter = <br> (dane kontaktowe, krótkie opisy)
+			var linie = pole.getAttribute('data-edytor') === 'linie';
 			tinymce.init({
 				target: pole,
 				language: 'pl',
@@ -32,9 +34,10 @@
 				branding: false,
 				menubar: false,
 				statusbar: false,
-				height: 260,
-				plugins: 'link lists',
-				toolbar: 'bold italic | bullist numlist | link | removeformat',
+				height: linie ? 170 : 260,
+				forced_root_block: linie ? '' : 'p',
+				plugins: linie ? 'link' : 'link lists',
+				toolbar: linie ? 'bold italic | link | removeformat' : 'bold italic | bullist numlist | link | removeformat',
 				relative_urls: false,
 				entity_encoding: 'raw'
 			});
@@ -57,8 +60,19 @@
 	var tresc = modalEl.querySelector('.modal-body');
 	var tytul = modalEl.querySelector('.modal-title');
 
+	// Najbliższy przodek z position: fixed (stopka leży stała pod treścią i odsłania się na końcu strony).
+	// Przycisk takiej sekcji wkładamy do niego, żeby chował się i pokazywał razem z nim.
+	function staly(el) {
+		for (; el && el !== document.body; el = el.parentElement) {
+			if (window.getComputedStyle(el).position === 'fixed') {
+				return el;
+			}
+		}
+		return null;
+	}
+
 	function przyciski() {
-		warstwa.innerHTML = '';
+		document.querySelectorAll('.sekcja-przycisk').forEach(function (p) { p.remove(); });
 		document.querySelectorAll('[data-sekcja]').forEach(function (sekcja) {
 			var przycisk = document.createElement('button');
 			przycisk.type = 'button';
@@ -71,16 +85,25 @@
 			przycisk.addEventListener('mouseenter', function () { sekcja.classList.add('sekcja-podswietlona'); });
 			przycisk.addEventListener('mouseleave', function () { sekcja.classList.remove('sekcja-podswietlona'); });
 			przycisk._sekcja = sekcja;
+			przycisk._kontener = null;
 			warstwa.appendChild(przycisk);
 		});
 		ustaw();
 	}
 
 	function ustaw() {
-		warstwa.querySelectorAll('.sekcja-przycisk').forEach(function (przycisk) {
+		document.querySelectorAll('.sekcja-przycisk').forEach(function (przycisk) {
+			// Sprawdzane za każdym razem: stopka staje się fixed dopiero po starcie glowny.js (klasa body.stopka-odslaniana)
+			var kontener = staly(przycisk._sekcja);
+			if (kontener !== przycisk._kontener) {
+				przycisk._kontener = kontener;
+				(kontener || warstwa).appendChild(przycisk);
+			}
 			var r = przycisk._sekcja.getBoundingClientRect();
-			przycisk.style.top = (r.top + window.scrollY + 12) + 'px';
-			przycisk.style.left = (r.right + window.scrollX - przycisk.offsetWidth - 12) + 'px';
+			// W kontenerze fixed pozycja względem kontenera, w warstwie - względem dokumentu
+			var k = przycisk._kontener ? przycisk._kontener.getBoundingClientRect() : {top: -window.scrollY, left: -window.scrollX};
+			przycisk.style.top = (r.top - k.top + 12) + 'px';
+			przycisk.style.left = (r.right - k.left - przycisk.offsetWidth - 12) + 'px';
 		});
 	}
 

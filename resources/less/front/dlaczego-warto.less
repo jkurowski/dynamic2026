@@ -53,6 +53,16 @@
 		display: block;
 	}
 
+	// Zdjęcie wgrane w panelu (Sekcje stron) jest już przycięte do proporcji kadru - wypełnia go
+	// w całości zamiast przesunięcia dobranego pod zdjęcie z szablonu.
+	img.wypelnia {
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
 	// Pomarańczowa obwódka nachodząca na zdjęcie
 	&::after {
 		content: '';

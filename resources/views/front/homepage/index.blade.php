@@ -253,41 +253,35 @@
 
 	</section>
 
-	<!-- ============ LICZBY ============ -->
-	<section class="liczby" aria-label="Dynamic Development w liczbach">
+	<!-- ============ LICZBY ============ (edycja: „strona-glowna.liczby”) -->
+	@php $liczby = sekcja('strona-glowna.liczby'); $tloLiczb = $liczby->obrazek('tlo'); @endphp
+	<section class="liczby" aria-label="Dynamic Development w liczbach"{!! $liczby->edycja() !!}>
 		<div class="liczby-tlo">
 			<picture>
-				<source type="image/webp" srcset="{{ asset('img/tlo-liczby.webp') }}">
-				<img src="{{ asset('img/tlo-liczby.jpg') }}" width="1920" height="503" alt="" loading="lazy">
+				<source type="image/webp" srcset="{{ $tloLiczb->webp }}">
+				<img src="{{ $tloLiczb->jpg }}" width="{{ $tloLiczb->szerokosc }}" height="{{ $tloLiczb->wysokosc }}" alt="{{ $tloLiczb->alt }}" loading="lazy">
 			</picture>
 		</div>
 
 		<ul class="liczby-lista">
-			<li class="liczba pojawia-sie">
-				<p class="wartosc"><span class="duza-liczba">20+</span> <span class="jednostka">LAT</span></p>
-				<span class="opis">DOŚWIADCZENIA W BRANŻY</span>
+			@foreach($liczby->lista('liczby') as $i => $liczba)
+			<li @class(['liczba', 'pojawia-sie', 'opoznienie-' . $i => $i > 0])>
+				<p class="wartosc"><span class="duza-liczba">{{ $liczba->tekst('wartosc') }}</span> <span class="jednostka">{{ $liczba->tekst('jednostka') }}</span></p>
+				<span class="opis">{{ $liczba->tekst('opis') }}</span>
 				<img class="ozdobnik" src="{{ asset('img/ozdoba-liczby.svg') }}" width="93" height="112" alt="">
 			</li>
-			<li class="liczba pojawia-sie opoznienie-1">
-				<p class="wartosc"><span class="duza-liczba">1000</span> <span class="jednostka">LOKALI</span></p>
-				<span class="opis">MIESZKALNYCH I UŻYTKOWYCH</span>
-				<img class="ozdobnik" src="{{ asset('img/ozdoba-liczby.svg') }}" width="93" height="112" alt="">
-			</li>
-			<li class="liczba pojawia-sie opoznienie-2">
-				<p class="wartosc"><span class="duza-liczba">40</span> <span class="jednostka">TYS.</span></p>
-				<span class="opis">METRÓW KWADRATOWYCH</span>
-				<img class="ozdobnik" src="{{ asset('img/ozdoba-liczby.svg') }}" width="93" height="112" alt="">
-			</li>
+			@endforeach
 		</ul>
 	</section>
 
 	<!-- ============ MAPA INWESTYCJI ============ -->
-	<section class="mapa-sekcja sekcja-karta">
+	@php $mapa = sekcja('strona-glowna.mapa'); @endphp
+	<section class="mapa-sekcja sekcja-karta"{!! $mapa->edycja() !!}>
 
 		<div class="mapa-gora pojawia-sie">
 			<div>
-				<x-etykieta>MAPA INWESTYCJI</x-etykieta>
-				<h2 class="tytul-sekcji rozjasnia-sie">Dobry adres<br><span class="akcent">dla lepszego życia</span></h2>
+				<x-etykieta>{{ $mapa->tekst('etykieta') }}</x-etykieta>
+				<h2 class="tytul-sekcji rozjasnia-sie">{{ $mapa->tekst('naglowek') }}@if($mapa->tekst('naglowek_akcent') !== '')<br><span class="akcent">{{ $mapa->tekst('naglowek_akcent') }}</span>@endif</h2>
 				<div class="mapa-kreska"></div>
 			</div>
 
@@ -387,43 +381,33 @@
 
 	</section>
 
-	<!-- ============ DLACZEGO WARTO ============ -->
-	<section class="dlaczego-warto">
+	<!-- ============ DLACZEGO WARTO ============ (edycja: „strona-glowna.dlaczego-warto”) -->
+	@php $dlaczego = sekcja('strona-glowna.dlaczego-warto'); $zdjecieDlaczego = $dlaczego->obrazek('zdjecie'); @endphp
+	<section class="dlaczego-warto"{!! $dlaczego->edycja() !!}>
 		<div class="uklad">
 
 			<div class="dlaczego-zdjecie pojawia-sie">
 				<picture>
-					<source type="image/webp" srcset="{{ asset('img/dlaczego-warto.webp') }}">
-					<img src="{{ asset('img/dlaczego-warto.jpg') }}" width="1370" height="836" alt="Osiedle Dynamic Development" loading="lazy">
+					<source type="image/webp" srcset="{{ $zdjecieDlaczego->webp }}">
+					<img @if($zdjecieDlaczego->wlasny)class="wypelnia" @endif src="{{ $zdjecieDlaczego->jpg }}" width="{{ $zdjecieDlaczego->szerokosc }}" height="{{ $zdjecieDlaczego->wysokosc }}" alt="{{ $zdjecieDlaczego->alt }}" loading="lazy">
 				</picture>
 			</div>
 
 			<div class="dlaczego-tresc pojawia-sie opoznienie-1">
-				<x-etykieta>DLACZEGO WARTO?</x-etykieta>
-				<h2 class="tytul-sekcji rozjasnia-sie">Z myślą o Twoim<br><span class="akcent">komforcie</span></h2>
+				<x-etykieta>{{ $dlaczego->tekst('etykieta') }}</x-etykieta>
+				<h2 class="tytul-sekcji rozjasnia-sie">{{ $dlaczego->tekst('naglowek') }}@if($dlaczego->tekst('naglowek_akcent') !== '')<br><span class="akcent">{{ $dlaczego->tekst('naglowek_akcent') }}</span>@endif</h2>
 
 				<ul class="zalety">
+					@foreach($dlaczego->lista('zalety') as $zaleta)
+					@php $ikona = $zaleta->ikona('ikona'); @endphp
 					<li>
-						<img src="{{ asset('img/ikona-teczka.svg') }}" width="70" height="70" alt="">
+						<img src="{{ $ikona->src }}" width="{{ $ikona->szerokosc }}" height="{{ $ikona->wysokosc }}" alt="">
 						<div>
-							<h3>20+ lat doświadczenia</h3>
-							<p>Rodzinny deweloper z polskim kapitałem i blisko 1000 zrealizowanych lokali</p>
+							<h3>{{ $zaleta->tekst('tytul') }}</h3>
+							<p>{!! $zaleta->html('opis') !!}</p>
 						</div>
 					</li>
-					<li>
-						<img src="{{ asset('img/ikona-rysunek.svg') }}" width="68" height="68" alt="">
-						<div>
-							<h3>Funkcjonalna architektura</h3>
-							<p>Przemyślane układy, jasne przestrzenie i rozwiązania dopasowane do codziennego życia</p>
-						</div>
-					</li>
-					<li>
-						<img src="{{ asset('img/ikona-park.svg') }}" width="67" height="67" alt="">
-						<div>
-							<h3>Komfortowe otoczenie</h3>
-							<p>Osiedla projektowane z myślą o rekreacji, wypoczynku<br class="lamanie-desktop"> i dobrze zagospodarowanej przestrzeni.</p>
-						</div>
-					</li>
+					@endforeach
 				</ul>
 			</div>
 
@@ -435,14 +419,17 @@
 
 	@if($aktualnosci->isNotEmpty())
 	<!-- ============ AKTUALNOŚCI ============ -->
-	<section class="aktualnosci">
+	@php $naglowekAktualnosci = sekcja('strona-glowna.aktualnosci'); $przyciskAktualnosci = $naglowekAktualnosci->link('przycisk'); @endphp
+	<section class="aktualnosci"{!! $naglowekAktualnosci->edycja() !!}>
 
 		<div class="aktualnosci-gora pojawia-sie">
 			<div>
-				<x-etykieta>AKTUALNOŚCI</x-etykieta>
-				<h2 class="tytul-sekcji jasny rozjasnia-sie">Co słychać <span class="akcent">nowego?</span></h2>
+				<x-etykieta>{{ $naglowekAktualnosci->tekst('etykieta') }}</x-etykieta>
+				<h2 class="tytul-sekcji jasny rozjasnia-sie">{{ $naglowekAktualnosci->tekst('naglowek') }}@if($naglowekAktualnosci->tekst('naglowek_akcent') !== '') <span class="akcent">{{ $naglowekAktualnosci->tekst('naglowek_akcent') }}</span>@endif</h2>
 			</div>
-			<x-przycisk-pigulka href="{{ route('aktualnosci.index') }}">WSZYSTKIE AKTUALNOŚCI</x-przycisk-pigulka>
+			@if($przyciskAktualnosci->tekst !== '' && $przyciskAktualnosci->adres !== '')
+				<x-przycisk-pigulka href="{{ $przyciskAktualnosci->adres }}">{{ $przyciskAktualnosci->tekst }}</x-przycisk-pigulka>
+			@endif
 		</div>
 
 		<div class="aktualnosci-lista">

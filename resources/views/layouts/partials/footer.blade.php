@@ -45,14 +45,12 @@
 			</ul>
 		</nav>
 
-		<div class="stopka-kolumna" aria-labelledby="stopka-kontakt">
-			<h2 id="stopka-kontakt"><img src="{{ asset('img/ikona-pinezka.svg') }}" width="12" height="19" alt=""> KONTAKT</h2>
+		{{-- Edycja: sekcja „stopka.kontakt” (config/sekcje.php) --}}
+		@php $kontaktStopki = sekcja('stopka.kontakt'); @endphp
+		<div class="stopka-kolumna" aria-labelledby="stopka-kontakt"{!! $kontaktStopki->edycja() !!}>
+			<h2 id="stopka-kontakt"><img src="{{ asset('img/ikona-pinezka.svg') }}" width="12" height="19" alt=""> {{ $kontaktStopki->tekst('naglowek') }}</h2>
 			<p>
-				Dynamic Development sp. z o.o.<br>
-				ul. Plonowa 24, <span class="kod-pocztowy">05-515</span> Nowa Wola<br>
-				KRS: 0000257514<br>
-				NIP: 5213389378<br>
-				REGON: 140557694
+				{!! $kontaktStopki->html('dane') !!}
 			</p>
 		</div>
 

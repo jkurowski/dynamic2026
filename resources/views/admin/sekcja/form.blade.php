@@ -34,6 +34,6 @@
     </div>
 
     <script src="{{ asset('/js/editor/tinymce.min.js') }}" charset="utf-8"></script>
-    <script src="{{ asset('/js/sekcje-edycja.js') }}"></script>
+    <script src="{{ asset('/js/sekcje-edycja.js') }}?v={{ filemtime(public_path('js/sekcje-edycja.js')) }}"></script>
     <script>sekcjaEdytor(document);</script>
 @endsection

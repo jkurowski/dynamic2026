@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PolaSekcji;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -25,6 +26,14 @@ class Sekcja extends Model
 
     // Cast 'array' koduje do zwykłego tekstu - kolumna jest TEXT, nie JSON
     protected $casts = ['dane' => 'array'];
+
+    private ?PolaSekcji $wartosci = null;
+
+    protected static function booted()
+    {
+        // Po zapisie wartości do widoku liczymy od nowa
+        static::saved(fn (Sekcja $sekcja) => $sekcja->wartosci = null);
+    }
 
     /** Sekcja do widoku - jedno zapytanie na klucz w obrębie żądania */
     public static function dlaKlucza(string $klucz): self
@@ -60,76 +69,20 @@ class Sekcja extends Model
         return $this->schemat()['nazwa'] ?? $this->klucz;
     }
 
-    public function pole(string $pole): array
+    /** Wartości pól do widoku (zapisane albo z szablonu) */
+    public function wartosci(): PolaSekcji
     {
-        $definicja = $this->schemat()['pola'][$pole] ?? null;
-        if (!$definicja) {
-            throw new \InvalidArgumentException("Sekcja „{$this->klucz}” nie ma pola „{$pole}”");
-        }
-
-        return $definicja;
+        return $this->wartosci ??= PolaSekcji::dlaSekcji($this->schemat()['pola'], $this->dane);
     }
 
-    /** Zapisana wartość albo domyślna z configu (null/'' w zapisie = brak wartości) */
-    public function wartosc(string $pole)
-    {
-        $zapisane = $this->dane[$pole] ?? null;
-
-        return ($zapisane === null || $zapisane === '') ? ($this->pole($pole)['domyslnie'] ?? null) : $zapisane;
-    }
-
-    public function tekst(string $pole): string
-    {
-        return (string) $this->wartosc($pole);
-    }
-
-    /** HTML z edytora - wpisuje go administrator, wypisujemy przez {!! !!} */
-    public function html(string $pole): string
-    {
-        return (string) $this->wartosc($pole);
-    }
-
-    /** @return object{tekst: string, adres: string} */
-    public function link(string $pole): object
-    {
-        $domyslnie = $this->pole($pole)['domyslnie'] ?? [];
-        $zapisane = $this->dane[$pole] ?? [];
-
-        $tekst = ($zapisane['tekst'] ?? '') !== '' ? $zapisane['tekst'] : ($domyslnie['tekst'] ?? '');
-        $adres = ($zapisane['adres'] ?? '') !== '' ? $zapisane['adres'] : ($domyslnie['adres'] ?? '');
-
-        return (object) ['tekst' => $tekst, 'adres' => self::adres($adres)];
-    }
-
-    /** /poznaj-nas -> pełny adres strony; http(s), #, tel:, mailto: bez zmian */
-    public static function adres(string $adres): string
-    {
-        return Str::startsWith($adres, '/') ? url($adres) : $adres;
-    }
-
-    /**
-     * @return object{jpg: string, webp: string, alt: string, szerokosc: int, wysokosc: int, wlasny: bool}
-     * wlasny = zdjęcie wgrane w panelu (przycięte do kadru), inaczej zdjęcie z szablonu
-     */
-    public function obrazek(string $pole): object
-    {
-        $definicja = $this->pole($pole);
-        $domyslnie = $definicja['domyslnie'] ?? [];
-        $zapisane = $this->dane[$pole] ?? [];
-        [$szerokosc, $wysokosc] = $definicja['rozmiar'] ?? $definicja['kadr'];
-
-        $plik = $zapisane['plik'] ?? null;
-        $wlasny = $plik && File::isFile(public_path(self::KATALOG . $plik));
-
-        return (object) [
-            'jpg' => asset($wlasny ? self::KATALOG . $plik : $domyslnie['jpg']),
-            'webp' => asset($wlasny ? self::KATALOG . 'webp/' . pathinfo($plik, PATHINFO_FILENAME) . '.webp' : $domyslnie['webp']),
-            'alt' => ($zapisane['alt'] ?? '') !== '' ? $zapisane['alt'] : ($domyslnie['alt'] ?? ''),
-            'szerokosc' => $szerokosc,
-            'wysokosc' => $wysokosc,
-            'wlasny' => $wlasny,
-        ];
-    }
+    // Skróty do widoku: $s->tekst('naglowek'), $s->lista('liczby') itd.
+    public function tekst(string $pole): string { return $this->wartosci()->tekst($pole); }
+    public function html(string $pole): string { return $this->wartosci()->html($pole); }
+    public function link(string $pole): object { return $this->wartosci()->link($pole); }
+    public function obrazek(string $pole): object { return $this->wartosci()->obrazek($pole); }
+    public function ikona(string $pole): object { return $this->wartosci()->ikona($pole); }
+    /** @return PolaSekcji[] */
+    public function lista(string $pole): array { return $this->wartosci()->lista($pole); }
 
     /** Atrybut dla edytora na froncie - tylko dla zalogowanych z uprawnieniem, gość dostaje pusty tekst */
     public function edycja(): string
@@ -187,20 +140,40 @@ class Sekcja extends Model
         $dekoduj = fn ($v) => is_string($v) ? (json_decode($v, true) ?: []) : ($v ?? []);
         $stare = $dekoduj(data_get($activity->properties, 'old.dane'));
         $nowe = $dekoduj(data_get($activity->properties, 'attributes.dane'));
+        $przed = $this->splaszcz($this->schemat()['pola'], $stare);
+        $po = $this->splaszcz($this->schemat()['pola'], $nowe);
         $old = $attributes = [];
 
-        foreach ($this->schemat()['pola'] as $pole => $definicja) {
-            $przed = $this->opisWartosci($definicja, $stare[$pole] ?? null);
-            $po = $this->opisWartosci($definicja, $nowe[$pole] ?? null);
-            if ($przed !== $po) {
-                $etykieta = $definicja['etykieta'] ?? $pole;
-                $old[$etykieta] = $przed;
-                $attributes[$etykieta] = $po;
+        foreach ($po as $etykieta => $wartosc) {
+            if (($przed[$etykieta] ?? null) !== $wartosc) {
+                $old[$etykieta] = $przed[$etykieta] ?? '(z szablonu)';
+                $attributes[$etykieta] = $wartosc;
             }
         }
 
         $activity->properties = $activity->properties
             ->merge(['old' => $old, 'attributes' => $attributes, 'subject_title' => $this->nazwa()]);
+    }
+
+    /** [etykieta pola => opis wartości]; elementy list jako „Liczby 2 - Opis” */
+    private function splaszcz(array $pola, array $dane, string $przedrostek = ''): array
+    {
+        $wynik = [];
+
+        foreach ($pola as $pole => $definicja) {
+            $etykieta = $przedrostek . ($definicja['etykieta'] ?? $pole);
+
+            if ($definicja['typ'] === 'lista') {
+                foreach (array_keys($definicja['domyslnie']) as $i) {
+                    $wynik += $this->splaszcz($definicja['pola'], $dane[$pole][$i] ?? [], $etykieta . ' ' . ($i + 1) . ' - ');
+                }
+                continue;
+            }
+
+            $wynik[$etykieta] = $this->opisWartosci($definicja, $dane[$pole] ?? null);
+        }
+
+        return $wynik;
     }
 
     private function opisWartosci(array $definicja, $wartosc): string
@@ -210,9 +183,10 @@ class Sekcja extends Model
         }
 
         return match ($definicja['typ']) {
-            'html' => Str::limit(trim(html_entity_decode(strip_tags($wartosc))), 120),
+            'html' => Str::limit(trim(html_entity_decode(strip_tags(preg_replace('/<br\s*\/?>/i', ' / ', $wartosc)))), 120),
             'link' => trim(($wartosc['tekst'] ?? '') . ' (' . ($wartosc['adres'] ?? '') . ')'),
             'obrazek' => trim(($wartosc['plik'] ?? 'zdjęcie z szablonu') . (($wartosc['alt'] ?? '') !== '' ? ', ALT: ' . $wartosc['alt'] : '')),
+            'ikona' => $definicja['opcje'][$wartosc][0] ?? (string) $wartosc,
             default => (string) $wartosc,
         };
     }
