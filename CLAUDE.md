@@ -2,7 +2,7 @@
 
 ## ZASADA: zmiany w bazie
 - NIE używamy migracji Laravela. Zmiany struktury i danych → pliki `.sql` w `database/sql/` (nazwa `RRRR_MM_DD_NN_opis.sql`), puszczane ręcznie: `mysql -uroot --default-character-set=utf8mb4 lar_dynamic < database/sql/plik.sql`.
-- Wykonane lokalnie (2026-10-01): `01_rodo_rules_zawezanie`, `02_clients_is_random_email`, `03_rodo_rules_teksty_dynamic`, `04_pages_front`, `05_aktualnosci` (articles.category + pages id 5), `06_articles_old_id_default` (naprawa 500 przy dodawaniu artykułu), `07_activity_log_nazwa_inwestycji`.
+- Wykonane lokalnie (2026-10-01): `01_rodo_rules_zawezanie`, `02_clients_is_random_email`, `03_rodo_rules_teksty_dynamic`, `04_pages_front`, `05_aktualnosci` (articles.category + pages id 5), `06_articles_old_id_default` (naprawa 500 przy dodawaniu artykułu), `07_activity_log_nazwa_inwestycji`; 2026-10-02: `01_rodo_rules_link_polityki` (zastąpione przez 02), `02_polityka_prywatnosci` (pages id 6 + link w klauzuli RODO na /polityka-prywatnosci).
 
 ## Repozytorium
 - `origin` = https://github.com/jkurowski/dynamic2026.git (od 2026-10-01). Historia zaczyna się od nowa — pierwszy commit `Start projektu dynamic-cms`. Historia Kaltera (kalter2024) tylko lokalnie na gałęzi `kalter-history`, nie wypychać jej do origin.
@@ -99,7 +99,8 @@ Zasada: sekcje powtarzające się na kilku podstronach → komponenty Blade `x-.
 - Skrypty wspólne w layoucie: jquery, bootstrap, (stack scripts), animacje.js, glowny.js. Skrypty strony: `@push('scripts')`.
 
 ### Strony statyczne (MenuController)
-- Rekord w `pages` (model `Page` — observer ustawia slug/uri z tytułu) + widok `resources/views/front/menupage/{uri}.blade.php`. `Front/MenuController@index` (trasa `menu.show`, `/{uri}`) szuka strony po `uri` i widoku o tej nazwie.
+- Rekord w `pages` (model `Page` — observer ustawia slug/uri z tytułu) + widok `resources/views/front/menupage/{uri}.blade.php`. `Front/MenuController@index` (trasa `menu.show`, `/{uri}`) szuka aktywnej strony po `uri`; ma własny widok → ten widok, nie ma → ogólny `front/menupage/strona-tekstowa` (H1 = „Nagłówek H1” albo tytuł, „Sub-Tytuł” = wstęp, treść z edytora; sekcja `po_tresci` dla widoków dziedziczących). Nowe strony tekstowe (regulamin itd.) można więc dodawać samym panelem.
+- Panel Strony: pole „Treść” jest opcjonalne (`PageFormRequest`) — strony z własnym widokiem nie mają treści w bazie, a wcześniej nie dało się ich zapisać.
 - Finansowanie (2026-10-01): `pages.id=1`, uri `finansowanie`, meta z szablonu; widok `front/menupage/finansowanie.blade.php` (hero, kalkulator raty — js/kalkulator.js, partner kredytowy, kontakt). Struktura HTML = `dynamic-front/finansowanie.html` (329 znaczników, 0 różnic).
 - Wykończenie pod klucz (2026-10-01): `pages.id=2`, uri `wykonczenie-pod-klucz`, widok `front/menupage/wykonczenie-pod-klucz.blade.php` (hero, korzyści, partner Complex, galeria realizacji — js/karuzele.js, kontakt). Struktura = szablon (320 znaczników, 0 różnic).
 - Poznaj nas (2026-10-01): `pages.id=3`, uri `poznaj-nas`, widok `front/menupage/poznaj-nas.blade.php` (hero, liczby firmy, misja i o nas przez `x-sekcje.zdjecie-tekst`, cytat, nagrody, historia firmy — js/karuzele.js, kontakt). Struktura = szablon (351 znaczników, 0 różnic).
@@ -139,7 +140,8 @@ Uwaga: w poligonowa poprawki formularzy są NIEZACOMMITOWANE (git log ich nie po
 - `public/js/formularz.js`: walidacja name/phone/email/message i zgód `[data-wymagana]`, prawdziwy POST, token reCAPTCHA v3 przed wysyłką (`data-recaptcha`), blokada podwójnej wysyłki, przewinięcie do komunikatu po powrocie.
 - Trasy POST /kontakt i /kontakt/{property}: `throttle:10,1`.
 - UWAGA: w ustawieniach panelu brak `page_email` — formularz bez inwestycji zapisze klienta, ale mail nie wyjdzie (błąd w logu `email`). Ustawić w Ustawienia → SEO.
-- Do zrobienia: podstrona Polityki prywatności (link w klauzuli ma href="#"); obowiązek informacyjny w `rodo_settings` to „Lorem ipsum”.
+- Polityka prywatności: NASZA strona `/polityka-prywatnosci` (pages id 6, widok `polityka-prywatnosci` dziedziczy po `strona-tekstowa`, treść z panelu Strony — na razie pusta). Link w klauzuli RODO id 1 → `/polityka-prywatnosci` (nowa karta). Treść = skrypt Cookiebot (deklaracja cookies) w widoku `front/menupage/polityka-prywatnosci` — dokładnie jak na obecnej stronie klienta, gdzie CAŁA polityka to ten skrypt (decyzja 2026-10-02). Na `dynamic-cms.test` Cookiebot pokazuje błąd „domain is not authorized”, dopóki domena nie zostanie dopisana w Cookiebot Manager (konto klienta) — nie obchodzić. Właściwy tekst polityki (administrator, cele, prawa RODO) — od klienta, wkleić w panelu nad deklaracją.
+- Do zrobienia: obowiązek informacyjny w `rodo_settings` to „Lorem ipsum”.
 
 ## Aktualności (2026-10-01)
 - Panel (`admin/article`): pole Kategoria (`articles.category`, lista `Article::KATEGORIE`: NOWA INWESTYCJA, DZIENNIK INWESTYCJI, PORADNIK). Zdjęcie przycinane do 2 rozmiarów, każdy JPG (q85) + WebP (q80), z `orientate()` (EXIF z telefonu):
@@ -163,6 +165,7 @@ Uwaga: w poligonowa poprawki formularzy są NIEZACOMMITOWANE (git log ich nie po
 ## Przeglądarka do testów
 - Do testów używać Chrome na **Windows** (ten sam komputer co Laragon). Podłączone są dwie przeglądarki: Windows i macOS — domyślnie sesja bywa podpięta pod macOS, który NIE widzi `*.test` (strona błędu).
 - Przed testem: `list_connected_browsers` → `select_browser` z przeglądarką `osPlatform: "Windows"` (2026-10-01: deviceId `930cfff7-d5f6-4563-bea9-c1d60da2f426`, „Browser 1”).
+- ZAWSZE tylko Chrome na Windows — także do stron zewnętrznych (np. obecna strona klienta). NIGDY nie używać Chrome na macOS. Gdy Windows nie jest podłączony — zatrzymać się i poprosić użytkownika o podłączenie, nie przełączać się na macOS.
 
 ## Stos
 - Laravel (PHP), widoki Blade w `resources/views`. Laravel Mix buduje tylko `resources/js/app.js` → `public/js/app.js` (czat, Echo/Pusher).

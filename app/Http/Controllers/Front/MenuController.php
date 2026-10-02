@@ -8,23 +8,24 @@ use App\Models\Page;
 
 class MenuController extends Controller
 {
+    /**
+     * Strony z panelu (pages) pod adresem /{uri}.
+     * Strona z własnym widokiem (front/menupage/{uri}.blade.php - Finansowanie, Poznaj nas...) dostaje go,
+     * każda inna - ogólny widok strony tekstowej z treścią z panelu (front/menupage/strona-tekstowa).
+     */
     public function index($uri = null)
     {
-        $page = Page::where('uri', $uri)->firstOrFail();
-        //$parent = Page::ancestorsOf($page->id)->first();
+        $page = Page::where('uri', $uri)->where('active', 1)->firstOrFail();
 
         $data = [];
 
         $inline = Inline::whereSlug($uri)->get()->toArray();
 
-        if (!view()->exists('front.menupage.'.$uri)) {
-            abort(404);
-        }
+        $view = view()->exists('front.menupage.' . $uri) ? 'front.menupage.' . $uri : 'front.menupage.strona-tekstowa';
 
-        return view('front.menupage.'.$uri)
+        return view($view)
             ->with([
                 'page' => $page,
-                //'parent' => $parent
                 'uri' => $uri,
                 'data' => $data,
                 'array' => $inline,

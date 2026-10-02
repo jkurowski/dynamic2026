@@ -42,7 +42,7 @@ class PageFormRequest extends FormRequest
                 'parent_id' => 'integer|nullable',
                 'title' => 'required|string|min:2|max:100|unique:pages,id,' . $this->route()->page,
                 'title_text' => '',
-                'content' => 'required|string|min:5',
+                'content' => 'nullable|string', // strony z własnym widokiem (Finansowanie, Kontakt...) nie mają treści w bazie
                 'content_header' => '',
                 'file_header' => '',
                 'meta_title' => '',
@@ -55,7 +55,7 @@ class PageFormRequest extends FormRequest
                 'parent_id' => 'integer|nullable',
                 'title' => 'required|string|min:2|max:100|unique:pages',
                 'title_text' => '',
-                'content' => 'required|string|min:5',
+                'content' => 'nullable|string', // strony z własnym widokiem (Finansowanie, Kontakt...) nie mają treści w bazie
                 'content_header' => '',
                 'file_header' => '',
                 'meta_title' => '',
