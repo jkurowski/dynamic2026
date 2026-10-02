@@ -38,25 +38,25 @@
                                     @include('form-elements.html-color', ['label' => 'Kolor wyciemnienia', 'name' => 'color', 'value' => $entry->color])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-input-text', ['label' => 'Nazwa', 'name' => 'title', 'value' => $entry->title, 'required' => 1])
+                                    @include('form-elements.html-input-text', ['label' => 'Tytuł', 'sublabel' => 'Duży napis na zdjęciu, np. nazwa inwestycji', 'name' => 'title', 'value' => $entry->title, 'required' => 1])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-input-text', ['label' => 'Treść', 'name' => 'text', 'value' => $entry->text])
+                                    @include('form-elements.html-input-text', ['label' => 'Lokalizacja', 'sublabel' => 'Mały napis nad tytułem, np. WARSZAWA · MOKOTÓW', 'name' => 'text', 'value' => $entry->text])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-input-text', ['label' => 'Button: adres url', 'name' => 'link', 'value' => $entry->link])
+                                    @include('form-elements.html-input-text', ['label' => 'Przycisk: adres', 'sublabel' => 'Puste = lista inwestycji', 'name' => 'link', 'value' => $entry->link])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-input-text', ['label' => 'Button: nazwa', 'name' => 'link_button', 'value' => $entry->link_button])
+                                    @include('form-elements.html-input-text', ['label' => 'Przycisk: napis', 'sublabel' => 'Puste = „Zobacz inwestycję”', 'name' => 'link_button', 'value' => $entry->link_button])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-select', ['label' => 'Button: target', 'name' => 'link_target', 'selected' => $entry->link_target, 'select' => [
+                                    @include('form-elements.html-select', ['label' => 'Przycisk: otwieranie', 'name' => 'link_target', 'selected' => $entry->link_target, 'select' => [
                                         '_self' => 'To samo okno',
                                         '_blank' => 'Nowe okno'
                                     ]])
                                 </div>
                                 <div class="row w-100 form-group">
-                                    @include('form-elements.html-input-file', ['label' => 'Zdjęcie', 'sublabel' => '(wymiary: '.config('images.slider.big_width').'px / '.config('images.slider.big_height').'px)', 'name' => 'file'])
+                                    @include('form-elements.html-input-file', ['label' => 'Zdjęcie', 'sublabel' => '(przycinane do kadru '.config('images.slider.big_width').' x '.config('images.slider.big_height').' px oraz 1280 x 768 i 768 x 461 dla mniejszych ekranów; zapis JPG + WebP)', 'name' => 'file'])
                                 </div>
                                 <div class="row w-100 form-group">
                                     @include('form-elements.html-input-text', ['label' => 'Atrybut ALT zdjęcia', 'name' => 'file_alt', 'value' => $entry->file_alt])

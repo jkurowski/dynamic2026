@@ -135,11 +135,19 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    // Hero na stronie głównej (szablon dynamic-front): kadr 5:3 jak hero-768/1280/1920 z makiety.
+    // Każdy rozmiar JPG + WebP: uploads/slider/{szerokosc}/plik.jpg i uploads/slider/{szerokosc}/webp/plik.webp
+    // (SliderService::upload). Na stronie object-fit: cover - inne proporcje też się zmieszczą.
     'slider' => [
         'big_width' => 1920,
-        'big_height' => 792,
-        'thumb_width' => 250,
-        'thumb_height' => 103,
+        'big_height' => 1152,
+        'rozmiary' => [
+            1920 => 1152,
+            1280 => 768,
+            768 => 461,
+        ],
+        'thumb_width' => 400,
+        'thumb_height' => 240,
         'file_path' => 'uploads/slider/',
         'thumb_file_path' => 'uploads/slider/thumbs/',
         'preview_file_path' => 'uploads/slider/thumbs/',

@@ -1,15 +1,16 @@
 @extends('layouts.homepage')
 
 @section('content')
+@php $slajd = $slajdy[0]; @endphp
 
 	<!-- ============ HERO ============ -->
 	<section class="hero" id="hero">
 
 		<div class="hero-tlo">
 			<picture>
-				<source type="image/webp" srcset="{{ asset('img/hero-768.webp') }} 768w, {{ asset('img/hero-1280.webp') }} 1280w, {{ asset('img/hero-1920.webp') }} 1920w" sizes="100vw">
-				<source type="image/jpeg" srcset="{{ asset('img/hero-768.jpg') }} 768w, {{ asset('img/hero-1280.jpg') }} 1280w, {{ asset('img/hero-1920.jpg') }} 1920w" sizes="100vw">
-				<img src="{{ asset('img/hero-1920.jpg') }}" width="1925" height="1155" alt="Wizualizacja inwestycji Dom Hygge Twin" fetchpriority="high">
+				<source type="image/webp" srcset="{{ $slajd['srcsetWebp'] }}" sizes="100vw">
+				<source type="image/jpeg" srcset="{{ $slajd['srcsetJpg'] }}" sizes="100vw">
+				<img src="{{ $slajd['zdjecieJpg'] }}" width="{{ $slajd['szerokosc'] }}" height="{{ $slajd['wysokosc'] }}" alt="{{ $slajd['alt'] }}" fetchpriority="high">
 			</picture>
 		</div>
 
@@ -18,9 +19,9 @@
 			<div class="hero-tresc pojawia-sie">
 				<p class="hero-lokalizacja">
 					<svg viewBox="0 0 16 25" aria-hidden="true"><path d="M10.0806 0L15.7895 0L5.7089 25H0L10.0806 0Z" fill="#DC5C0C"/></svg>
-					<span class="tekst-lokalizacji">WARSZAWA · MOKOTÓW</span>
+					<span class="tekst-lokalizacji">{{ $slajd['lokalizacja'] }}</span>
 				</p>
-				<h1 class="hero-naglowek">Dom Hygge Twin</h1>
+				<h1 class="hero-naglowek">{{ $slajd['tytul'] }}</h1>
 				<div class="hero-kreska"></div>
 			</div>
 
@@ -30,14 +31,14 @@
 					<button type="button" class="slajd-poprzedni" aria-label="Poprzednia inwestycja">
 						<svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M11.9996 1.5L1.49966 12L11.9996 22.5M1.49966 12L22.4996 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
 					</button>
-					<span class="hero-licznik"><span class="numer-slajdu">1</span> / <span class="ile-slajdow">4</span></span>
+					<span class="hero-licznik"><span class="numer-slajdu">1</span> / <span class="ile-slajdow">{{ count($slajdy) }}</span></span>
 					<button type="button" class="slajd-nastepny" aria-label="Następna inwestycja">
 						<svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M12 22.5L22.5 12L12 1.50004M22.5 12L1.5 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
 					</button>
 				</div>
 
-				<a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}" class="hero-przycisk">
-					Zobacz inwestycję
+				<a href="{{ $slajd['link'] }}" class="hero-przycisk"@if($slajd['cel']) target="{{ $slajd['cel'] }}"@endif>
+					{{ $slajd['przycisk'] }}
 					<x-ikona.strzalka />
 				</a>
 			</div>
@@ -468,6 +469,8 @@
 @endsection
 
 @push('scripts')
+	{{-- Slajdy hero z panelu (Slider) - lista dla js/slider.js; pierwszy jest też w HTML wyżej (SEO) --}}
+	<script>window.slajdyHero = @json($slajdy);</script>
 	<script src="{{ asset('js/slider.js') }}"></script>
 	<script src="{{ asset('js/karuzele.js') }}"></script>
 	<script src="{{ asset('js/aktualnosci-domowa.js') }}"></script>

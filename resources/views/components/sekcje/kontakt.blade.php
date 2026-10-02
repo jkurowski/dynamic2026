@@ -9,72 +9,49 @@
 		<h2 class="tytul-sekcji rozjasnia-sie">Masz pytania?<br><span class="akcent">Skontaktuj się z Biurem Sprzedaży</span></h2>
 		<p class="kontakt-wstep">Masz pytania dotyczące mieszkań lub inwestycji?<br>Skontaktuj się z nami - chętnie doradzimy i pomożemy znaleźć najlepsze rozwiązanie</p>
 
+		{{-- Biura z panelu (Miasta): zakładki + dane; pierwsze aktywne biuro widoczne na start --}}
+		@php $biura = \App\Models\City::biura(); @endphp
 		<div class="zakladki-biur">
-			<button type="button" class="aktywna" data-biuro="warszawa">WARSZAWA</button>
-			<button type="button" data-biuro="nowa-wola">NOWA WOLA</button>
+			@foreach($biura as $biuro)
+				<button type="button" @class(['aktywna' => $loop->first]) data-biuro="{{ $biuro->slug }}">{{ mb_strtoupper($biuro->name) }}</button>
+			@endforeach
 		</div>
 
-		<div class="dane-biura widoczne" data-biuro="warszawa">
+		@foreach($biura as $biuro)
+		<div @class(['dane-biura', 'widoczne' => $loop->first]) data-biuro="{{ $biuro->slug }}">
 			<ul class="lista-danych">
 				<li>
 					<span class="ikona-ramka"><img src="{{ asset('img/ikona-adres.svg') }}" width="69" height="69" alt=""></span>
 					<span class="tresc">
-						<strong>Biuro w Warszawie</strong><br>
-						ul. Bobrowiecka 1B/U3<br>
-						00-728 Warszawa<br>
-						<a href="https://www.google.com/maps/dir/?api=1&amp;destination=ul.%20Bobrowiecka%201B%2FU3%2C%2000-728%20Warszawa" target="_blank" rel="noopener"><strong>Wyznacz trasę</strong></a>
+						<strong>Biuro {{ $biuro->name }}</strong><br>
+						{!! $biuro->address !!}
+						@if($biuro->map_link)<br>
+						<a href="{{ $biuro->map_link }}" target="_blank" rel="noopener"><strong>Wyznacz trasę</strong></a>@endif
 					</span>
-					<span class="ramka-kodu"><picture><source type="image/webp" srcset="{{ asset('img/kod-qr.webp') }}"><img class="kod-qr" src="{{ asset('img/kod-qr.png') }}" width="131" height="130" alt="Kod QR z trasą do biura"></picture></span>
+					<span class="ramka-kodu"><picture><source type="image/webp" srcset="{{ $biuro->qr(true) }}"><img class="kod-qr" src="{{ $biuro->qr() }}" width="131" height="130" alt="Kod QR z trasą do biura"></picture></span>
 				</li>
+				@if($biuro->working_hours)
 				<li>
 					<span class="ikona-ramka"><img src="{{ asset('img/ikona-zegar.svg') }}" width="69" height="69" alt=""></span>
 					<span class="tresc">
 						<strong>Godziny otwarcia:</strong><br>
-						poniedziałek-piątek 9:00-17:00<br>
-						sobota - po wcześniejszej rezerwacji<br>
-						Niedziela - nieczynne
+						{!! $biuro->working_hours !!}
 					</span>
 				</li>
+				@endif
+				@if($biuro->phone)
 				<li>
 					<span class="ikona-ramka"><img src="{{ asset('img/ikona-sluchawka.svg') }}" width="69" height="69" alt=""></span>
 					<span class="tresc mocny">
 						Telefon<br>
-						<a href="tel:+48576786666">+48 576 786 666</a>
+						{!! $biuro->telefonZLinkami() !!}
 					</span>
 					<span class="znak-kontaktu" aria-hidden="true"></span>
 				</li>
+				@endif
 			</ul>
 		</div>
-
-		<div class="dane-biura" data-biuro="nowa-wola">
-			<ul class="lista-danych">
-				<li>
-					<span class="ikona-ramka"><img src="{{ asset('img/ikona-adres.svg') }}" width="69" height="69" alt=""></span>
-					<span class="tresc">
-						<strong>Biuro w Nowej Woli</strong><br>
-						ul. Maciejki 8/2<br>
-						05-515 Nowa Wola<br>
-						<a href="https://www.google.com/maps/dir/?api=1&amp;destination=ul.%20Maciejki%208%2F2%2C%2005-515%20Nowa%20Wola" target="_blank" rel="noopener"><strong>Wyznacz trasę</strong></a>
-					</span>
-					<span class="ramka-kodu"><picture><source type="image/webp" srcset="{{ asset('img/kod-qr.webp') }}"><img class="kod-qr" src="{{ asset('img/kod-qr.png') }}" width="131" height="130" alt="Kod QR z trasą do biura"></picture></span>
-				</li>
-				<li>
-					<span class="ikona-ramka"><img src="{{ asset('img/ikona-zegar.svg') }}" width="69" height="69" alt=""></span>
-					<span class="tresc">
-						<strong>Godziny otwarcia:</strong><br>
-						poniedziałek-piątek 9:00-17:00
-					</span>
-				</li>
-				<li>
-					<span class="ikona-ramka"><img src="{{ asset('img/ikona-sluchawka.svg') }}" width="69" height="69" alt=""></span>
-					<span class="tresc mocny">
-						Telefon<br>
-						<a href="tel:+48512379056">+48 512 379 056</a>
-					</span>
-					<span class="znak-kontaktu" aria-hidden="true"></span>
-				</li>
-			</ul>
-		</div>
+		@endforeach
 	</div>
 
 	<x-formularz-kontaktowy :strona="$strona" :investment-id="$investmentId" :property-id="$propertyId" :back="$back" />

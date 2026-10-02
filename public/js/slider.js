@@ -1,48 +1,17 @@
 /* Slider inwestycji na hero.
-   W makiecie licznik pokazuje "1 / 4", ale w Figmie jest tylko jeden slajd z treścią
-   (Dom Hygge Twin) - pozostałe trzy nie zostały zaprojektowane. Dlatego slajdy trzymamy
-   w tablicy poniżej: pierwszy jest też wpisany na sztywno w HTML (dla SEO), resztę
-   dopisze backend przy generowaniu strony. */
-
+   Slajdy przychodzą z CMS (panel -> Slider) w window.slajdyHero - wypisuje je widok strony głównej
+   (Slider::slajdyHero(); gdy w panelu nie ma aktywnych slajdów, są to slajdy z makiety).
+   Pierwszy slajd jest też wyrenderowany w HTML (dla SEO).
+   Pola slajdu: lokalizacja, tytul, link, przycisk, cel, alt, zdjecieJpg, srcsetJpg, srcsetWebp. */
 (function ($) {
 	'use strict';
 
-	var slajdy = [
-		{
-			lokalizacja: 'WARSZAWA · MOKOTÓW',
-			tytul: 'Dom Hygge Twin',
-			link: '/inwestycje/dom-hygge-twin',
-			zdjecieWebp: '/img/hero-1920.webp',
-			zdjecieJpg: '/img/hero-1920.jpg'
-		},
-		{
-			lokalizacja: 'CHYLICE · KONSTANCIN-JEZIORNA',
-			tytul: 'Konstancin Riverside House',
-			link: '/inwestycje/konstancin-riverside-house',
-			zdjecieWebp: '/img/hero-konstancin-hd.webp',
-			zdjecieJpg: '/img/hero-konstancin-hd.jpg'
-		},
-		{
-			lokalizacja: 'ZALESIE GÓRNE · GM. PIASECZNO',
-			tytul: 'Segmenty Lake Village',
-			link: '/inwestycje/lake-village',
-			zdjecieWebp: '/img/hero-lake-hd.webp',
-			zdjecieJpg: '/img/hero-lake-hd.jpg'
-		},
-		{
-			lokalizacja: 'NOWA WOLA · GM. LESZNOWOLA',
-			tytul: 'Zespół willowy Zielona Polana',
-			link: '/inwestycje/zielona-polana',
-			zdjecieWebp: '/img/poznaj-onas.webp',
-			zdjecieJpg: '/img/poznaj-onas.jpg'
-		}
-	];
+	var slajdy = window.slajdyHero || [];
 
 	// Wstępne załadowanie grafik slajdów w tle, aby kliknięcie w przełącznik slajdu zawsze
 	// reagowało natychmiast, bez czekania na sieć.
+	// (przeglądarka sama wybierze rozmiar z srcset - tu tylko główny wariant 1920)
 	slajdy.forEach(function (s) {
-		var w = new Image();
-		w.src = s.zdjecieWebp;
 		var j = new Image();
 		j.src = s.zdjecieJpg;
 	});
@@ -63,6 +32,10 @@
 	var $lokalizacja = $hero.find('.tekst-lokalizacji');
 	var $tytul = $hero.find('.hero-naglowek');
 	var $przycisk = $hero.find('.hero-przycisk');
+
+	if (!slajdy.length) {
+		return;
+	}
 
 	$hero.find('.ile-slajdow').text(slajdy.length);
 
@@ -92,6 +65,15 @@
 		$lokalizacja.text(slajd.lokalizacja);
 		$tytul.text(slajd.tytul);
 		$przycisk.attr('href', slajd.link);
+		if (slajd.cel) {
+			$przycisk.attr('target', slajd.cel);
+		} else {
+			$przycisk.removeAttr('target');
+		}
+		// napis przycisku to pierwszy węzeł tekstowy przed ikoną strzałki
+		$przycisk.contents().filter(function () {
+			return this.nodeType === 3 && this.nodeValue.trim() !== '';
+		}).first().replaceWith(document.createTextNode(' ' + slajd.przycisk + ' '));
 
 		// Wyzwolenie płynnego pojawienia się nowego tekstu
 		$tresc.addClass('slajd-przelacza');
@@ -104,11 +86,11 @@
 	function zmienZdjecie(slajd, numer) {
 		// zdjęcie siedzi w <picture>, więc trzeba podmienić oba źródła, nie samo <img>
 		var $nowe = $wzorZdjecia.clone().addClass('zdjecie-wchodzi');
-		$nowe.find('source[type="image/webp"]').attr('srcset', slajd.zdjecieWebp);
-		$nowe.find('source[type="image/jpeg"]').attr('srcset', slajd.zdjecieJpg);
+		$nowe.find('source[type="image/webp"]').attr('srcset', slajd.srcsetWebp);
+		$nowe.find('source[type="image/jpeg"]').attr('srcset', slajd.srcsetJpg);
 		$nowe.find('img').attr({
 			src: slajd.zdjecieJpg,
-			alt: 'Wizualizacja inwestycji ' + slajd.tytul
+			alt: slajd.alt
 		});
 
 		var $stare = $tlo.children('picture');

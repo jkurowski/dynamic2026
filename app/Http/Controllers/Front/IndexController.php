@@ -14,7 +14,8 @@ class IndexController extends Controller
 {
     public function index()
     {
-        $slider = Slider::whereActive(1)->get();
+        // Slajdy hero z panelu (Slider); gdy brak aktywnych - slajdy z makiety
+        $slajdy = Slider::slajdyHero();
 
         $promotion = Property::where('highlighted', '=', 1)->get();
 
@@ -23,7 +24,7 @@ class IndexController extends Controller
 
         return view('front.homepage.index', [
             'array' => Inline::getElements(1),
-            'slider' => $slider,
+            'slajdy' => $slajdy,
             'promotion' => $promotion,
             'aktualnosci' => $aktualnosci,
         ]);

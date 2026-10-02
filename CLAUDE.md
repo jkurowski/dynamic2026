@@ -2,7 +2,7 @@
 
 ## ZASADA: zmiany w bazie
 - NIE używamy migracji Laravela. Zmiany struktury i danych → pliki `.sql` w `database/sql/` (nazwa `RRRR_MM_DD_NN_opis.sql`), puszczane ręcznie: `mysql -uroot --default-character-set=utf8mb4 lar_dynamic < database/sql/plik.sql`.
-- Wykonane lokalnie (2026-10-01): `01_rodo_rules_zawezanie`, `02_clients_is_random_email`, `03_rodo_rules_teksty_dynamic`, `04_pages_front`, `05_aktualnosci` (articles.category + pages id 5), `06_articles_old_id_default` (naprawa 500 przy dodawaniu artykułu), `07_activity_log_nazwa_inwestycji`; 2026-10-02: `01_rodo_rules_link_polityki` (zastąpione przez 02), `02_polityka_prywatnosci` (pages id 6 + link w klauzuli RODO na /polityka-prywatnosci).
+- Wykonane lokalnie (2026-10-01): `01_rodo_rules_zawezanie`, `02_clients_is_random_email`, `03_rodo_rules_teksty_dynamic`, `04_pages_front`, `05_aktualnosci` (articles.category + pages id 5), `06_articles_old_id_default` (naprawa 500 przy dodawaniu artykułu), `07_activity_log_nazwa_inwestycji`; 2026-10-02: `01_rodo_rules_link_polityki` (zastąpione przez 02), `02_polityka_prywatnosci` (pages id 6 + link w klauzuli RODO na /polityka-prywatnosci), `03_biura` (cities: address/map_link/file, phone i working_hours TEXT + dane 2 biur).
 
 ## Repozytorium
 - `origin` = https://github.com/jkurowski/dynamic2026.git (od 2026-10-01). Historia zaczyna się od nowa — pierwszy commit `Start projektu dynamic-cms`. Historia Kaltera (kalter2024) tylko lokalnie na gałęzi `kalter-history`, nie wypychać jej do origin.
@@ -39,7 +39,7 @@
   UWAGA: `admin/crm/jobs` to kolejka zadań Laravela — NIE jest modułem ofert pracy, zostaje.
   Baza: tabele `boxes` i `custom_fields` usunięte (DROP), uprawnienia `box-*` usunięte z `permissions` i `role_has_permissions`, tłumaczenia usunięte. `lar_dynamic` ma teraz 58 tabel.
 - Usunięte z górnej belki: Kalendarz, Nowy klient, Nowa oferta + `#modalNewUser` i skrypt modala nowego klienta (`btn-add-user`, `initModal`).
-- Menu teraz: CMS (Strony, Aktualności, Slider, Galeria, Użytkownicy, Blokada dostępu, Ustawienia), DeveloCRM (Miasta, Inwestycje, Leads).
+- Menu teraz: CMS (Strony, Aktualności, Slider, Galeria, Użytkownicy, Blokada dostępu, Ustawienia), DeveloCRM (Miasta = biura sprzedaży, Inwestycje, Leads).
 
 ## Usunięte widoki starego frontu (2026-10-01, ręcznie)
 - 45 widoków: `components/*` (formularze kontaktowe, karty lokali/inwestycji, iframes), `email-templates-json-parser/blocks/*`, `front/email-template-preview`, `front/howtobuy`, `front/offer`, `layouts/iframe`, `layouts/partials/*` (poza header/footer/inline/page-header), `shared/forms/form-note`.
@@ -109,9 +109,23 @@ Zasada: sekcje powtarzające się na kilku podstronach → komponenty Blade `x-.
 
 ### Strona główna (2026-10-01)
 - `layouts/homepage.blade.php` (body `strona-glowna` — wymagane przez motyw jasny), `front/homepage/index.blade.php`.
-- Treść statyczna z makiety (baza pusta). Do podpięcia: slider hero (`js/slider.js` ma tablicę slajdów), inwestycje w sprzedaży, mapa inwestycji, aktualności (`$aktualnosci` w @php na górze widoku), formularz kontaktowy.
+- Podpięte do CMS: slider hero (Slider), aktualności (karuzela), formularz kontaktowy. Nadal statyczne z makiety: wyszukiwarka, inwestycje w sprzedaży, mapa inwestycji, liczby, o nas.
 - Weryfikacja: HTML strony głównej ma tę samą strukturę co `dynamic-front/index.html` (622 znaczniki, 0 różnic w tekście; jedyna różnica — „Inwestycje” nie są aktywne na stronie głównej). 81 zasobów → 200.
-- Chrome nie ufa certyfikatowi Laragona dla https://dynamic-cms.test (strona błędu) — test w przeglądarce wymaga zaufania cert. Laragon (Menu → SSL).
+
+## Biura sprzedaży = panel Miasta (`/admin/city`, tabela `cities`, 2026-10-02)
+- Wyświetlane na froncie: boksy na stronie Kontakt (`front/contact/index`), zakładki biur w `<x-sekcje.kontakt>` (strona główna, Finansowanie, Wykończenie, Poznaj nas), pinezki na mapie biur (Kontakt). Źródło: `City::biura()` (aktywne, wg `sort`; raz na żądanie).
+- Pola w panelu: Aktywne (tak/nie), Nazwa (tłumaczona), Adres / Godziny otwarcia / Telefon (mini TinyMCE, `forced_root_block: ''` → linie jako `<br>`, bez `<p>`), Link do Google Maps („Wyznacz trasę”), Kod QR (PNG + WebP bezstratnie, `uploads/biura/`, max 400 px; puste = `img/kod-qr.png` z szablonu; checkbox „Usuń kod QR”), lat, lng, Kolejność. Stare kolumny cities (email, phone2, address_line_*, contact_*, footer, short_message, completed) zostają w bazie, usunięte z formularza.
+- Telefon: w zakładkach numery zamieniane na linki `tel:` (`City::telefonZLinkami()`), na stronie Kontakt jak wpisano.
+- Mapa biur: `City::pozycjaNaMapie()` przelicza lat/lng na % na obrazku `img/mapa.jpg` — kalibracja liniowa na 2 punktach w `config/mapa.php` (pinezki biur z szablonu + współrzędne z OpenStreetMap). Mapa okazała się w przybliżeniu geograficzna (skala zgodna z cos 52°). Przy zmianie obrazka mapy — nowe punkty kalibracji.
+- Teksty generowane: zakładka „Biuro {nazwa}”, dymek na mapie „Biuro Sprzedaży {nazwa}” (w szablonie „Biuro w Warszawie” — odmiany nie da się wyliczyć z nazwy).
+- `cities` używają też inwestycje (`investments.city_id`, lista miast w formularzu inwestycji) — dlatego rozbudowa tej tabeli, nie nowa.
+- Test 2026-10-02: panel (lista, formularz, zapis z QR, usunięcie QR, walidacja) w transakcji; Chrome Windows — boksy Kontakt, pinezki 52.4%/42.3% i 44.6%/78.3% (= szablon), przełączanie zakładek na Poznaj nas, konsola czysta. Struktura stron = szablon.
+
+## Slider hero na stronie głównej (2026-10-02)
+- Panel → Slider: Tytuł (duży napis), Lokalizacja (pole `text`, mały napis nad tytułem), Przycisk: adres (`link`, puste = lista inwestycji), napis (`link_button`, puste = „Zobacz inwestycję”), otwieranie (`link_target`), zdjęcie + ALT, Status (1 = aktywny), kolejność (sortowanie listy). Wyciemnienie/kolor ukryte (nieużywane w nowym szablonie).
+- Zdjęcie: kadr 5:3 jak w szablonie — `config('images.slider.rozmiary')` 1920×1152, 1280×768, 768×461, każdy JPG (q85) + WebP (q80): `uploads/slider/{szer}/plik.jpg` i `uploads/slider/{szer}/webp/plik.webp`, miniatura do panelu `uploads/slider/thumbs/` 400×240. Kod: `SliderService::upload`, usuwanie plików `Slider::usunPliki()` (observer `deleted`, podmiana zdjęcia).
+- Front: `Slider::slajdyHero()` → aktywne slajdy z panelu, a gdy brak — 4 slajdy z makiety. Pierwszy renderuje Blade (SEO), cała lista w `window.slajdyHero` dla `public/js/slider.js` (nie ma już tablicy na sztywno w JS). Przełączanie podmienia srcset (WebP/JPG), ALT, lokalizację, tytuł, link, target i napis przycisku; licznik „1 / N” z liczby slajdów.
+- Test 2026-10-02 (Chrome Windows): 2 slajdy z panelu — przełączanie OK, konsola czysta; po usunięciu slajdów pliki skasowane, strona wraca do slajdów z makiety. W bazie 0 slajdów.
 
 ## Ustalenia z klientem — Aktualności (poczta, folder „Dynamic Investment”, maile 20.05–21.08.2026)
 - Umowa, Załącznik nr 1 (Etap 1): klient sam edytuje w CMS treści, grafiki, **aktualności**, dane kontaktowe i treść raty. Do tego instrukcja CMS i jedno szkolenie.

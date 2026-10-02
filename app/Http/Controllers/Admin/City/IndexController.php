@@ -29,17 +29,17 @@ class IndexController extends Controller
     public function create()
     {
         return view('admin.city.form', [
-            'cardTitle' => 'Dodaj wpis',
+            'cardTitle' => 'Dodaj biuro',
             'backButton' => route('admin.city.index')
         ])->with('entry', City::make());
     }
 
     public function store(CityFormRequest $request)
     {
-        $city = $this->repository->create($request->validated());
+        $city = $this->repository->create(collect($request->validated())->except('file')->all());
 
-        if ($request->hasFile('header')) {
-            $this->service->uploadHeader($request->name, $request->file('header'), $city);
+        if ($request->hasFile('file')) {
+            $this->service->uploadQr($request->name, $request->file('file'), $city);
         }
 
         return redirect(route('admin.city.index'))->with('success', 'Nowy wpis dodany');
@@ -53,7 +53,7 @@ class IndexController extends Controller
 
         return view('admin.city.form', [
             'entry' => $city,
-            'cardTitle' => 'Edytuj wpis',
+            'cardTitle' => 'Edytuj biuro',
             'backButton' => route('admin.city.index')
         ]);
     }
@@ -64,10 +64,15 @@ class IndexController extends Controller
             app()->setLocale(request()->get('lang'));
         }
 
-        $this->repository->update($request->validated(), $city);
+        $this->repository->update(collect($request->validated())->except('file')->all(), $city);
 
-        if ($request->hasFile('header')) {
-            $this->service->uploadHeader($request->name, $request->file('header'), $city, true);
+        if ($request->hasFile('file')) {
+            $this->service->uploadQr($request->name, $request->file('file'), $city, true);
+        }
+
+        if ($request->boolean('usun_file')) {
+            $this->service->usunQr($city);
+            $city->update(['file' => null]);
         }
 
         return redirect(route('admin.city.index'))->with('success', 'Wpis zaktualizowany');
@@ -75,6 +80,10 @@ class IndexController extends Controller
 
     public function destroy(int $id)
     {
+        if ($city = City::find($id)) {
+            $this->service->usunQr($city);
+        }
+
         $this->repository->delete($id);
         return response()->json('Deleted');
     }

@@ -4,6 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Miasta / biura sprzedaży (boksy na stronie Kontakt, zakładki biur w sekcji kontaktu, mapa biur).
+ */
 class CityFormRequest extends FormRequest
 {
     /**
@@ -16,30 +19,25 @@ class CityFormRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
         $rules = [
-            'name' => 'required|string|min:3|max:100',
-            'phone' => '',
-            'phone2' => '',
-            'address_line_1' => '',
-            'address_line_2' => '',
-            'lat' => '',
-            'lng' => '',
-            'working_hours' => '',
-            'short_message' => '',
-            'contact_title' => 'required'
+            'name' => 'required|string|min:2|max:100',
         ];
 
-        if ($this->input('lang') === 'pl') {
-            $rules['email'] = 'required';
-            $rules['active'] = 'boolean|required';
-            $rules['completed'] = 'boolean|required';
+        // Pola nietłumaczone - tylko w wersji podstawowej (pl), jak w pozostałych modułach
+        if (!$this->filled('lang') || $this->input('lang') === 'pl') {
+            $rules += [
+                'active' => 'required|boolean',
+                'address' => 'nullable|string|max:2000',
+                'working_hours' => 'nullable|string|max:2000',
+                'phone' => 'nullable|string|max:2000',
+                'map_link' => 'nullable|url|max:500',
+                'file' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:4096',
+                'lat' => 'nullable|numeric|between:-90,90',
+                'lng' => 'nullable|numeric|between:-180,180',
+                'sort' => 'nullable|integer|min:0',
+            ];
         }
 
         return $rules;
@@ -48,9 +46,11 @@ class CityFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'To pole jest wymagane',
-            'name.max.string' => 'Maksymalna ilość znaków: 100',
-            'name.min.string' => 'Minimalna ilość znaków: 5'
+            'name.required' => 'Podaj nazwę.',
+            'map_link.url' => 'Link do Google Maps musi być pełnym adresem (https://...).',
+            'file.image' => 'Kod QR musi być obrazkiem (PNG, JPG, WebP).',
+            'lat.numeric' => 'Szerokość geograficzna to liczba, np. 52.1970523.',
+            'lng.numeric' => 'Długość geograficzna to liczba, np. 21.0463495.',
         ];
     }
 }
