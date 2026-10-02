@@ -16,6 +16,13 @@ Route::group([
     Route::redirect('/', '/admin/settings/seo');
 
     Route::post('slider/set', 'Slider\IndexController@sort')->name('slider.sort');
+
+    // Sekcje stron (config/sekcje.php) - klucz z kropkami, np. strona-glowna.o-nas
+    Route::get('sekcje', 'Sekcja\IndexController@index')->name('sekcja.index');
+    Route::get('sekcje/{klucz}/edytuj', 'Sekcja\IndexController@edit')->where('klucz', '[a-z0-9\-\.]+')->name('sekcja.edit');
+    Route::get('sekcje/{klucz}/formularz', 'Sekcja\IndexController@formularz')->where('klucz', '[a-z0-9\-\.]+')->name('sekcja.formularz');
+    Route::put('sekcje/{klucz}', 'Sekcja\IndexController@update')->where('klucz', '[a-z0-9\-\.]+')->name('sekcja.update');
+
     Route::post('gallery/set', 'Gallery\IndexController@sort')->name('gallery.sort');
     Route::post('image/set', 'Gallery\ImageController@sort')->name('image.sort');
     Route::post('invest-page/set', 'Developro\Page\IndexController@sort')->name('investment_page.sort');

@@ -218,27 +218,36 @@
 		</div>
 	</section>
 
-	<!-- ============ O NAS ============ -->
-	<section class="o-nas sekcja-karta">
+	<!-- ============ O NAS ============ (edycja: config/sekcje.php, „strona-glowna.o-nas”) -->
+	@php
+		$oNas = sekcja('strona-glowna.o-nas');
+		$zdjecieDuze = $oNas->obrazek('zdjecie_duze');
+		$zdjecieMale = $oNas->obrazek('zdjecie_male');
+		$przyciskONas = $oNas->link('przycisk');
+	@endphp
+	<section class="o-nas sekcja-karta"{!! $oNas->edycja() !!}>
 
 		<div class="o-nas-zdjecia pojawia-sie">
+			{{-- Zdjęcia z szablonu są kadrowane w CSS (przesunięcie w ramce), wgrane w panelu są już przycięte - klasa "wypelnia" --}}
 			<picture>
-				<source type="image/webp" srcset="{{ asset('img/o-nas-duze.webp') }}">
-				<img class="duze" src="{{ asset('img/o-nas-duze.jpg') }}" width="540" height="561" alt="Inwestycja Dynamic Development" loading="lazy">
+				<source type="image/webp" srcset="{{ $zdjecieDuze->webp }}">
+				<img @class(['duze', 'wypelnia' => $zdjecieDuze->wlasny]) src="{{ $zdjecieDuze->jpg }}" width="{{ $zdjecieDuze->szerokosc }}" height="{{ $zdjecieDuze->wysokosc }}" alt="{{ $zdjecieDuze->alt }}" loading="lazy">
 			</picture>
 			<picture>
-				<source type="image/webp" srcset="{{ asset('img/o-nas-male.webp') }}">
-				<img class="male" src="{{ asset('img/o-nas-male.jpg') }}" width="355" height="458" alt="Wnętrze mieszkania" loading="lazy">
+				<source type="image/webp" srcset="{{ $zdjecieMale->webp }}">
+				<img @class(['male', 'wypelnia' => $zdjecieMale->wlasny]) src="{{ $zdjecieMale->jpg }}" width="{{ $zdjecieMale->szerokosc }}" height="{{ $zdjecieMale->wysokosc }}" alt="{{ $zdjecieMale->alt }}" loading="lazy">
 			</picture>
 		</div>
 
 		<div class="o-nas-tresc pojawia-sie opoznienie-1">
-			<x-etykieta>O NAS</x-etykieta>
-			<h2 class="tytul-sekcji rozjasnia-sie">Kreujemy nowoczesną<br><span class="akcent">rzeczywistość</span></h2>
+			<x-etykieta>{{ $oNas->tekst('etykieta') }}</x-etykieta>
+			<h2 class="tytul-sekcji rozjasnia-sie">{{ $oNas->tekst('naglowek') }}@if($oNas->tekst('naglowek_akcent') !== '')<br><span class="akcent">{{ $oNas->tekst('naglowek_akcent') }}</span>@endif</h2>
 
 			<div class="wciecie">
-				<p>Stawiamy na rozwiązania niekonwencjonalne, innowacyjne i unikalne. Dzięki temu projekty naszych mieszkań i domów spełniają nie tylko współczesne standardy, ale także stanowią odpowiedź na potrzeby przyszłych właścicieli. Rzeczywistość wcale nie musi być nudna i ponura, a nasze nieruchomości są na to najlepszym dowodem. Kreatywność i fantazja to wartości, które mają ogromny potencjał na przyszłość. Właśnie dlatego realizując kolejne projekty, wspomniane wartości stanowią nasze motto, a także są podstawą ideologii, którą się kierujemy. Budujemy komfortowe mieszkania, domy, a także tworzymy niebanalne przestrzenie do rekreacji i wypoczynku.</p>
-				<x-przycisk-pigulka href="{{ route('menu.show', ['uri' => 'poznaj-nas']) }}" class="na-tle">WIĘCEJ O NAS</x-przycisk-pigulka>
+				{!! $oNas->html('tresc') !!}
+				@if($przyciskONas->tekst !== '' && $przyciskONas->adres !== '')
+					<x-przycisk-pigulka href="{{ $przyciskONas->adres }}" class="na-tle">{{ $przyciskONas->tekst }}</x-przycisk-pigulka>
+				@endif
 			</div>
 		</div>
 

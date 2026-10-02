@@ -15,6 +15,8 @@ return array (
     'slider-create'   => 'Slider - Tworzenie',
     'slider-edit'   => 'Slider - Edycja',
     'slider-delete'   => 'Slider - Usuwanie',
+    'sekcja-list'   => 'Sekcje stron',
+    'sekcja-edit'   => 'Sekcje stron - Edycja',
     'page-list'   => 'Strony',
     'page-create'   => 'Strony - Tworzenie',
     'page-edit'   => 'Strony - Edycja',

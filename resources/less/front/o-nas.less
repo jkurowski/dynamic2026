@@ -81,6 +81,17 @@
 		display: block;
 	}
 
+	// Zdjęcie wgrane w panelu (Sekcje stron) jest już przycięte do proporcji kadru - wypełnia go
+	// w całości zamiast przesunięcia dobranego pod zdjęcie z szablonu.
+	.duze.wypelnia,
+	.male.wypelnia {
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
 	// Niżej wymiary dostaje kadr, a nie samo zdjęcie - ono siedzi w kadrze na procentach i
 	// skaluje się razem z nim.
 	@media (max-width: @duzy-ekran) {

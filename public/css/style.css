@@ -2973,6 +2973,14 @@ strong {
   max-width: none;
   display: block;
 }
+.o-nas-zdjecia .duze.wypelnia,
+.o-nas-zdjecia .male.wypelnia {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 @media (max-width: 1024px) {
   .o-nas-zdjecia {
     flex-basis: 620px;

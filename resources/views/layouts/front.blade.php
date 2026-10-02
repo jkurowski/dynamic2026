@@ -32,9 +32,9 @@
 
 @include('layouts.partials.footer')
 
-@auth
-    @include('layouts.partials.inline')
-@endauth
+@if(\App\Models\Sekcja::moznaEdytowac())
+    @include('layouts.partials.sekcje-edycja')
+@endif
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>

@@ -54,6 +54,14 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span> Slider</a>
                             </li>
+                            @can('sekcja-list')
+                            <li {{ Request::routeIs('admin.sekcja.*') ? 'class=active' : '' }}>
+                                <a href="{{ route('admin.sekcja.index') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span> Sekcje stron</a>
+                            </li>
+                            @endcan
                             <li {{ Request::routeIs('admin.gallery.*') ? 'class=active' : '' }}>
                                 <a href="{{ route('admin.gallery.index') }}">
                                     <span class="menu-bullet">
