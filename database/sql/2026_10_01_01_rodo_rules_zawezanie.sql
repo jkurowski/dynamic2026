@@ -1,9 +1,10 @@
 -- Zawężanie klauzul RODO do formularzy i inwestycji (wzorzec: poligonowa, 2026-08-16).
--- rodo_rules.forms: lista kodów formularzy (JSON), NULL lub [] = klauzula we wszystkich formularzach.
+-- rodo_rules.forms: lista kodów formularzy (JSON zapisany jako TEXT - baza docelowa nie ma typu JSON),
+-- NULL lub [] = klauzula we wszystkich formularzach.
 -- rodo_rule_investment: klauzula przypisana do inwestycji; brak przypisań = klauzula wszędzie.
 
 ALTER TABLE `rodo_rules`
-    ADD COLUMN `forms` JSON NULL AFTER `text`;
+    ADD COLUMN `forms` TEXT NULL AFTER `text`;
 
 CREATE TABLE IF NOT EXISTS `rodo_rule_investment` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

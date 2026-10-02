@@ -1,7 +1,11 @@
 # dynamic-cms — notatki projektu
 
 ## ZASADA: zmiany w bazie
-- NIE używamy migracji Laravela. Zmiany struktury i danych → pliki `.sql` w `database/sql/` (nazwa `RRRR_MM_DD_NN_opis.sql`), puszczane ręcznie: `mysql -uroot --default-character-set=utf8mb4 lar_dynamic < database/sql/plik.sql`.
+- NIE używamy migracji Laravela. Zmiany struktury i danych → pliki `.sql` w `database/sql/` (nazwa `RRRR_MM_DD_NN_opis.sql`).
+- Uruchamianie (2026-10-02): panel **/admin/sql** (tylko rola Administrator: lista plików, „Wykonaj wszystkie oczekujące”, „Oznacz jako wykonany”) albo `php artisan sql:wykonaj` (`--lista`, `--oznacz`). Wykonane pliki w tabeli `sql_wykonane` (zakładana sama przy pierwszym użyciu) - każdy plik raz, po kolei, stop na pierwszym błędzie (plik z błędem zostaje „czeka”). Kod: `App\Services\SqlPliki` (dzieli plik na zapytania z pominięciem średników w tekstach i komentarzach), `Admin\Sql\IndexController`, `Console\Commands\SqlWykonaj`. ALTER/CREATE nie cofają się - przed wykonaniem kopia bazy.
+- Po dodaniu nowego pliku i puszczeniu go lokalnie RĘCZNIE (mysql) → `php artisan sql:wykonaj --oznacz`, albo od razu `php artisan sql:wykonaj`. Lokalnie wszystkie pliki do `04_sekcje` oznaczone.
+- Baza docelowa NIE ma typu JSON → kolumny JSON jako TEXT (cast 'array'), bez `whereJsonContains`/`JSON_*` w zapytaniach. `rodo_rules.forms` zmienione na TEXT (plik 01 poprawiony, lokalnie ALTER), `RodoRules::scopeForForm` szuka kodu formularza przez `LIKE '%"kod"%'`.
+- Test 2026-10-02: kopia lar_dynamic z cofniętymi zmianami (58 tabel) → `sql:wykonaj` wykonał wszystkie 11 plików bez błędów (polskie znaki OK), drugie uruchomienie nic nie robi.
 - Wykonane lokalnie (2026-10-01): `01_rodo_rules_zawezanie`, `02_clients_is_random_email`, `03_rodo_rules_teksty_dynamic`, `04_pages_front`, `05_aktualnosci` (articles.category + pages id 5), `06_articles_old_id_default` (naprawa 500 przy dodawaniu artykułu), `07_activity_log_nazwa_inwestycji`; 2026-10-02: `01_rodo_rules_link_polityki` (zastąpione przez 02), `02_polityka_prywatnosci` (pages id 6 + link w klauzuli RODO na /polityka-prywatnosci), `03_biura` (cities: address/map_link/file, phone i working_hours TEXT + dane 2 biur), `04_sekcje` (tabela sekcje + uprawnienia sekcja-list/sekcja-edit).
 
 ## Repozytorium
@@ -257,3 +261,8 @@ Zasada: aktualizujemy tylko Bootstrap, jQuery, Inputmask, Moment, datepicker. Re
 - Zasoby edytora z `?v=filemtime` - bez tego przeglądarka trzymała starą wersję JS. Wgrane zdjęcia mają klasę `wypelnia` (object-fit: cover w `o-nas.less`), zdjęcia z szablonu - kadr z przesunięciem jak w makiecie. HTML sekcji dla gościa = szablon (0 różnic).
 - Stary edytor inline (`Inline`, `Front/InlineController`, `layouts/partials/inline`, tabela `inlines` pusta) - już niedołączany w layoucie frontu; do usunięcia po przeniesieniu wszystkich sekcji.
 - Test 2026-10-02 (Chrome Windows, zalogowany): przycisk w rogu sekcji, modal z polami ze schematu + TinyMCE, zapis → podmiana sekcji bez przeładowania (animacje widoczne), błąd walidacji w modalu, okienko linku TinyMCE trzyma fokus, panel admin/sekcje/.../edytuj, konsola czysta, wpis w dzienniku z etykietami pól.
+
+## Instalacja na serwerze (2026-10-02)
+- Serwer pusty - instrukcja: `INSTALACJA.md` (kod, import bazy, .env, .htaccess, uprawnienia, ustawienia w panelu).
+- Baza do instalacji: `database/instalacja/lar_dynamic_instalacja.sql` (w .gitignore - zawiera konto administratora). Zrobiony z kopii lar_dynamic: tylko użytkownik id 1 (decyzja użytkownika), pusty activity_log, reszta 1:1 (artykuły [TEST], zapis sekcji O nas zostają), `sql_wykonane` z 11 plikami. 61 tabel, sprawdzony import do pustej bazy + strony frontu i panelu 200.
+- Odtworzenie: kopia lar_dynamic do bazy tymczasowej → DELETE users/model_has_roles/model_has_permissions poza id 1, TRUNCATE activity_log → `mysqldump --no-tablespaces --skip-dump-date`.

@@ -12,7 +12,7 @@ class RodoRules extends Model
     use LogsActivity;
 
     /**
-     * Kody formularzy, w których klauzula może się wyświetlać (kolumna `forms`, JSON).
+     * Kody formularzy, w których klauzula może się wyświetlać (kolumna `forms`, JSON jako TEXT).
      * Pusta lista / NULL = klauzula we wszystkich formularzach.
      */
     public const FORM_CONTACT = 'kontakt';
@@ -60,7 +60,9 @@ class RodoRules extends Model
             ->where(function (Builder $q) use ($form) {
                 $q->whereNull('forms')
                     ->orWhere('forms', '[]')
-                    ->orWhereJsonContains('forms', $form);
+                    // LIKE zamiast whereJsonContains (JSON_CONTAINS) - kolumna to TEXT, baza docelowa nie ma typu JSON.
+                    // Kody formularzy to proste słowa, więc "kod" w cudzysłowie nie trafi w inny kod.
+                    ->orWhere('forms', 'like', '%"' . $form . '"%');
             })
             ->where(function (Builder $q) use ($investmentId) {
                 $q->whereDoesntHave('investments');

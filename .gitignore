@@ -21,3 +21,6 @@ config/tracker.php
 .DS_Store
 /public/remove/
 *.bak
+
+# Zrzut bazy do instalacji (konto administratora) - przenosić ręcznie, nie do repo
+/database/instalacja/

@@ -23,6 +23,11 @@ Route::group([
     Route::get('sekcje/{klucz}/formularz', 'Sekcja\IndexController@formularz')->where('klucz', '[a-z0-9\-\.]+')->name('sekcja.formularz');
     Route::put('sekcje/{klucz}', 'Sekcja\IndexController@update')->where('klucz', '[a-z0-9\-\.]+')->name('sekcja.update');
 
+    // Zmiany w bazie z database/sql/*.sql (tylko Administrator) - to samo co php artisan sql:wykonaj
+    Route::get('sql', 'Sql\IndexController@index')->name('sql.index');
+    Route::post('sql/wykonaj', 'Sql\IndexController@wykonaj')->name('sql.wykonaj');
+    Route::post('sql/oznacz', 'Sql\IndexController@oznacz')->name('sql.oznacz');
+
     Route::post('gallery/set', 'Gallery\IndexController@sort')->name('gallery.sort');
     Route::post('image/set', 'Gallery\ImageController@sort')->name('image.sort');
     Route::post('invest-page/set', 'Developro\Page\IndexController@sort')->name('investment_page.sort');
