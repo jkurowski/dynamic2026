@@ -319,7 +319,15 @@
 			$opis.find('.inwestycje-podtytul').text(dane.podtytul);
 			$opis.find('.parametry li').first().find('.nazwa').text(dane.miasto);
 			$opis.find('.parametry li').first().find('.wartosc').text(dane.adres);
-			$opis.find('.inwestycje-przycisk').attr('href', dane.link);
+			// CMS: termin, metraż i cena z data-* zdjęcia; puste (inwestycja bez lokali w panelu) - ukryte
+			$opis.find('.parametry li[data-parametr]').each(function () {
+				var wartosc = dane[$(this).attr('data-parametr')] || '';
+				$(this).find('.wartosc').text(wartosc);
+				$(this).prop('hidden', !wartosc);
+			});
+			$opis.find('.inwestycje-przycisk').attr('href', dane.link)
+				.attr('target', dane.zewnetrzny ? '_blank' : null)
+				.attr('rel', dane.zewnetrzny ? 'noopener' : null);
 			$glowna.closest('.galeria-glowna').find('.tekst-adresu').text(dane.pasek);
 		}
 

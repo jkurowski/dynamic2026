@@ -7,8 +7,9 @@ return [
     |--------------------------------------------------------------------------
     */
     'investment' => [
-        'thumb_width' => 552,
-        'thumb_height' => 827,
+        // Karta inwestycji w nowym szablonie: 843x464 (lista), zapis w 2x
+        'thumb_width' => 1686,
+        'thumb_height' => 928,
         'file_path' => 'investment/',
         'thumb_file_path' => 'investment/thumbs/',
         'preview_file_path' => 'investment/thumbs/',
@@ -16,8 +17,9 @@ return [
         'logo_height' => 140,
         'logo_file_path' => 'investment/logo/',
         'logo_preview_file_path' => 'investment/logo/',
-        'header_width' => 1920,
-        'header_height' => 386,
+        // Nagłówek podstrony inwestycji w nowym szablonie: 1019x650, zapis w 2x
+        'header_width' => 2038,
+        'header_height' => 1300,
         'header_file_path' => 'investment/header/',
         'header_preview_file_path' => 'investment/header/',
         'brochure_file_path' => 'investment/brochure/'

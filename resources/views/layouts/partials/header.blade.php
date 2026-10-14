@@ -1,14 +1,24 @@
 @php
     // Menu główne. Aktywna pozycja wyliczana z adresu (w makiecie była na sztywno przy "Inwestycjach").
     $menu = [
-        ['nazwa' => 'Inwestycje', 'link' => route('menu.show', ['uri' => 'inwestycje']), 'wzorzec' => 'inwestycje*', 'daszek' => true],
+        ['nazwa' => 'Inwestycje', 'link' => route('inwestycje.index'), 'wzorzec' => 'inwestycje*', 'daszek' => true],
         ['nazwa' => 'Finansowanie', 'link' => route('menu.show', ['uri' => 'finansowanie']), 'wzorzec' => 'finansowanie*'],
         ['nazwa' => 'Wykończenie pod klucz', 'link' => route('menu.show', ['uri' => 'wykonczenie-pod-klucz']), 'wzorzec' => 'wykonczenie-pod-klucz*'],
         ['nazwa' => 'Poznaj nas', 'link' => route('menu.show', ['uri' => 'poznaj-nas']), 'wzorzec' => 'poznaj-nas*'],
         ['nazwa' => 'Kontakt', 'link' => route('contact'), 'wzorzec' => 'kontakt*'],
     ];
     $telefon = '+48 576 786 666';
+
+    // Podmenu „Inwestycje” (buduje je glowny.js): centralna oferta + inwestycje z panelu (ustalenie z klientem 18.08)
+    $inwestycjeMenu = collect([['Wybierz nieruchomość', route('wyszukiwarka')]])
+        ->concat(\App\Models\Investment::frontu()->map(fn ($i) => [$i->name, $i->linkMenu()]));
+    // Adresy dla menu mobilnego (glowny.js dokłada „Strona główna” i „Aktualności”)
+    $adresyMenu = ['glowna' => route('index'), 'aktualnosci' => route('aktualnosci.index'), 'poznajNas' => route('menu.show', ['uri' => 'poznaj-nas'])];
 @endphp
+<script>
+    window.inwestycjeMenu = @json($inwestycjeMenu);
+    window.adresyMenu = @json($adresyMenu);
+</script>
 <a href="#tresc" class="tylko-czytnik">Przejdź do treści</a>
 
 <!-- ============ NAGLOWEK ============ -->

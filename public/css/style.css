@@ -13047,6 +13047,17 @@ input[type="range"].tor:focus-visible {
     border-radius: max(22px, 1.82292vw);
   }
 }
+@media (min-width: 1025px) {
+  .filtry-wynikow.filtry-szerokie {
+    flex-wrap: wrap;
+  }
+  .filtry-wynikow.filtry-szerokie .pole-filtru {
+    flex: 1 1 190px;
+  }
+  .filtry-wynikow.filtry-szerokie .przycisk-szukaj-pigulka {
+    flex-grow: 0;
+  }
+}
 .hero-poznaj .para-przyciskow {
   margin-top: 56.4px;
 }

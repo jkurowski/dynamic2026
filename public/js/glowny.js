@@ -42,7 +42,10 @@
 
 	$('.filtry-wynikow, .filtry-inwestycji').each(function () {
 		$(this).find('.pole-filtru').each(function (indeks) {
-			$(this).attr('data-pole', polaWynikow[indeks]);
+			// CMS wypisuje data-pole sam (zestaw pól zależy od oferty) - kolejność z makiety tylko awaryjnie
+			if (!$(this).attr('data-pole')) {
+				$(this).attr('data-pole', polaWynikow[indeks]);
+			}
 		});
 	});
 
@@ -66,7 +69,17 @@
 		$lista.find('.dropdown-item').removeClass('wybrany');
 		$pozycja.addClass('wybrany');
 		ustawTekstFiltru($przycisk, $pozycja.text());
-		ustawUkrytePole($przycisk.closest('form'), pole, $pozycja.text());
+		// Pierwsza opcja („Dowolna”) to brak filtra - nie trafia do adresu
+		if ($pozycja.closest('li').index() === 0) {
+			$przycisk.closest('form').find('input[type="hidden"][name="' + pole + '"]').remove();
+			var parametry = new URLSearchParams(window.location.search);
+			if (parametry.has(pole) && window.history && history.replaceState) {
+				parametry.delete(pole);
+				history.replaceState(null, '', parametry.toString() ? '?' + parametry.toString() : window.location.pathname);
+			}
+		} else {
+			ustawUkrytePole($przycisk.closest('form'), pole, $pozycja.text());
+		}
 		filtrujWyniki();
 	});
 
@@ -82,7 +95,7 @@
 	// Parametry wybrane na stronie głównej wracają do właściwych pól po przejściu na wyniki.
 	// Przyjmujemy tylko wartości, które naprawdę istnieją na liście.
 	var parametryAdresu = new URLSearchParams(window.location.search);
-	$('.filtry-wynikow').each(function () {
+	$('.filtry-wynikow, .filtry-inwestycji').each(function () {
 		var $formularz = $(this);
 		$formularz.find('.pole-filtru').each(function () {
 			var $przycisk = $(this);
@@ -110,7 +123,7 @@
 
 	// "Szukaj" nie przeładowuje strony: wyniki są już przefiltrowane, a adres dostaje
 	// parametry, żeby dało się go skopiować z tym samym wyborem
-	$('.filtry-wynikow').on('submit', function (e) {
+	$('.filtry-wynikow, .filtry-inwestycji').on('submit', function (e) {
 		e.preventDefault();
 		var parametry = new URLSearchParams(window.location.search);
 		$(this).find('input[type="hidden"]').each(function () {
@@ -125,12 +138,9 @@
 	});
 
 	// --- rozwijana lista inwestycji w menu ---
-	var inwestycjeMenu = [
-		['Dom Hygge Twin', 'inwestycje.html#dom-hygge-twin'],
-		['Konstancin Riverside House', 'inwestycje.html#konstancin-riverside-house'],
-		['Segmenty Lake Village', 'inwestycje.html#segmenty-lake-village'],
-		['Zielona Polana', 'inwestycje.html#zielona-polana'],
-	];
+	// Lista z CMS (layouts/partials/header: window.inwestycjeMenu) - „Wybierz nieruchomość” + inwestycje
+	var inwestycjeMenu = window.inwestycjeMenu || [];
+	var adresyMenu = window.adresyMenu || {};
 
 	function zbudujPodmenu($lista, id) {
 		var $pozycja = $lista.children('li').first();
@@ -167,11 +177,11 @@
 	zbudujPodmenu($listaMenuMobilnego, 'podmenuInwestycjiMobilne');
 
 	if ($listaMenuMobilnego.length && !$listaMenuMobilnego.children('[data-uzupelnienie-menu]').length) {
-		$listaMenuMobilnego.prepend(
-			'<li data-uzupelnienie-menu><a href="index.html">Strona główna</a></li>');
-		var $poznajNas = $listaMenuMobilnego.find('a[href="poznaj-nas.html"]').parent();
-		$poznajNas.before(
-			'<li data-uzupelnienie-menu><a href="aktualnosci.html">Aktualności</a></li>');
+		$listaMenuMobilnego.prepend($('<li data-uzupelnienie-menu></li>')
+			.append($('<a></a>', { href: adresyMenu.glowna || '/', text: 'Strona główna' })));
+		var $poznajNas = $listaMenuMobilnego.find('a[href="' + (adresyMenu.poznajNas || '') + '"]').parent();
+		$poznajNas.before($('<li data-uzupelnienie-menu></li>')
+			.append($('<a></a>', { href: adresyMenu.aktualnosci || '/aktualnosci', text: 'Aktualności' })));
 	}
 
 	function zamknijPodmenu($przelacznik) {
@@ -247,13 +257,19 @@
 		$grupa.find('.wiersz-lokalu').each(function (indeks) {
 			var $wiersz = $(this);
 			var lokal = $wiersz.find('.nazwa-lokalu').text().trim();
+			var $przycisk = $wiersz.find('.do-ulubionych');
+			if ($przycisk.attr('data-ulubione-id')) {
+				return; // CMS: stały identyfikator lokalu, ten sam co na karcie lokalu
+			}
 			var id = uproscTekst(inwestycja + '-' + lokal) + '-' + (indeks + 1);
-			$wiersz.find('.do-ulubionych').attr('data-ulubione-id', id)
+			$przycisk.attr('data-ulubione-id', id)
 				.data('nazwa-ulubionego', lokal + ' – ' + inwestycja);
 		});
 	});
 
-	$('.akcje-lokalu .ulubione').data('nazwa-ulubionego', 'Mieszkanie C.1 – Dom Hygge Twin');
+	$('.akcje-lokalu .ulubione').filter(function () {
+		return !$(this).attr('data-nazwa-ulubionego');
+	}).data('nazwa-ulubionego', 'Mieszkanie C.1 – Dom Hygge Twin');
 
 	// --- filtrowanie i sortowanie wyników ---
 	// Liczba z tekstu wiersza: "1.400.573,30 zł" -> 1400573.3, "67,9 m²" -> 67.9
@@ -264,6 +280,26 @@
 	}
 
 	function daneLokalu($wiersz) {
+		// CMS: wiersz/kafelek ma komplet danych w data-* (puste = nie dotyczy, np. piętro przy domu)
+		if ($wiersz.is('[data-powierzchnia]')) {
+			var liczba = function (pole) {
+				var wartosc = $wiersz.attr('data-' + pole);
+				return wartosc === '' || wartosc === undefined ? NaN : parseFloat(wartosc);
+			};
+			var tekst = function (pole) {
+				return ($wiersz.attr('data-' + pole) || '').toLowerCase();
+			};
+			return {
+				powierzchnia: liczba('powierzchnia'),
+				pokoje: liczba('pokoje'),
+				pietro: liczba('pietro'),
+				cena: liczba('cena'),
+				status: tekst('status'),
+				inwestycja: tekst('inwestycja'),
+				lokalizacja: tekst('lokalizacja'),
+				rodzaj: tekst('rodzaj')
+			};
+		}
 		var $mocne = $wiersz.find('.linia.mocna');
 		var pietro = $wiersz.find('.pietro strong').text().trim().toLowerCase();
 		return {
@@ -304,10 +340,14 @@
 		return wartosc === liczby[0];
 	}
 
+	// Pola porównywane dosłownie z opcją listy (reszta to liczby i przedziały)
+	var polaTekstowe = ['status', 'inwestycja', 'lokalizacja', 'rodzaj'];
+
 	function filtrujWyniki() {
+		var $formularz = $('.filtry-wynikow, .filtry-inwestycji').first();
 		var $grupy = $('.grupa-wynikow');
-		var $formularz = $('.filtry-wynikow');
-		if (!$grupy.length || !$formularz.length) {
+		var $elementy = $('.element-oferty');
+		if (!$formularz.length || (!$grupy.length && !$elementy.length)) {
 			return;
 		}
 
@@ -319,36 +359,50 @@
 			}
 		});
 
-		// Nazwa ze strony głównej bywa krótsza niż nazwa grupy ("Lake Village")
-		var inwestycja = ($formularz.find('input[name="inwestycja"]').val() || '').toLowerCase();
+		// Ze strony głównej (ukryte pole) - nazwa bywa krótsza niż nazwa grupy ("Lake Village")
+		var inwestycja = ($formularz.find('input[type="hidden"][name="inwestycja"]').val() || '').toLowerCase();
 		var trybUlubionych = new URLSearchParams(window.location.search).get('ulubione') === '1';
 		var ulubione = pobierzUlubione();
-		var widoczneRazem = 0;
 
-		$grupy.each(function () {
-			var $grupa = $(this);
-			var nazwaGrupy = $grupa.find('.baner-grupy h2').text().trim().toLowerCase();
-			var pasujeInwestycja = !inwestycja || inwestycja === 'wszystkie inwestycje' ||
-				nazwaGrupy.indexOf(inwestycja) !== -1;
-			var widoczne = 0;
-
-			$grupa.find('.wiersz-lokalu').each(function () {
-				var $wiersz = $(this);
-				var dane = daneLokalu($wiersz);
-				var pokaz = pasujeInwestycja && warunki.every(function (warunek) {
-					if (warunek.pole === 'status') {
-						return dane.status === warunek.opcja.toLowerCase();
+		function pasuje($element, nazwaGrupy) {
+			var dane = daneLokalu($element);
+			var grupa = (nazwaGrupy || dane.inwestycja || '').toLowerCase();
+			var pokaz = (!inwestycja || inwestycja === 'wszystkie inwestycje' || grupa.indexOf(inwestycja) !== -1) &&
+				warunki.every(function (warunek) {
+					if (polaTekstowe.indexOf(warunek.pole) !== -1) {
+						return dane[warunek.pole] === warunek.opcja.toLowerCase();
 					}
 					return spelniaWarunek(warunek.opcja, dane[warunek.pole]);
 				});
-				if (trybUlubionych) {
-					pokaz = pokaz &&
-						ulubione.indexOf($wiersz.find('.do-ulubionych').data('ulubione-id')) !== -1;
-				}
-				$wiersz.prop('hidden', !pokaz);
+			if (trybUlubionych) {
+				var id = $element.find('.do-ulubionych').attr('data-ulubione-id');
+				pokaz = pokaz && ulubione.indexOf(id) !== -1;
+			}
+			return pokaz;
+		}
+
+		var widoczneRazem = 0;
+
+		if (!$grupy.length) {
+			// Podstrona inwestycji: te same lokale jako kafelki i jako wiersze listy - liczymy kafelki
+			$elementy.each(function () {
+				var pokaz = pasuje($(this));
+				$(this).prop('hidden', !pokaz);
+				if (pokaz && !$(this).hasClass('wiersz-lokalu')) widoczneRazem += 1;
+			});
+			$('.brak-wynikow-oferty').prop('hidden', widoczneRazem > 0);
+			return;
+		}
+
+		$grupy.each(function () {
+			var $grupa = $(this);
+			var nazwaGrupy = $grupa.find('.baner-grupy h2').text().trim();
+			var widoczne = 0;
+			$grupa.find('.wiersz-lokalu').each(function () {
+				var pokaz = pasuje($(this), nazwaGrupy);
+				$(this).prop('hidden', !pokaz);
 				if (pokaz) widoczne += 1;
 			});
-
 			$grupa.prop('hidden', widoczne === 0);
 			widoczneRazem += widoczne;
 		});
@@ -359,8 +413,8 @@
 			$grupy.first().before($brak);
 		}
 		$brak.text(trybUlubionych && !ulubione.length
-			? 'Nie masz jeszcze żadnych ulubionych mieszkań.'
-			: 'Brak mieszkań spełniających wybrane kryteria.');
+			? 'Nie masz jeszcze żadnych zapisanych lokali.'
+			: 'Brak lokali spełniających wybrane kryteria.');
 		$brak.prop('hidden', widoczneRazem > 0);
 		przeliczWyniki();
 	}
@@ -400,10 +454,10 @@
 
 		// Akcent na drugim słowie - ten sam podział, co w "Wyniki wyszukiwania".
 		$('.naglowek-wynikow .tytul-sekcji')
-			.html('Ulubione <span class="akcent">Inwestycje</span>');
+			.html('Zapisane <span class="akcent">oferty</span>');
 		$('.naglowek-wynikow .okruszki span').not('.rozdzielacz').last()
-			.text('Ulubione Inwestycje');
-		document.title = 'Ulubione Inwestycje - Dynamic Development';
+			.text('Schowek');
+		document.title = 'Schowek - zapisane oferty - Dynamic Development';
 	}
 
 	function przeliczWyniki() {
@@ -427,8 +481,10 @@
 					(aktywny ? ' z ulubionych' : ' do ulubionych'),
 			});
 		});
-		$('.licznik-ulubionych').text(ulubione.length).closest('a')
-			.attr('href', 'wyszukiwarka.html?ulubione=1');
+		$('.licznik-ulubionych').text(ulubione.length).closest('a').each(function () {
+			var adres = (this.getAttribute('href') || '').split('?')[0];
+			this.setAttribute('href', adres + '?ulubione=1');
+		});
 		ustawWidokUlubionych(ulubione);
 		przeliczWyniki();
 	}

@@ -1081,3 +1081,19 @@
 		}
 	}
 }
+
+// --- więcej filtrów niż w makiecie (Wybierz nieruchomość: inwestycja, lokalizacja, rodzaj + 5 z makiety) ---
+// Na desktopie rząd się zawija, zamiast ściskać pola do uciętych napisów. Telefon ma swój układ wyżej.
+@media (min-width: @desktop) {
+	.filtry-wynikow.filtry-szerokie {
+		flex-wrap: wrap;
+
+		.pole-filtru {
+			flex: 1 1 190px;
+		}
+
+		.przycisk-szukaj-pigulka {
+			flex-grow: 0;
+		}
+	}
+}

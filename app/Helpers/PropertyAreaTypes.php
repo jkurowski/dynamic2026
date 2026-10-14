@@ -9,6 +9,8 @@ class PropertyAreaTypes {
     const GARDEN = 4;
     const SHOP = 5;
     const PARKING_STORAGE = 6;
+    const HOUSE = 7;
+    const SEGMENT = 8;
 
     private const STATUS_MAP = [
         self::ROOM_APARTMENT => 'Mieszkanie / Apartament',
@@ -17,6 +19,8 @@ class PropertyAreaTypes {
         self::GARDEN => 'Ogródek',
         self::SHOP => 'Lokal usługowy',
         self::PARKING_STORAGE => 'Miejsce parkingowe z komórką lokatorską',
+        self::HOUSE => 'Dom',
+        self::SEGMENT => 'Segment',
     ];
 
     public static function getStatusText(int $statusValue): ?string

@@ -15,11 +15,12 @@ use Spatie\Sluggable\SlugOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Translatable\HasTranslations;
 use App\Services\Activity\ActivityChangeDescriber;
+use App\Models\Concerns\InwestycjaNaFroncie;
 
 class Investment extends Model
 {
 
-    use LogsActivity, HasSlug, HasTranslations, Notifiable;
+    use LogsActivity, HasSlug, HasTranslations, Notifiable, InwestycjaNaFroncie;
     public array $translatable = ['name', 'entry_content', 'content', 'end_content', 'meta_title', 'meta_description', 'popup_text'];
 
     /**
@@ -34,6 +35,10 @@ class Investment extends Model
         'name',
         'slug',
         'address',
+        'location_label',
+        'external_url',
+        'lat',
+        'lng',
         'city_id',
         'gallery_id',
         'commercial',

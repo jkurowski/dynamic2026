@@ -103,19 +103,6 @@ class City extends Model
      */
     public function pozycjaNaMapie(): ?array
     {
-        if (!is_numeric($this->lat) || !is_numeric($this->lng)) {
-            return null;
-        }
-
-        [[$lat1, $lng1, $x1, $y1], [$lat2, $lng2, $x2, $y2]] = config('mapa.kalibracja');
-
-        $left = $x1 + ($this->lng - $lng1) * ($x2 - $x1) / ($lng2 - $lng1);
-        $top = $y1 + ($this->lat - $lat1) * ($y2 - $y1) / ($lat2 - $lat1);
-
-        if ($left < 0 || $left > 100 || $top < 0 || $top > 100) {
-            return null;
-        }
-
-        return ['left' => round($left, 1), 'top' => round($top, 1)];
+        return \App\Support\MapaStatyczna::pozycja($this->lat, $this->lng);
     }
 }

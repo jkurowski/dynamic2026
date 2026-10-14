@@ -12,10 +12,11 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Translatable\HasTranslations;
 use App\Services\Activity\ActivityChangeDescriber;
+use App\Models\Concerns\LokalNaFroncie;
 
 class Property extends Model
 {
-    use LogsActivity, Notifiable, HasTranslations;
+    use LogsActivity, Notifiable, HasTranslations, LokalNaFroncie;
     public array $translatable = ['name', 'name_list', 'meta_title', 'meta_description'];
 
 

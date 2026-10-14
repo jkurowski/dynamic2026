@@ -12,6 +12,10 @@ use App\Models\Plan;
 
 class InvestmentService
 {
+    /**
+     * Zdjęcie karty inwestycji (lista /inwestycje, strona główna, wyszukiwarka): kadr z config('images.investment')
+     * - proporcje karty z szablonu (843x464) w 2x - jako JPG + WebP (investment/thumbs/webp/).
+     */
     public function uploadThumb(string $title, UploadedFile $file, object $model, bool $delete = false)
     {
 
@@ -19,18 +23,23 @@ class InvestmentService
             if (File::isFile(public_path('investment/thumbs/' . $model->file_thumb))) {
                 File::delete(public_path('investment/thumbs/' . $model->file_thumb));
             }
+            $staryWebp = public_path('investment/thumbs/webp/' . pathinfo((string) $model->file_thumb, PATHINFO_FILENAME) . '.webp');
+            if ($model->file_thumb && File::isFile($staryWebp)) {
+                File::delete($staryWebp);
+            }
         }
 
-        $name = date('His').'_'.Str::slug($title).'.' . $file->getClientOriginalExtension();
-        $file->storeAs('thumbs', $name, 'investment_uploads');
+        $base = date('His').'_'.Str::slug($title);
+        $name = $base . '.jpg';
+        File::ensureDirectoryExists(public_path('investment/thumbs/webp'));
 
-        $filepath = public_path('investment/thumbs/' . $name);
-        Image::make($filepath)
-            ->fit(
-                config('images.investment.thumb_width'),
-                config('images.investment.thumb_height')
-            )
-            ->save($filepath);
+        // orientate() - zdjęcia z telefonu mają obrót zapisany w EXIF
+        $image = Image::make($file->getRealPath())->orientate()->fit(
+            config('images.investment.thumb_width'),
+            config('images.investment.thumb_height')
+        );
+        $image->save(public_path('investment/thumbs/' . $name), 85, 'jpg');
+        $image->save(public_path('investment/thumbs/webp/' . $base . '.webp'), 80, 'webp');
 
         $model->update(['file_thumb' => $name]);
     }
@@ -85,6 +94,9 @@ class InvestmentService
         );
     }
 
+    /**
+     * Zdjęcie w nagłówku podstrony inwestycji (inwestycja.html: kadr 1019x650, zapis w 2x) - JPG + WebP.
+     */
     public function uploadHeader(string $title, UploadedFile $file, object $model, bool $delete = false)
     {
 
@@ -92,18 +104,22 @@ class InvestmentService
             if (File::isFile(public_path('investment/header/' . $model->file_header))) {
                 File::delete(public_path('investment/header/' . $model->file_header));
             }
+            $staryWebp = public_path('investment/header/webp/' . pathinfo((string) $model->file_header, PATHINFO_FILENAME) . '.webp');
+            if ($model->file_header && File::isFile($staryWebp)) {
+                File::delete($staryWebp);
+            }
         }
 
-        $name = date('His').'_'.Str::slug($title).'.' . $file->getClientOriginalExtension();
-        $file->storeAs('header', $name, 'investment_uploads');
+        $base = date('His').'_'.Str::slug($title);
+        $name = $base . '.jpg';
+        File::ensureDirectoryExists(public_path('investment/header/webp'));
 
-        $filepath = public_path('investment/header/' . $name);
-        Image::make($filepath)
-            ->fit(
-                config('images.investment.header_width'),
-                config('images.investment.header_height')
-            )
-            ->save($filepath);
+        $image = Image::make($file->getRealPath())->orientate()->fit(
+            config('images.investment.header_width'),
+            config('images.investment.header_height')
+        );
+        $image->save(public_path('investment/header/' . $name), 85, 'jpg');
+        $image->save(public_path('investment/header/webp/' . $base . '.webp'), 80, 'webp');
 
         $model->update(['file_header' => $name]);
     }

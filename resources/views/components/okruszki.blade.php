@@ -1,5 +1,5 @@
 {{-- Ścieżka nawigacji podstron. Pierwsza pozycja "Strona główna" dokładana automatycznie.
-     Użycie: <x-okruszki :sciezka="['Inwestycje' => route('menu.show', ['uri' => 'inwestycje']), 'Dom Hygge Twin' => null]" /> - ostatnia pozycja bez linku. --}}
+     Użycie: <x-okruszki :sciezka="['Inwestycje' => route('inwestycje.index'), 'Dom Hygge Twin' => null]" /> - ostatnia pozycja bez linku. --}}
 @props(['sciezka' => []])
 @php
 	$pozycje = ['<a href="' . e(route('index')) . '">Strona główna</a>'];

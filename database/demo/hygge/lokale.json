@@ -1,0 +1,734 @@
+{
+ "zrodlo": "https://hyggemokotow.pl/apartamenty/ i /lokale/ (stan 2026-10-14)",
+ "lokale": [
+  {
+   "numer": "C.1",
+   "klatka": "C",
+   "typ_ukladu": 6,
+   "status": 1,
+   "powierzchnia": 67.98,
+   "pietro": 1,
+   "pokoje": 4,
+   "balkony": [
+    11.22,
+    9.5,
+    19.25
+   ],
+   "cena": 1402223.46,
+   "rzut": "lokal-49-C1.jpg",
+   "pdf": "typ6-c1.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/ea71f36e-e78d-4872-a7d4-b7b91f915728.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:58:00",
+     1402223.0
+    ],
+    [
+     "2026-05-06 09:57:00",
+     1400573.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     1500590.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.7",
+   "klatka": "A",
+   "typ_ukladu": 6,
+   "status": 1,
+   "powierzchnia": 65.93,
+   "pietro": 2,
+   "pokoje": 3,
+   "balkony": [
+    7.77,
+    12.24
+   ],
+   "cena": 1341675.5,
+   "rzut": "lokal-7-A7.jpg",
+   "pdf": "typ6-a7.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/ea4cc667-17fd-40e4-b571-16ef01438317.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:58:00",
+     1341676.0
+    ],
+    [
+     "2026-05-06 09:55:00",
+     1341472.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     1407392.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.1",
+   "klatka": "A",
+   "typ_ukladu": 6,
+   "status": 1,
+   "powierzchnia": 65.86,
+   "pietro": 1,
+   "pokoje": 3,
+   "balkony": [
+    8.24,
+    12.24
+   ],
+   "cena": 1323786.0,
+   "rzut": "lokal-1-A1.jpg",
+   "pdf": "typ6-a1.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/ea4cc667-17fd-40e4-b571-16ef01438317.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:55:00",
+     1323786.0
+    ],
+    [
+     "2026-05-06 09:54:00",
+     1324992.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     1390912.0
+    ]
+   ]
+  },
+  {
+   "numer": "B.1",
+   "klatka": "B",
+   "typ_ukladu": 5,
+   "status": 2,
+   "powierzchnia": 56.92,
+   "pietro": 1,
+   "pokoje": 3,
+   "balkony": [
+    5.93,
+    12.12
+   ],
+   "cena": 1155476.0,
+   "rzut": "lokal-31-B1.jpg",
+   "pdf": "typ5-b1.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/530df0d7-fef8-4b58-8ea5-4a38ed374ece.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:54:00",
+     1155476.0
+    ],
+    [
+     "2026-05-06 09:53:00",
+     1153649.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     1210479.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.9",
+   "klatka": "C",
+   "typ_ukladu": 4,
+   "status": 2,
+   "powierzchnia": 44.43,
+   "pietro": 3,
+   "pokoje": 2,
+   "balkony": [
+    6.21,
+    7.29
+   ],
+   "cena": 961903.0,
+   "rzut": "LOKAL-57-C9.jpg",
+   "pdf": "typ4-c9.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/7fa3b822-b2a0-4412-9c7a-48865c0e4ac1.3d",
+   "historia_cen": [
+    [
+     "2026-05-06 09:51:00",
+     917473.0
+    ],
+    [
+     "2025-09-05 20:21:00",
+     961903.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     981903.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.3",
+   "klatka": "C",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 44.17,
+   "pietro": 1,
+   "pokoje": 2,
+   "balkony": [
+    6.08,
+    7.21
+   ],
+   "cena": 909902.0,
+   "rzut": "lokal-51-C3.jpg",
+   "pdf": "typ4-c3.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/7fa3b822-b2a0-4412-9c7a-48865c0e4ac1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:52:00",
+     909902.0
+    ],
+    [
+     "2026-05-06 09:48:00",
+     895258.0
+    ],
+    [
+     "2025-09-05 20:21:00",
+     939688.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     959688.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.6",
+   "klatka": "C",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 44.13,
+   "pietro": 2,
+   "pokoje": 2,
+   "balkony": [
+    6.19,
+    7.26
+   ],
+   "cena": 920110.5,
+   "rzut": "lokal-54-C6.jpg",
+   "pdf": "typ4-c6.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/7fa3b822-b2a0-4412-9c7a-48865c0e4ac1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:52:00",
+     920111.0
+    ],
+    [
+     "2026-05-06 09:49:00",
+     906366.0
+    ],
+    [
+     "2025-09-05 20:21:00",
+     950796.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     970796.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.12",
+   "klatka": "C",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 44.06,
+   "pietro": 4,
+   "pokoje": 2,
+   "balkony": [
+    6.14,
+    7.26
+   ],
+   "cena": 940681.0,
+   "rzut": "lokal-60-C12.jpg",
+   "pdf": "typ4-c12.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/7fa3b822-b2a0-4412-9c7a-48865c0e4ac1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:53:00",
+     940681.0
+    ],
+    [
+     "2026-05-06 09:51:00",
+     928581.0
+    ],
+    [
+     "2025-09-05 21:55:00",
+     973011.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     993011.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.15",
+   "klatka": "C",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 44.04,
+   "pietro": 5,
+   "pokoje": 2,
+   "balkony": [
+    6.27,
+    7.21
+   ],
+   "cena": 951264.0,
+   "rzut": "lokal-63-C15.jpg",
+   "pdf": "typ4-c15.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/7fa3b822-b2a0-4412-9c7a-48865c0e4ac1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:54:00",
+     951264.0
+    ],
+    [
+     "2026-05-06 09:52:00",
+     939688.0
+    ],
+    [
+     "2025-09-05 20:23:00",
+     984118.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     1004118.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.18",
+   "klatka": "A",
+   "typ_ukladu": 4,
+   "status": 2,
+   "powierzchnia": 43.26,
+   "pietro": 3,
+   "pokoje": 2,
+   "balkony": [
+    20.41
+   ],
+   "cena": 912786.0,
+   "rzut": "lokal-18-A18.jpg",
+   "pdf": "typ4-a18.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/59ef90d7-3368-4ade-9e04-848dbcb47f09.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:51:00",
+     912786.0
+    ],
+    [
+     "2026-05-06 09:47:00",
+     912575.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     955825.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.12",
+   "klatka": "A",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 43.17,
+   "pietro": 2,
+   "pokoje": 2,
+   "balkony": [
+    20.41
+   ],
+   "cena": 900094.5,
+   "rzut": "lokal-12-A12.jpg",
+   "pdf": "typ4-a12.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/59ef90d7-3368-4ade-9e04-848dbcb47f09.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:50:00",
+     900095.0
+    ],
+    [
+     "2026-05-06 09:46:00",
+     901763.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     945013.0
+    ]
+   ]
+  },
+  {
+   "numer": "B.2",
+   "klatka": "B",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 40.04,
+   "pietro": 1,
+   "pokoje": 2,
+   "balkony": [
+    10.83
+   ],
+   "cena": 828828.0,
+   "rzut": "lokal-32-B2.jpg",
+   "pdf": "typ4-b2.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/bfe652be-f082-4388-a09d-bddba26c352b.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:50:00",
+     828828.0
+    ],
+    [
+     "2026-09-01 13:52:00",
+     825516.0
+    ],
+    [
+     "2026-05-06 09:43:00",
+     805516.0
+    ],
+    [
+     "2025-09-05 20:18:00",
+     845396.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     865396.0
+    ]
+   ]
+  },
+  {
+   "numer": "B.10",
+   "klatka": "B",
+   "typ_ukladu": 4,
+   "status": 2,
+   "powierzchnia": 39.88,
+   "pietro": 3,
+   "pokoje": 2,
+   "balkony": [
+    10.8
+   ],
+   "cena": 865336.0,
+   "rzut": "lokal-40-B10.jpg",
+   "pdf": "typ4-b10.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/bfe652be-f082-4388-a09d-bddba26c352b.3d",
+   "historia_cen": [
+    [
+     "2026-05-06 09:44:00",
+     825456.0
+    ],
+    [
+     "2025-09-05 20:20:00",
+     865336.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     885336.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.4",
+   "klatka": "A",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 39.71,
+   "pietro": 1,
+   "pokoje": 2,
+   "balkony": [
+    6.74
+   ],
+   "cena": 821997.0,
+   "rzut": "lokal-4-A4.jpg",
+   "pdf": "typ4-a4.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/4cd9d58d-cbb9-457a-be3b-d9821bbb8ec1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:47:00",
+     821997.0
+    ],
+    [
+     "2026-05-05 15:56:00",
+     800548.0
+    ],
+    [
+     "2025-09-05 20:16:00",
+     840188.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     860188.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.16",
+   "klatka": "A",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 39.64,
+   "pietro": 3,
+   "pokoje": 2,
+   "balkony": [
+    6.62
+   ],
+   "cena": 840368.0,
+   "rzut": "lokal-16-A16.jpg",
+   "pdf": "typ4-a16.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/4cd9d58d-cbb9-457a-be3b-d9821bbb8ec1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:48:00",
+     840368.0
+    ],
+    [
+     "2026-05-06 09:41:00",
+     820368.0
+    ],
+    [
+     "2025-09-05 20:17:00",
+     860008.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     880008.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.28",
+   "klatka": "A",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 39.61,
+   "pietro": 5,
+   "pokoje": 2,
+   "balkony": [
+    6.62
+   ],
+   "cena": 859537.0,
+   "rzut": "lokal-28-A28.jpg",
+   "pdf": "typ4-a28.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/4cd9d58d-cbb9-457a-be3b-d9821bbb8ec1.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:49:00",
+     859537.0
+    ],
+    [
+     "2026-05-06 09:42:00",
+     840188.0
+    ],
+    [
+     "2025-09-05 20:18:00",
+     879828.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     899828.0
+    ]
+   ]
+  },
+  {
+   "numer": "A.5",
+   "klatka": "A",
+   "typ_ukladu": 4,
+   "status": 1,
+   "powierzchnia": 36.16,
+   "pietro": 1,
+   "pokoje": 2,
+   "balkony": [
+    2.63
+   ],
+   "cena": 748512.0,
+   "rzut": "lokal-5-A5.jpg",
+   "pdf": "typ4-a5.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/e9b5e4d5-8dfd-47f8-bbc1-a78c6451dcd3.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:41:00",
+     748512.0
+    ],
+    [
+     "2026-05-05 13:49:00",
+     733066.0
+    ],
+    [
+     "2025-09-05 19:51:00",
+     769446.0
+    ],
+    [
+     "2025-09-05 19:51:00",
+     789446.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.11",
+   "klatka": "C",
+   "typ_ukladu": 3,
+   "status": 1,
+   "powierzchnia": 35.21,
+   "pietro": 4,
+   "pokoje": 2,
+   "balkony": [
+    7.72,
+    4.68
+   ],
+   "cena": 755254.5,
+   "rzut": "lokal-59-C11.jpg",
+   "pdf": "typ3-c11.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/6980da8f-1135-4ce3-8605-d988aa71758a.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:39:00",
+     755255.0
+    ],
+    [
+     "2026-05-05 13:43:00",
+     756113.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     791363.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.8",
+   "klatka": "C",
+   "typ_ukladu": 3,
+   "status": 1,
+   "powierzchnia": 35.18,
+   "pietro": 3,
+   "pokoje": 2,
+   "balkony": [
+    7.67,
+    4.73
+   ],
+   "cena": 745816.0,
+   "rzut": "lokal-56-C8.jpg",
+   "pdf": "typ3-c8.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/6980da8f-1135-4ce3-8605-d988aa71758a.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:37:00",
+     745816.0
+    ],
+    [
+     "2026-05-05 13:43:00",
+     747300.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     782550.0
+    ]
+   ]
+  },
+  {
+   "numer": "C.14",
+   "klatka": "C",
+   "typ_ukladu": 3,
+   "status": 2,
+   "powierzchnia": 35.17,
+   "pietro": 5,
+   "pokoje": 2,
+   "balkony": [
+    7.69,
+    4.73
+   ],
+   "cena": 763189.0,
+   "rzut": "lokal-62-C14-.jpg",
+   "pdf": "typ3-c14.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/6980da8f-1135-4ce3-8605-d988aa71758a.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:41:00",
+     763189.0
+    ],
+    [
+     "2026-05-05 13:46:00",
+     764925.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     800175.0
+    ]
+   ]
+  },
+  {
+   "numer": "B.7",
+   "klatka": "B",
+   "typ_ukladu": 3,
+   "status": 1,
+   "powierzchnia": 34.53,
+   "pietro": 2,
+   "pokoje": 2,
+   "balkony": [
+    9.4
+   ],
+   "cena": 726856.5,
+   "rzut": "lokal-37-B7.jpg",
+   "pdf": "typ3-b7.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/5c77a1f7-7699-4e48-b950-b6623749a911.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:31:00",
+     726857.0
+    ],
+    [
+     "2026-05-05 13:40:00",
+     726015.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     760505.0
+    ]
+   ]
+  },
+  {
+   "numer": "B.11",
+   "klatka": "B",
+   "typ_ukladu": 3,
+   "status": 1,
+   "powierzchnia": 34.46,
+   "pietro": 3,
+   "pokoje": 2,
+   "balkony": [
+    9.44
+   ],
+   "cena": 733998.0,
+   "rzut": "lokal-41-B11.jpg",
+   "pdf": "typ3-b11.pdf",
+   "spacer_3d": "https://tours.3destate.pl/Process/5c77a1f7-7699-4e48-b950-b6623749a911.3d",
+   "historia_cen": [
+    [
+     "2026-09-22 14:36:00",
+     733998.0
+    ],
+    [
+     "2026-05-05 13:41:00",
+     734637.0
+    ],
+    [
+     "2025-09-05 20:04:00",
+     769127.0
+    ]
+   ]
+  },
+  {
+   "numer": "U.1",
+   "klatka": "U",
+   "typ_ukladu": null,
+   "status": 1,
+   "powierzchnia": 218.34,
+   "pietro": 0,
+   "pokoje": 0,
+   "balkony": [],
+   "cena": null,
+   "rzut": "Lokal-uslugowy-U1.jpg",
+   "pdf": null,
+   "spacer_3d": null,
+   "historia_cen": [],
+   "rodzaj": "lokal_uslugowy"
+  }
+ ]
+}

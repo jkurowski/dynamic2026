@@ -2,8 +2,8 @@
     // Menu stopki. Aktywna pozycja wyliczana z adresu (w szablonie klasa "aktywny" na bieżącej podstronie).
     $menuStopki = [
         ['nazwa' => 'Strona główna', 'link' => route('index'), 'aktywny' => request()->routeIs('index')],
-        ['nazwa' => 'Inwestycje', 'link' => route('menu.show', ['uri' => 'inwestycje']), 'aktywny' => request()->is('inwestycje*')],
-        ['nazwa' => 'Wybierz mieszkanie', 'link' => route('menu.show', ['uri' => 'wyszukiwarka']), 'aktywny' => request()->is('wyszukiwarka*')],
+        ['nazwa' => 'Inwestycje', 'link' => route('inwestycje.index'), 'aktywny' => request()->is('inwestycje*')],
+        ['nazwa' => 'Wybierz nieruchomość', 'link' => route('wyszukiwarka'), 'aktywny' => request()->is('wybierz-nieruchomosc*')],
         ['nazwa' => 'Poznaj nas', 'link' => route('menu.show', ['uri' => 'poznaj-nas']), 'aktywny' => request()->is('poznaj-nas*')],
         ['nazwa' => 'Aktualności', 'link' => route('aktualnosci.index'), 'aktywny' => request()->is('aktualnosci*')],
         ['nazwa' => 'Kontakt', 'link' => route('contact'), 'aktywny' => request()->is('kontakt*')],
@@ -38,10 +38,9 @@
 		<nav class="stopka-kolumna" aria-labelledby="stopka-inwestycje">
 			<h2 id="stopka-inwestycje"><img src="{{ asset('img/ikona-pinezka.svg') }}" width="12" height="19" alt=""> INWESTYCJE</h2>
 			<ul>
-				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Dom Hygge Twin</a></li>
-				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Konstancin Riverside House</a></li>
-				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Lake Village</a></li>
-				<li><a href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Zielona Polana</a></li>
+				@foreach(\App\Models\Investment::frontu() as $inwestycjaStopki)
+					<li><a href="{{ $inwestycjaStopki->linkMenu() }}" @if($inwestycjaStopki->linkZewnetrzny()) target="_blank" rel="noopener" @endif>{{ $inwestycjaStopki->name }}</a></li>
+				@endforeach
 			</ul>
 		</nav>
 

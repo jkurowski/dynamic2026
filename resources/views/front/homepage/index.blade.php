@@ -51,9 +51,9 @@
 	</section>
 
 	<!-- ============ WYSZUKIWARKA ============ -->
-	<!-- Listy opcji są na razie przykładowe - do podpięcia pod bazę inwestycji. -->
-	<section class="wyszukiwarka pojawia-sie" aria-label="Wyszukiwarka mieszkań">
-		<form class="pasek-wyszukiwarki" action="{{ route('menu.show', ['uri' => 'wyszukiwarka']) }}" method="get">
+	<!-- Lista inwestycji z bazy (te z ofertą lokali); filtry przechodzą do /wybierz-nieruchomosc jako parametry adresu -->
+	<section class="wyszukiwarka pojawia-sie" aria-label="Wyszukiwarka nieruchomości">
+		<form class="pasek-wyszukiwarki" action="{{ route('wyszukiwarka') }}" method="get">
 
 			<button class="filtr" type="button" data-bs-toggle="dropdown" data-pole="inwestycja" aria-expanded="false">
 				<span class="etykieta">Inwestycje</span>
@@ -62,10 +62,9 @@
 			</button>
 			<ul class="dropdown-menu lista-filtru">
 				<li><button class="dropdown-item wybrany" type="button">Wszystkie inwestycje</button></li>
-				<li><button class="dropdown-item" type="button">Dom Hygge Twin</button></li>
-				<li><button class="dropdown-item" type="button">Konstancin Riverside House</button></li>
-				<li><button class="dropdown-item" type="button">Lake Village</button></li>
-				<li><button class="dropdown-item" type="button">Zielona Polana</button></li>
+				@foreach(\App\Models\Investment::frontu()->filter(fn ($i) => $i->maPodstrone()) as $inwestycjaWyszukiwarki)
+					<li><button class="dropdown-item" type="button">{{ $inwestycjaWyszukiwarki->name }}</button></li>
+				@endforeach
 			</ul>
 
 			<button class="filtr" type="button" data-bs-toggle="dropdown" data-pole="pokoje" aria-expanded="false">
@@ -128,81 +127,84 @@
 	</section>
 
 	<!-- ============ INWESTYCJE W SPRZEDAŻY ============ -->
+	{{-- Z bazy: pierwsza inwestycja duże zdjęcie, reszta miniatury. Dane wymienianych inwestycji w data-* zdjęć
+	     (js/karuzele.js - wpiszOpis), puste parametry (inwestycja bez lokali w panelu) są ukrywane. --}}
+	@php
+		$inwestycjeGlowna = \App\Models\Investment::frontu()->where('status', 1)->values();
+		$pierwszaInwestycja = $inwestycjeGlowna->first();
+		$daneInwestycji = fn ($i) => [
+			'tytul' => $i->name,
+			'podtytul' => $i->entry_content,
+			'miasto' => $i->location_label,
+			'adres' => $i->address,
+			'pasek' => collect([$i->address, \App\Support\FiltryOferty::lokalizacja($i)])->filter()->implode(', '),
+			'link' => $i->linkMenu(),
+			'zewnetrzny' => $i->linkZewnetrzny() ? 1 : 0,
+			'termin' => $i->terminOddania(),
+			'metraz' => $i->zakresMetrazu(),
+			'cena' => $i->cenaOd(),
+		];
+	@endphp
+	@if($pierwszaInwestycja)
+	@php $dane = $daneInwestycji($pierwszaInwestycja); @endphp
 	<section class="inwestycje">
 		<div class="uklad">
 
 			<div class="inwestycje-opis pojawia-sie">
 				<x-etykieta>INWESTYCJE</x-etykieta>
 				<div class="inwestycje-tytul-wiersz">
-					<h2 class="tytul-sekcji jasny rozjasnia-sie">Dom Hygge Twin</h2>
+					<h2 class="tytul-sekcji jasny rozjasnia-sie">{{ $dane['tytul'] }}</h2>
 					<button type="button" class="inwestycje-przelacznik-szczegolow" aria-expanded="false" aria-controls="szczegolyInwestycji" aria-label="Pokaż szczegóły inwestycji"></button>
 				</div>
 				<div class="inwestycje-szczegoly-panel" id="szczegolyInwestycji">
-					<p class="inwestycje-podtytul">Mieszkania na sprzedaż w stylu Hygge</p>
+					<p class="inwestycje-podtytul">{{ $dane['podtytul'] }}</p>
 
 				<ul class="parametry" id="parametryInwestycji">
 					<li>
 						<img src="{{ asset('img/ikona-lokalizacja.svg') }}" width="34" height="34" alt="">
-						<span><span class="nazwa">WARSZAWA, MOKOTÓW</span><span class="wartosc">ul. Bobrowiecka 4B</span></span>
+						<span><span class="nazwa">{{ $dane['miasto'] }}</span><span class="wartosc">{{ $dane['adres'] }}</span></span>
 					</li>
-					<li>
+					<li data-parametr="termin" @if(!$dane['termin']) hidden @endif>
 						<img src="{{ asset('img/ikona-kalendarz.svg') }}" width="34" height="34" alt="">
-						<span><span class="nazwa">TERMIN ODDANIA:</span><span class="wartosc">IV kwartał 2025</span></span>
+						<span><span class="nazwa">TERMIN ODDANIA:</span><span class="wartosc">{{ $dane['termin'] }}</span></span>
 					</li>
-					<li>
+					<li data-parametr="metraz" @if(!$dane['metraz']) hidden @endif>
 						<img src="{{ asset('img/ikona-metraz.svg') }}" width="34" height="34" alt="">
-						<span><span class="nazwa">ZAKRES METRAŻU:</span><span class="wartosc">27 - 90,5 m²</span></span>
+						<span><span class="nazwa">ZAKRES METRAŻU:</span><span class="wartosc">{{ $dane['metraz'] }}</span></span>
 					</li>
-					<li>
+					<li data-parametr="cena" @if(!$dane['cena']) hidden @endif>
 						<img src="{{ asset('img/ikona-cena.svg') }}" width="34" height="34" alt="">
-						<span><span class="nazwa">CENY OD</span><span class="wartosc">805.516,00 zł</span></span>
+						<span><span class="nazwa">CENY OD</span><span class="wartosc">{{ $dane['cena'] }}</span></span>
 					</li>
 				</ul>
 				</div>
 
 				<div class="inwestycje-akcje">
-					<x-przycisk-pigulka href="{{ route('menu.show', ['uri' => 'inwestycje']) }}" class="na-tle inwestycje-przycisk">ZOBACZ INWESTYCJĘ</x-przycisk-pigulka>
+					<x-przycisk-pigulka href="{{ $dane['link'] }}" class="na-tle inwestycje-przycisk">ZOBACZ INWESTYCJĘ</x-przycisk-pigulka>
 				</div>
 			</div>
 
 			<div class="inwestycje-galeria pojawia-sie opoznienie-1">
 				<div class="galeria-glowna">
-					<picture data-tytul="Dom Hygge Twin"
-						data-podtytul="Mieszkania na sprzedaż w stylu Hygge"
-						data-miasto="WARSZAWA, MOKOTÓW" data-adres="ul. Bobrowiecka 4B"
-						data-pasek="ul. Bobrowiecka 4B, Warszawa" data-link="{{ route('menu.show', ['uri' => 'inwestycje']) }}">
-						<source type="image/webp" srcset="{{ asset('img/galeria-hygge.webp') }}">
-						<img src="{{ asset('img/galeria-hygge.jpg') }}" width="1120" height="616" alt="Dom Hygge Twin - wizualizacja" loading="lazy">
+					<picture @foreach($dane as $klucz => $wartosc) data-{{ $klucz }}="{{ $wartosc }}" @endforeach>
+						<source type="image/webp" srcset="{{ $pierwszaInwestycja->zdjecieKarty(true) }}">
+						<img src="{{ $pierwszaInwestycja->zdjecieKarty() }}" width="1120" height="616" alt="{{ $pierwszaInwestycja->name }} - wizualizacja" loading="lazy">
 					</picture>
-					<span class="plakietka-status">W SPRZEDAŻY</span>
+					<span class="plakietka-status">{{ $pierwszaInwestycja->plakietka() }}</span>
 					<p class="pasek-adresu">
 						<img src="{{ asset('img/ikona-lokalizacja.svg') }}" width="25" height="25" alt="">
-						<span class="tekst-adresu">ul. Bobrowiecka 4B, Warszawa</span>
+						<span class="tekst-adresu">{{ $dane['pasek'] }}</span>
 					</p>
 				</div>
 
+				@if($inwestycjeGlowna->count() > 1)
 				<div class="galeria-miniatury">
-					<picture data-tytul="Konstancin Riverside House"
-						data-podtytul="Domy w Konstancinie-Jeziornej"
-						data-miasto="CHYLICE" data-adres="Konstancin-Jeziorna"
-						data-pasek="Chylice, Konstancin-Jeziorna" data-link="{{ route('menu.show', ['uri' => 'inwestycje']) }}">
-						<source type="image/webp" srcset="{{ asset('img/inwestycja-2.webp') }}">
-						<img src="{{ asset('img/inwestycja-2.jpg') }}" width="469" height="406" alt="Konstancin Riverside House" loading="lazy">
-					</picture>
-					<picture data-tytul="Segmenty Lake Village"
-						data-podtytul="Segmenty w Zalesiu Górnym"
-						data-miasto="ZALESIE GÓRNE" data-adres="gm. Piaseczno"
-						data-pasek="Zalesie Górne, gm. Piaseczno" data-link="{{ route('menu.show', ['uri' => 'inwestycje']) }}">
-						<source type="image/webp" srcset="{{ asset('img/inwestycja-3.webp') }}">
-						<img src="{{ asset('img/inwestycja-3.jpg') }}" width="469" height="406" alt="Lake Village" loading="lazy">
-					</picture>
-					<picture data-tytul="Zespół willowy Zielona Polana"
-						data-podtytul="Domy w Nowej Woli"
-						data-miasto="NOWA WOLA" data-adres="gm. Lesznowola"
-						data-pasek="Nowa Wola, gm. Lesznowola" data-link="{{ route('menu.show', ['uri' => 'inwestycje']) }}">
-						<source type="image/webp" srcset="{{ asset('img/lista-zielona-polana.webp') }}">
-						<img src="{{ asset('img/lista-zielona-polana.jpg') }}" width="469" height="406" alt="Zielona Polana" loading="lazy">
-					</picture>
+					@foreach($inwestycjeGlowna->skip(1) as $inwestycjaMiniatury)
+						<picture @foreach($daneInwestycji($inwestycjaMiniatury) as $klucz => $wartosc) data-{{ $klucz }}="{{ $wartosc }}" @endforeach>
+							<source type="image/webp" srcset="{{ $inwestycjaMiniatury->zdjecieKarty(true) }}">
+							<img src="{{ $inwestycjaMiniatury->zdjecieKarty() }}" width="469" height="406" alt="{{ $inwestycjaMiniatury->name }}" loading="lazy">
+						</picture>
+					@endforeach
 				</div>
 
 				<div class="galeria-nawigacja">
@@ -213,10 +215,12 @@
 						<img src="{{ asset('img/strzalka-nastepna-duza.svg') }}" width="39" height="40" alt="">
 					</button>
 				</div>
+				@endif
 			</div>
 
 		</div>
 	</section>
+	@endif
 
 	<!-- ============ O NAS ============ (edycja: config/sekcje.php, „strona-glowna.o-nas”) -->
 	@php
@@ -310,71 +314,49 @@
 				<img src="{{ asset('img/mapa.jpg') }}" width="1920" height="750" alt="Mapa inwestycji Dynamic Development" loading="lazy">
 			</picture>
 
-			<!-- Współrzędne ma tylko pinezka: "left"/"top" to jej czubek, czyli sam punkt
-			     na mapie. Procenty policzone ze współrzędnych z Figmy (1920 x 750).
-			     Dymki nie mają własnych współrzędnych - js/mapa.js stawia je obok pinezki
-			     i na jej wysokości.
-			     data-strona="lewo" mówi tylko, po której stronie pinezki stoi dymek. -->
-			<button class="pinezka" type="button" data-inwestycja="hygge" data-status="sprzedaz" style="left:52.4%;top:42.3%" aria-label="Dom Hygge Twin">
-				<img src="{{ asset('img/pinezka-mapa.svg') }}" width="55" height="69" alt="">
-			</button>
-			<button class="pinezka" type="button" data-inwestycja="lake" data-status="zrealizowane" style="left:44.6%;top:78.3%" aria-label="Lake Village">
-				<img src="{{ asset('img/pinezka-mapa.svg') }}" width="55" height="69" alt="">
-			</button>
-			<button class="pinezka" type="button" data-inwestycja="polana" data-status="zrealizowane" style="left:45.5%;top:81.3%" aria-label="Zielona Polana">
-				<img src="{{ asset('img/pinezka-mapa.svg') }}" width="55" height="69" alt="">
-			</button>
-			<button class="pinezka" type="button" data-inwestycja="konstancin" data-status="sprzedaz" style="left:59.3%;top:79.9%" aria-label="Konstancin Riverside House">
-				<img src="{{ asset('img/pinezka-mapa.svg') }}" width="55" height="69" alt="">
-			</button>
+			<!-- Pinezki z bazy: lat/lng inwestycji przeliczone na % obrazka (config/mapa.php - App\Support\MapaStatyczna).
+			     "left"/"top" to czubek pinezki. Dymki nie mają własnych współrzędnych - js/mapa.js stawia je obok
+			     pinezki; po lewej stronie, gdy pinezka stoi przy prawej krawędzi albo inna pinezka jest tuż obok. -->
+			@php
+				$inwestycjeMapy = \App\Models\Investment::frontu()->filter(fn ($i) => $i->pozycjaNaMapie())->values();
+			@endphp
+			@foreach($inwestycjeMapy as $inwestycjaMapy)
+				@php $pozycja = $inwestycjaMapy->pozycjaNaMapie(); @endphp
+				<button class="pinezka" type="button" data-inwestycja="{{ $inwestycjaMapy->slug }}" data-status="{{ $inwestycjaMapy->statusNaMapie() }}" style="left:{{ $pozycja['left'] }}%;top:{{ $pozycja['top'] }}%" aria-label="{{ $inwestycjaMapy->name }}">
+					<img src="{{ asset('img/pinezka-mapa.svg') }}" width="55" height="69" alt="">
+				</button>
+			@endforeach
 
-			<div class="dymek-mapy" data-dymek="hygge">
-				<button class="nazwa" type="button">Dom Hygge Twin</button>
-				<div class="szczegoly">
-					<p class="wiersz"><img src="{{ asset('img/ikona-pin-maly.svg') }}" width="19" height="19" alt=""> Warszawa, Mokotów</p>
-					<p class="wiersz"><img src="{{ asset('img/ikona-dom.svg') }}" width="19" height="19" alt=""> Dostępne mieszkania: <span class="akcent">48</span></p>
-					<div class="przyciski">
-						<a class="mini-przycisk" href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Szczegóły inwestycji</a>
-						<a class="mini-przycisk obrys" href="https://www.google.com/maps/dir/?api=1&amp;destination=ul.%20Bobrowiecka%204B%2C%20Warszawa" target="_blank" rel="noopener"><img src="{{ asset('img/ikona-auto.svg') }}" width="14" height="14" alt=""> Jak dojechać</a>
+			@foreach($inwestycjeMapy as $inwestycjaMapy)
+				@php
+					$pozycja = $inwestycjaMapy->pozycjaNaMapie();
+					// Sąsiad bliżej niż ~4% szerokości - dymki rozsuwamy w pionie (jak Lake Village / Zielona Polana w makiecie)
+					$sasiad = $inwestycjeMapy->first(fn ($inna) => $inna->id !== $inwestycjaMapy->id
+						&& abs($inna->pozycjaNaMapie()['left'] - $pozycja['left']) < 4 && abs($inna->pozycjaNaMapie()['top'] - $pozycja['top']) < 6);
+					$lewo = $sasiad || $pozycja['left'] > 75;
+					$odsuniecie = $sasiad ? ($sasiad->pozycjaNaMapie()['top'] > $pozycja['top'] ? -17 : 17) : null;
+					$dostepne = $inwestycjaMapy->liczbaDostepnych();
+				@endphp
+				<div @class(['dymek-mapy', 'rozwiniety' => $loop->first]) data-dymek="{{ $inwestycjaMapy->slug }}" @if($lewo) data-strona="lewo" @endif @if($odsuniecie) data-odsuniecie="{{ $odsuniecie }}" @endif>
+					<button class="nazwa" type="button">{{ $inwestycjaMapy->name }}</button>
+					<div class="szczegoly">
+						<p class="wiersz"><img src="{{ asset('img/ikona-pin-maly.svg') }}" width="19" height="19" alt=""> {{ collect([\App\Support\FiltryOferty::lokalizacja($inwestycjaMapy), $inwestycjaMapy->address])->filter()->implode(' / ') }}</p>
+						<p class="wiersz"><img src="{{ asset('img/ikona-dom.svg') }}" width="19" height="19" alt="">
+							@if($inwestycjaMapy->status != 1)
+								Inwestycja {{ $inwestycjaMapy->status == 2 ? 'zrealizowana' : 'w realizacji' }}
+							@elseif($dostepne)
+								Dostępne lokale: <span class="akcent">{{ $dostepne }}</span>
+							@else
+								Inwestycja w sprzedaży
+							@endif
+						</p>
+						<div class="przyciski">
+							<a class="mini-przycisk" href="{{ $inwestycjaMapy->linkMenu() }}" @if($inwestycjaMapy->linkZewnetrzny()) target="_blank" rel="noopener" @endif>Szczegóły inwestycji</a>
+							<a class="mini-przycisk obrys" href="{{ $inwestycjaMapy->jakDojechac() }}" target="_blank" rel="noopener"><img src="{{ asset('img/ikona-auto.svg') }}" width="14" height="14" alt=""> Jak dojechać</a>
+						</div>
 					</div>
 				</div>
-			</div>
-
-			<div class="dymek-mapy" data-dymek="lake" data-strona="lewo" data-odsuniecie="-17">
-				<button class="nazwa" type="button">Lake Village</button>
-				<div class="szczegoly">
-					<p class="wiersz"><img src="{{ asset('img/ikona-pin-maly.svg') }}" width="19" height="19" alt=""> Zalesie Górne</p>
-					<p class="wiersz"><img src="{{ asset('img/ikona-dom.svg') }}" width="19" height="19" alt=""> Inwestycja zrealizowana</p>
-					<div class="przyciski">
-						<a class="mini-przycisk" href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Szczegóły inwestycji</a>
-						<a class="mini-przycisk obrys" href="https://www.google.com/maps/dir/?api=1&amp;destination=Zalesie%20G%C3%B3rne" target="_blank" rel="noopener"><img src="{{ asset('img/ikona-auto.svg') }}" width="14" height="14" alt=""> Jak dojechać</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="dymek-mapy" data-dymek="polana" data-strona="lewo" data-odsuniecie="17">
-				<button class="nazwa" type="button">Zielona Polana</button>
-				<div class="szczegoly">
-					<p class="wiersz"><img src="{{ asset('img/ikona-pin-maly.svg') }}" width="19" height="19" alt=""> Nowa Wola</p>
-					<p class="wiersz"><img src="{{ asset('img/ikona-dom.svg') }}" width="19" height="19" alt=""> Inwestycja zrealizowana</p>
-					<div class="przyciski">
-						<a class="mini-przycisk" href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Szczegóły inwestycji</a>
-						<a class="mini-przycisk obrys" href="https://www.google.com/maps/dir/?api=1&amp;destination=Nowa%20Wola" target="_blank" rel="noopener"><img src="{{ asset('img/ikona-auto.svg') }}" width="14" height="14" alt=""> Jak dojechać</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="dymek-mapy rozwiniety" data-dymek="konstancin">
-				<button class="nazwa" type="button">Konstancin Riverside House</button>
-				<div class="szczegoly">
-					<p class="wiersz"><img src="{{ asset('img/ikona-pin-maly.svg') }}" width="19" height="19" alt=""> Chylice / Konstancin-Jeziorna</p>
-					<p class="wiersz"><img src="{{ asset('img/ikona-dom.svg') }}" width="19" height="19" alt=""> Dostępne mieszkania: <span class="akcent">32</span></p>
-					<div class="przyciski">
-						<a class="mini-przycisk" href="{{ route('menu.show', ['uri' => 'inwestycje']) }}">Szczegóły inwestycji</a>
-						<a class="mini-przycisk obrys" href="https://www.google.com/maps/dir/?api=1&amp;destination=Chylice%2C%20Konstancin-Jeziorna" target="_blank" rel="noopener"><img src="{{ asset('img/ikona-auto.svg') }}" width="14" height="14" alt=""> Jak dojechać</a>
-					</div>
-				</div>
-			</div>
+			@endforeach
 
 			<x-mapa-sterowanie />
 		</div>

@@ -98,6 +98,12 @@ Route::middleware(['restrictIp'])->group(function () {
 
         Route::post('/kontakt/{property}', 'ContactController@property')->middleware('throttle:10,1')->name('contact.property');
 
+        // Inwestycje (nowy front) - przed trasami z parametrem na początku ({uri}, {slug}/{page})
+        Route::get('/inwestycje', 'InwestycjeController@index')->name('inwestycje.index');
+        Route::get('/inwestycje/{inwestycja}', 'InwestycjeController@show')->where('inwestycja', '[a-z0-9\-]+')->name('inwestycje.show');
+        Route::get('/inwestycje/{inwestycja}/{lokal}', 'InwestycjeController@lokal')->where(['inwestycja' => '[a-z0-9\-]+', 'lokal' => '\d+(-[a-z0-9\-]*)?'])->name('inwestycje.lokal');
+        Route::get('/wybierz-nieruchomosc', 'WyszukiwarkaController@index')->name('wyszukiwarka');
+
         Route::post('/clipboard', 'Clipboard\IndexController@store')->name('clipboard.store');
         Route::post('/clipboard/send', 'Clipboard\IndexController@send')->name('clipboard.send');
         Route::get('/schowek', 'Clipboard\IndexController@index')->name('clipboard.index');

@@ -75,6 +75,40 @@
                     </div>
                 </div>
 
+                {{-- Nowy front: karty inwestycji (lista, strona główna), mapa inwestycji, podmenu --}}
+                <div class="row w-100 mb-4">
+                    <div class="col-3">
+                        @include('form-elements.html-input-text', [
+                            'label' => 'Miejsce na karcie',
+                            'sublabel' => 'Np. WARSZAWA, MOKOTÓW - nad adresem',
+                            'name' => 'location_label',
+                            'value' => $entry->location_label,
+                        ])
+                    </div>
+                    <div class="col-5">
+                        @include('form-elements.html-input-text', [
+                            'label' => 'Strona inwestycji poza serwisem',
+                            'sublabel' => 'Wypełnione = karta prowadzi tam, bez podstrony u nas',
+                            'name' => 'external_url',
+                            'value' => $entry->external_url,
+                        ])
+                    </div>
+                    <div class="col-2">
+                        @include('form-elements.html-input-text', [
+                            'label' => 'Mapa: szerokość (lat)',
+                            'name' => 'lat',
+                            'value' => $entry->lat,
+                        ])
+                    </div>
+                    <div class="col-2">
+                        @include('form-elements.html-input-text', [
+                            'label' => 'Mapa: długość (lng)',
+                            'name' => 'lng',
+                            'value' => $entry->lng,
+                        ])
+                    </div>
+                </div>
+
                 <div class="row w-100 mb-4">
                     <div class="col-4">
                         @include('form-elements.html-input-text', [
@@ -187,6 +221,7 @@
                     <div class="col-4">
                         @include('form-elements.html-input-text', [
                             'label' => 'Termin zakończenia inwestycji',
+                            'sublabel' => 'Na stronie jako „Termin oddania”, np. IV kwartał 2025',
                             'name' => 'date_end',
                             'value' => $entry->date_end,
                         ])

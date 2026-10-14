@@ -37,6 +37,12 @@ class PropertyService
 
         $name = date('His').'_'.Str::slug($title).'.' . $file->getClientOriginalExtension();
         $name_webp = date('His').'_'.Str::slug($title).'.webp';
+
+        // Na czystej instalacji (nowy serwer) katalogów jeszcze nie ma - Intervention sam ich nie zakłada
+        foreach (['thumbs/webp', 'list/webp', 'webp'] as $katalog) {
+            File::ensureDirectoryExists(public_path('investment/property/' . $katalog));
+        }
+
         $file->storeAs('property', $name, 'investment_uploads');
 
         // Property card image

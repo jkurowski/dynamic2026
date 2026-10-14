@@ -16,7 +16,7 @@
 		</div>
 
 		<div class="para-przyciskow pojawia-sie opoznienie-1">
-			<a href="{{ url('inwestycje') }}" class="przycisk-pigulka pelny">
+			<a href="{{ route('inwestycje.index') }}" class="przycisk-pigulka pelny">
 				POZNAJ INWESTYCJE
 			</a>
 			<x-przycisk-pigulka href="#kontakt" class="na-tle">SKONTAKTUJ SIĘ Z NAMI</x-przycisk-pigulka>
