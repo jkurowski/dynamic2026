@@ -273,6 +273,7 @@ Zasada: aktualizujemy tylko Bootstrap, jQuery, Inputmask, Moment, datepicker. Re
 - NIE testować produkcji seriami zapytań (zwłaszcza o /.env, /vendor itp.) - Fail2Ban zablokował IP użytkownika. Testy lokalnie.
 - Konsola SSH (użytkownik hocancrm) bierze ustawienia PHP głównej domeny developro.pl (`open_basedir` = httpdocs/developro2018) - artisan uruchamiać: `php -d open_basedir= -d memory_limit=512M artisan ...`. Nie poszerzać open_basedir domeny developro.pl w Plesku.
 - 2026-10-14: na serwerze wykonane `demo:hygge` (4 inwestycje, 23 lokale).
+- 2026-10-27: na serwerze wykonane `demo:lake-village` (8 segmentów).
 
 ## Inwestycje na nowym froncie - wersja demo (2026-10-14)
 - Ustalenia z klientem (poczta, folder Klienci/Dynamic Investment, 16.06-21.08.2026): strona = „strona matka” całego portfolio; inwestycje jako karty; obsługa mieszkań, domów, segmentów i lokali usługowych (właściwe nazwy, „Piętro” tylko tam, gdzie dotyczy); centralny listing „Wybierz nieruchomość” w menu (na desktopie może być pod „Inwestycje”) z filtrami inwestycja/lokalizacja/rodzaj; przyciski zależne od statusu KONKRETNEGO lokalu (sprzedany: „Zapytaj o podobne”, nie „Oblicz ratę”); schowek bez koszyka („Schowek”, licznik); Zespół Willowy Falenty - przygotować w CMS ze statusem „ukryta” (4). Zielona Polana i Lake Village w portfolio. Konstancin Riverside House - tylko w makiecie, w mailach klienta nie występuje.
