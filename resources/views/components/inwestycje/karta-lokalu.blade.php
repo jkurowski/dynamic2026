@@ -33,6 +33,13 @@
 				<span class="wartosc">{{ $lokal->pietro() }}</span>
 			</li>
 			@endif
+			@if($lokal->pokazujDzialke())
+			<li>
+				<img src="{{ asset('img/lokal-ikona-dzialka.svg') }}" width="24" height="24" alt="">
+				<span class="nazwa">DZIAŁKA</span>
+				<span class="wartosc">{{ $lokal->dzialka() }}</span>
+			</li>
+			@endif
 			<li>
 				<img src="{{ asset('img/inw-ikona-cena.svg') }}" width="24" height="24" alt="">
 				<span class="nazwa">CENA</span>

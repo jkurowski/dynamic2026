@@ -2,6 +2,7 @@
 
 {{-- Wybierz nieruchomość - oferta ze wszystkich inwestycji (szablon dynamic-front/wyszukiwarka.html).
      ?ulubione=1 - schowek: glowny.js zostawia tylko lokale zapisane w przeglądarce i zmienia nagłówek. --}}
+@section('body_class', 'strona-wynikow')
 @section('main_class', 'ma-pasek-boczny')
 @section('meta_title', $page->title ?? 'Wybierz nieruchomość')
 @isset($page->meta_title) @section('seo_title', $page->meta_title) @endisset
@@ -12,7 +13,8 @@
 	<section class="naglowek-strony naglowek-wynikow">
 		<x-okruszki :sciezka="['Wybierz nieruchomość' => null]" />
 		<x-etykieta class="na-srodku pojawia-sie">WYSZUKIWARKA</x-etykieta>
-		<h1 class="tytul-sekcji na-srodku rozjasnia-sie">Wybierz <span class="akcent">nieruchomość</span></h1>
+		{{-- Nazewnictwo ustalone z klientem (27.10): nagłówek „Znajdź swój nowy dom”, przycisk „Pokaż oferty”, w menu „Wybierz nieruchomość” --}}
+		<h1 class="tytul-sekcji na-srodku rozjasnia-sie">Znajdź swój <span class="akcent">nowy dom</span></h1>
 	</section>
 
 		<x-pasek-boczny />

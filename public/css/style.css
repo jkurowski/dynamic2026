@@ -12004,6 +12004,146 @@ input[type="range"].tor:focus-visible {
     max-width: calc(100% - 22px);
   }
 }
+@media (min-width: 1025px) {
+  .strona-lokalu .lokal-uklad {
+    height: auto;
+    min-height: 0;
+  }
+  .strona-lokalu .karta-lokalu {
+    height: auto;
+    min-height: 0;
+  }
+  .strona-lokalu .karta-lokalu > .plakietki-lokalu,
+  .strona-lokalu .karta-lokalu > .etykieta-sekcji,
+  .strona-lokalu .karta-lokalu > h1,
+  .strona-lokalu .karta-lokalu > .parametry-lokalu,
+  .strona-lokalu .karta-lokalu > .ceny-lokalu,
+  .strona-lokalu .karta-lokalu .cechy-lokalu,
+  .strona-lokalu .karta-lokalu .tytul-kosztow,
+  .strona-lokalu .karta-lokalu .koszty-lokalu,
+  .strona-lokalu .karta-lokalu > .akcje-lokalu,
+  .strona-lokalu .karta-lokalu > .prospekt {
+    position: static;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+  }
+  .strona-lokalu .karta-lokalu > .plakietki-lokalu {
+    margin: 0 0 calc(1.35 * var(--karta, 19.2px));
+  }
+  .strona-lokalu .karta-lokalu > .etykieta-sekcji {
+    margin: 0;
+  }
+  .strona-lokalu .karta-lokalu > h1 {
+    margin: calc(.1 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu > .parametry-lokalu {
+    margin: calc(1.95 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu > .ceny-lokalu {
+    position: relative;
+    margin: calc(1.6 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu > .ceny-lokalu .wiersz,
+  .strona-lokalu .karta-lokalu > .ceny-lokalu .wiersz .przed-rabatem,
+  .strona-lokalu .karta-lokalu > .ceny-lokalu .rabat {
+    position: static;
+    width: auto;
+  }
+  .strona-lokalu .karta-lokalu > .ceny-lokalu .wiersz:first-of-type {
+    margin-top: 0;
+  }
+  .strona-lokalu .karta-lokalu > .ceny-lokalu .wiersz .przed-rabatem {
+    margin-left: auto;
+  }
+  .strona-lokalu .karta-lokalu > .ceny-lokalu .rabat {
+    margin: calc(.3 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu .przycisk-historii {
+    position: static;
+    margin: calc(.8 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu .cechy-lokalu {
+    margin: calc(1.6 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu .tytul-kosztow {
+    margin: calc(1.6 * var(--karta, 19.2px)) 0 calc(.3 * var(--karta, 19.2px));
+  }
+  .strona-lokalu .karta-lokalu .koszty-lokalu {
+    margin: 0;
+  }
+  .strona-lokalu .karta-lokalu > .akcje-lokalu {
+    flex-wrap: wrap;
+    margin: calc(2 * var(--karta, 19.2px)) 0 0;
+  }
+  .strona-lokalu .karta-lokalu > .prospekt {
+    position: relative;
+    display: block;
+    width: fit-content;
+    margin: calc(1.1 * var(--karta, 19.2px)) 0 0;
+  }
+}
+.kafel-kalkulatora .zalozenia-raty {
+  margin: 12px 0 0;
+  max-width: 640px;
+  color: var(--tekst-na-ciemnym);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+.kafel-kalkulatora .zalozenia-raty strong {
+  font-weight: 600;
+}
+@media (min-width: 1025px) {
+  .strona-lokalu .kafle {
+    height: auto;
+    min-height: 483px;
+  }
+  .strona-lokalu .kafle .kafel,
+  .strona-lokalu .kafle .kafel-kalkulatora {
+    height: 100%;
+  }
+  .strona-lokalu .kafel-kalkulatora {
+    padding: 50px 65px 45px 67px;
+  }
+  .strona-lokalu .kafel-kalkulatora h2,
+  .strona-lokalu .kafel-kalkulatora .suwak,
+  .strona-lokalu .kafel-kalkulatora .podsumowanie-raty,
+  .strona-lokalu .kafel-kalkulatora .podsumowanie-raty .wynik-raty,
+  .strona-lokalu .kafel-kalkulatora .stopka-kalkulatora,
+  .strona-lokalu .kafel-kalkulatora .przycisk-zapytaj {
+    position: static;
+  }
+  .strona-lokalu .kafel-kalkulatora h2 {
+    margin: 0 0 14px;
+  }
+  .strona-lokalu .kafel-kalkulatora .suwak {
+    height: auto;
+    margin: 0 0 8px;
+  }
+  .strona-lokalu .kafel-kalkulatora .podsumowanie-raty {
+    margin: 6px 0 0;
+  }
+  .strona-lokalu .kafel-kalkulatora .podsumowanie-raty .wynik-raty {
+    line-height: 1.3;
+  }
+  .strona-lokalu .kafel-kalkulatora .stopka-kalkulatora {
+    margin: 4px 0 0;
+  }
+  .strona-lokalu .kafel-kalkulatora .przycisk-zapytaj {
+    margin: 18px 0 0;
+  }
+}
+.kafel-kalkulatora .stopka-kalkulatora a:first-child {
+  margin-left: 0;
+  padding-left: 0;
+}
+.kafel-kalkulatora .stopka-kalkulatora a:first-child::before {
+  display: none;
+}
 .filtry-wynikow {
   width: 100%;
   max-width: var(--kontener-maks, 1728px);
@@ -16392,6 +16532,23 @@ input[type="range"].tor:focus-visible {
     height: auto;
     padding-top: max(56px, 4.8958vw);
     padding-bottom: 0;
+  }
+}
+@media (min-width: 1025px) {
+  .filtry-inwestycji.filtry-szerokie {
+    flex-wrap: wrap;
+  }
+  .filtry-inwestycji.filtry-szerokie .pole-filtru {
+    flex: 1 1 180px;
+    min-width: 0;
+  }
+  .filtry-inwestycji.filtry-szerokie .przycisk-szukaj-pigulka {
+    flex: 0 0 auto;
+    min-width: 180px;
+  }
+  .filtry-inwestycji.filtry-szerokie .widok {
+    flex: 0 0 auto;
+    margin-left: auto;
   }
 }
 html.motyw-jasny {

@@ -205,6 +205,38 @@ return [
         ],
     ],
 
+    // Założenia kalkulatora raty - wspólne dla strony Finansowanie i kart lokali (uwaga klienta 27.10)
+    'kalkulator-raty' => [
+        'nazwa' => 'Kalkulator raty - założenia (Finansowanie i karty lokali)',
+        'strona' => '/finansowanie',
+        'pola' => [
+            'oprocentowanie' => [
+                'typ' => 'tekst', 'etykieta' => 'Oprocentowanie nominalne w skali roku (%)', 'liczba' => [0.1, 30],
+                'pomoc' => 'Z tej wartości liczona jest rata (raty równe). Np. 6,7', 'domyslnie' => '6,7',
+            ],
+            'rrso' => [
+                'typ' => 'tekst', 'etykieta' => 'RRSO (%) - opcjonalnie', 'liczba' => [0.1, 50],
+                'pomoc' => 'Tylko informacja pod wynikiem, nie wpływa na ratę. Puste = nie pokazujemy. RRSO nie może być niższe od oprocentowania.',
+                'domyslnie' => '',
+            ],
+            'wklad' => [
+                'typ' => 'tekst', 'etykieta' => 'Wkład własny na karcie lokalu - wartość startowa (%)', 'liczba' => [0, 90],
+                'pomoc' => 'Kwota kredytu = cena - wkład własny. Klient może zmienić suwakiem (0-90%).', 'domyslnie' => '20',
+            ],
+            'okres' => [
+                'typ' => 'tekst', 'etykieta' => 'Okres spłaty - wartość startowa (lata)', 'liczba' => [5, 35], 'domyslnie' => '20',
+            ],
+            'aktualizacja' => [
+                'typ' => 'tekst', 'etykieta' => 'Stan na (np. „październik 2026”) - opcjonalnie', 'max' => 40,
+                'pomoc' => 'Pokazywane przy oprocentowaniu. Zmieniając oprocentowanie, zmień też tę datę.', 'domyslnie' => '',
+            ],
+            'zastrzezenie' => [
+                'typ' => 'tekst', 'etykieta' => 'Zastrzeżenie pod kalkulatorem', 'max' => 400,
+                'domyslnie' => 'Symulacja ma charakter poglądowy i nie stanowi oferty handlowej w rozumieniu Kodeksu Cywilnego',
+            ],
+        ],
+    ],
+
     // Stopka jest na każdej stronie - edytować można z dowolnej
     'stopka.kontakt' => [
         'nazwa' => 'Stopka - dane kontaktowe',

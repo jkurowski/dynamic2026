@@ -2,6 +2,7 @@
 
 {{-- Karta lokalu (szablon dynamic-front/lokal.html). Ceny, historia ceny i koszty dodatkowe z panelu;
      przyciski zależne od statusu tego lokalu (sprzedany - bez ceny i kalkulatora, „Zapytaj o podobne”). --}}
+@section('body_class', 'strona-lokalu')
 @section('main_class', 'ma-pasek-boczny')
 @section('meta_title', $lokal->nazwaPelna() . ' - ' . $inwestycja->name)
 @section('seo_title', $lokal->nazwaPelna() . ' - ' . $inwestycja->name . ' - Dynamic Development')
@@ -11,6 +12,9 @@
 	$promocja = $lokal->highlighted && $lokal->promotion_price > 0 && $lokal->promotion_price < $lokal->price_brutto && !$lokal->sprzedany();
 	$cenaAktualna = $promocja ? $lokal->promotion_price : $lokal->price_brutto;
 	$kafelWykonczenia = sekcja('kafle')->lista('kafle')[1] ?? null;
+	// Założenia raty - Sekcje stron „kalkulator-raty” (wspólne ze stroną Finansowanie)
+	$kalk = sekcja('kalkulator-raty');
+	$wklad = (int) $kalk->liczba('wklad');
 	$pdf = $lokal->kartaPdf();
 	$prospekt = $inwestycja->file_brochure && \Illuminate\Support\Facades\File::isFile(public_path('investment/brochure/' . $inwestycja->file_brochure))
 		? asset('investment/brochure/' . $inwestycja->file_brochure) : null;
@@ -65,6 +69,13 @@
 					<img src="{{ asset('img/lokal-ikona-pietro.svg') }}" width="52" height="52" alt="">
 					<span class="nazwa">PIĘTRO</span>
 					<span class="wartosc">{{ $lokal->pietro() }}</span>
+				</li>
+				@endif
+				@if($lokal->pokazujDzialke())
+				<li>
+					<img src="{{ asset('img/lokal-ikona-dzialka.svg') }}" width="52" height="52" alt="">
+					<span class="nazwa">DZIAŁKA</span>
+					<span class="wartosc">{{ $lokal->dzialka() }}</span>
 				</li>
 				@endif
 			</ul>
@@ -179,7 +190,7 @@
 		<div class="row">
 			@if($lokal->maCene())
 			<div class="col-12 col-md-6">
-				<section class="kafel-kalkulatora pojawia-sie" id="kalkulatorRaty" data-format-kwoty="grosze-kropki">
+				<section class="kafel-kalkulatora pojawia-sie" id="kalkulatorRaty" data-format-kwoty="grosze-kropki" data-oprocentowanie="{{ $kalk->liczba('oprocentowanie') }}"{!! $kalk->edycja() !!}>
 					<picture>
 						<source type="image/webp" srcset="{{ asset('img/kafel-finansowanie.webp') }}">
 						<img src="{{ asset('img/kafel-finansowanie.jpg') }}" width="830" height="482" alt="" loading="lazy">
@@ -196,19 +207,36 @@
 					</div>
 					<div class="suwak">
 						<div class="opis">
+							<label class="podpis" for="wkladWlasny">Wkład własny</label>
+							<span class="wartosc wartosc-wkladu">{{ $wklad }}%</span>
+						</div>
+						<input class="tor" type="range" id="wkladWlasny" name="wklad"
+						       min="0" max="90" step="1" value="{{ $wklad }}"
+						       aria-label="Wkład własny w procentach ceny">
+					</div>
+					<div class="suwak">
+						<div class="opis">
 							<label class="podpis" for="okresSplaty">Okres spłaty</label>
-							<span class="wartosc wartosc-okresu">20 lat</span>
+							<span class="wartosc wartosc-okresu">{{ (int) $kalk->liczba('okres') }} lat</span>
 						</div>
 						<input class="tor" type="range" id="okresSplaty" name="okres"
-						       min="1" max="35" step="1" value="20"
+						       min="1" max="35" step="1" value="{{ (int) $kalk->liczba('okres') }}"
 						       aria-label="Okres spłaty w latach">
 					</div>
 					<div class="podsumowanie-raty">
 						<span class="podpis">Szacunkowa rata:</span>
 						<span class="wynik-raty" role="status">0,00 zł</span>
 					</div>
+					{{-- Założenia raty jawnie (uwaga klienta 27.10): od jakiej kwoty, jakie oprocentowanie, stan na kiedy --}}
+					<p class="zalozenia-raty">
+						Kredyt: <strong class="wartosc-kredytu"></strong> (cena minus wkład własny), raty równe,
+						oprocentowanie {{ \App\Support\Format::procent($kalk->liczba('oprocentowanie')) }}@if($kalk->tekst('aktualizacja')) (stan na {{ $kalk->tekst('aktualizacja') }})@endif.
+						{{ $kalk->tekst('zastrzezenie') }}
+					</p>
 					<p class="stopka-kalkulatora">
-						RRSO <span class="akcent">6,09%</span>
+						@if($kalk->tekst('rrso'))
+							RRSO <span class="akcent">{{ \App\Support\Format::procent($kalk->liczba('rrso')) }}</span>
+						@endif
 						<a href="{{ route('menu.show', ['uri' => 'finansowanie']) }}">Zobacz koszty kredytu</a>
 					</p>
 					<a class="przycisk-zapytaj" href="#kontakt">ZAPYTAJ O OFERTĘ</a>
@@ -236,6 +264,6 @@
 @endsection
 
 @push('scripts')
-	<script src="{{ asset('js/kalkulator.js') }}"></script>
-	<script src="{{ asset('js/formularz.js') }}"></script>
+	<script src="{{ zasob('js/kalkulator.js') }}"></script>
+	<script src="{{ zasob('js/formularz.js') }}"></script>
 @endpush

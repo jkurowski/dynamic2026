@@ -293,6 +293,7 @@
 				powierzchnia: liczba('powierzchnia'),
 				pokoje: liczba('pokoje'),
 				pietro: liczba('pietro'),
+				dzialka: liczba('dzialka'),
 				cena: liczba('cena'),
 				status: tekst('status'),
 				inwestycja: tekst('inwestycja'),
@@ -343,6 +344,48 @@
 	// Pola porównywane dosłownie z opcją listy (reszta to liczby i przedziały)
 	var polaTekstowe = ['status', 'inwestycja', 'lokalizacja', 'rodzaj'];
 
+	// Pola warunkowe (ustalenia z klientem 13-18.08): „Liczba pokoi”, „Piętro” i „Działka” znikają, gdy żaden
+	// lokal z wybranej inwestycji / lokalizacji / rodzaju ich nie ma (piętro - domy i segmenty, działka - mieszkania).
+	// Ukryte pole wraca do „Dowolna”, żeby nie filtrowało po czymś, czego nie widać.
+	var polaWarunkowe = ['pokoje', 'pietro', 'dzialka'];
+	var polaZakresu = ['inwestycja', 'lokalizacja', 'rodzaj'];
+
+	function ustawPolaWarunkowe($formularz) {
+		var zakres = {};
+		$formularz.find('.pole-filtru').each(function () {
+			var pole = $(this).data('pole');
+			var $wybrana = $(this).next('.lista-filtru').find('.dropdown-item.wybrany');
+			if (polaZakresu.indexOf(pole) !== -1 && $wybrana.length && $wybrana.closest('li').index() > 0) {
+				zakres[pole] = $wybrana.text().trim().toLowerCase();
+			}
+		});
+
+		var obecne = {};
+		$('.element-oferty, .grupa-wynikow .wiersz-lokalu').each(function () {
+			var dane = daneLokalu($(this));
+			var wZakresie = Object.keys(zakres).every(function (pole) {
+				return dane[pole] === zakres[pole];
+			});
+			if (!wZakresie) return;
+			polaWarunkowe.forEach(function (pole) {
+				if (!isNaN(dane[pole])) obecne[pole] = true;
+			});
+		});
+
+		polaWarunkowe.forEach(function (pole) {
+			var $przycisk = $formularz.find('.pole-filtru[data-pole="' + pole + '"]');
+			if (!$przycisk.length) return;
+			var $lista = $przycisk.next('.lista-filtru');
+			var ukryj = !obecne[pole];
+			$przycisk.add($lista).toggleClass('d-none', ukryj);
+			if (ukryj && $lista.find('.dropdown-item.wybrany').closest('li').index() > 0) {
+				$lista.find('.dropdown-item').removeClass('wybrany').first().addClass('wybrany');
+				ustawTekstFiltru($przycisk, $przycisk.attr('data-etykieta') || $lista.find('.dropdown-item').first().text());
+				$formularz.find('input[type="hidden"][name="' + pole + '"]').remove();
+			}
+		});
+	}
+
 	function filtrujWyniki() {
 		var $formularz = $('.filtry-wynikow, .filtry-inwestycji').first();
 		var $grupy = $('.grupa-wynikow');
@@ -350,6 +393,8 @@
 		if (!$formularz.length || (!$grupy.length && !$elementy.length)) {
 			return;
 		}
+
+		ustawPolaWarunkowe($formularz);
 
 		var warunki = [];
 		$formularz.find('.pole-filtru').each(function () {

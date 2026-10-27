@@ -12,6 +12,9 @@
             <label for="{{ $id }}" class="form-label fw-semibold">{{ $etykieta }}</label>
             <input type="text" class="form-control" id="{{ $id }}" name="{{ $nazwa('pola') }}" maxlength="{{ $definicja['max'] ?? 255 }}"
                    value="{{ old("pola.$kropki", $wartosci->tekst($pole)) }}">
+            @isset($definicja['pomoc'])
+                <div class="form-text">{{ $definicja['pomoc'] }}</div>
+            @endisset
             @break
 
         @case('html')

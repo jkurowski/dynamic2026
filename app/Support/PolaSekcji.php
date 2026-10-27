@@ -50,6 +50,12 @@ class PolaSekcji
         return (string) $this->wartosc($pole);
     }
 
+    /** Pole tekstowe z liczbą („6,7” albo „6.7”) */
+    public function liczba(string $pole): float
+    {
+        return (float) str_replace(',', '.', $this->tekst($pole));
+    }
+
     /** HTML z edytora - wpisuje go administrator, wypisujemy przez {!! !!} */
     public function html(string $pole): string
     {

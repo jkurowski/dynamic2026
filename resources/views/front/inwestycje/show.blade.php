@@ -102,7 +102,7 @@
 @endsection
 
 @push('scripts')
-	<script src="{{ asset('js/karuzele.js') }}"></script>
-	<script src="{{ asset('js/mapa.js') }}"></script>
-	<script src="{{ asset('js/formularz.js') }}"></script>
+	<script src="{{ zasob('js/karuzele.js') }}"></script>
+	<script src="{{ zasob('js/mapa.js') }}"></script>
+	<script src="{{ zasob('js/formularz.js') }}"></script>
 @endpush

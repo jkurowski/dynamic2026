@@ -17,7 +17,7 @@
     <link rel="apple-touch-icon" href="{{ asset('img/favicon-180.png') }}">
 
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ zasob('css/style.css') }}">
 
     @stack('style')
 </head>
@@ -41,8 +41,8 @@
 
 @stack('scripts')
 
-<script src="{{ asset('js/animacje.js') }}"></script>
-<script src="{{ asset('js/glowny.js') }}"></script>
+<script src="{{ zasob('js/animacje.js') }}"></script>
+<script src="{{ zasob('js/glowny.js') }}"></script>
 
 {!! settings()->get("scripts_beforebody") !!}
 </body>

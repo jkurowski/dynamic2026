@@ -77,6 +77,7 @@ class Sekcja extends Model
 
     // Skróty do widoku: $s->tekst('naglowek'), $s->lista('liczby') itd.
     public function tekst(string $pole): string { return $this->wartosci()->tekst($pole); }
+    public function liczba(string $pole): float { return $this->wartosci()->liczba($pole); }
     public function html(string $pole): string { return $this->wartosci()->html($pole); }
     public function link(string $pole): object { return $this->wartosci()->link($pole); }
     public function obrazek(string $pole): object { return $this->wartosci()->obrazek($pole); }

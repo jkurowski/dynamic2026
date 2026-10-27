@@ -2018,3 +2018,189 @@
 		max-width: ~"calc(100% - 22px)";
 	}
 }
+
+// ============ karta lokalu w przepływie (desktop od 1025px) ============
+// Szablon ustawiał elementy karty na sztywnych współrzędnych z makiety (C.1: promocja, 3 cechy,
+// 4 koszty). Przy innych danych (bez promocji, bez pokoi, bez kosztów, lokal usługowy) treść
+// nachodziła na siebie. Tu elementy idą jeden pod drugim z odstępami makiety
+// (--karta = 1vw w paśmie 1025-1899px, powyżej 19,2px = 1vw przy 1920px).
+@media (min-width: @desktop) {
+	.strona-lokalu {
+		@u: var(--karta, 19.2px);
+
+		.lokal-uklad {
+			height: auto;
+			min-height: 0;
+		}
+
+		.karta-lokalu {
+			height: auto;
+			min-height: 0;
+
+			> .plakietki-lokalu,
+			> .etykieta-sekcji,
+			> h1,
+			> .parametry-lokalu,
+			> .ceny-lokalu,
+			.cechy-lokalu,
+			.tytul-kosztow,
+			.koszty-lokalu,
+			> .akcje-lokalu,
+			> .prospekt {
+				position: static;
+				left: auto;
+				right: auto;
+				top: auto;
+				width: auto;
+				height: auto;
+			}
+
+			> .plakietki-lokalu {
+				margin: 0 0 ~"calc(1.35 * @{u})";
+			}
+
+			> .etykieta-sekcji {
+				margin: 0;
+			}
+
+			> h1 {
+				margin: ~"calc(.1 * @{u})" 0 0;
+			}
+
+			> .parametry-lokalu {
+				margin: ~"calc(1.95 * @{u})" 0 0;
+			}
+
+			// cena + historia ceny: okno historii liczy pozycję od tego bloku
+			> .ceny-lokalu {
+				position: relative;
+				margin: ~"calc(1.6 * @{u})" 0 0;
+
+				.wiersz,
+				.wiersz .przed-rabatem,
+				.rabat {
+					position: static;
+					width: auto;
+				}
+
+				.wiersz:first-of-type {
+					margin-top: 0;
+				}
+
+				.wiersz .przed-rabatem {
+					margin-left: auto;
+				}
+
+				.rabat {
+					margin: ~"calc(.3 * @{u})" 0 0;
+				}
+			}
+
+			.przycisk-historii {
+				position: static;
+				margin: ~"calc(.8 * @{u})" 0 0;
+			}
+
+			.cechy-lokalu {
+				margin: ~"calc(1.6 * @{u})" 0 0;
+			}
+
+			.tytul-kosztow {
+				margin: ~"calc(1.6 * @{u})" 0 ~"calc(.3 * @{u})";
+			}
+
+			.koszty-lokalu {
+				margin: 0;
+			}
+
+			> .akcje-lokalu {
+				flex-wrap: wrap;
+				margin: ~"calc(2 * @{u})" 0 0;
+			}
+
+			> .prospekt {
+				position: relative;
+				display: block;
+				width: fit-content;
+				margin: ~"calc(1.1 * @{u})" 0 0;
+			}
+		}
+	}
+}
+
+// --- kalkulator raty: założenia (wkład własny, kwota kredytu, oprocentowanie) - uwaga klienta 27.10 ---
+.kafel-kalkulatora .zalozenia-raty {
+	margin: 12px 0 0;
+	max-width: 640px;
+	color: var(--tekst-na-ciemnym);
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 1.5;
+	opacity: .85;
+
+	strong {
+		font-weight: 600;
+	}
+}
+
+// Makieta ustawiała elementy kafla na sztywnych współrzędnych (2 suwaki). Z trzecim suwakiem
+// i założeniami raty kafel idzie w przepływie, a wysokość wyrównuje się z sąsiednim kaflem.
+@media (min-width: (@duzy-ekran + 1px)) {
+	.strona-lokalu .kafle {
+		height: auto;
+		min-height: 483px;
+	}
+
+	.strona-lokalu .kafle .kafel,
+	.strona-lokalu .kafle .kafel-kalkulatora {
+		height: 100%;
+	}
+
+	.strona-lokalu .kafel-kalkulatora {
+		padding: 50px 65px 45px 67px;
+
+		h2,
+		.suwak,
+		.podsumowanie-raty,
+		.podsumowanie-raty .wynik-raty,
+		.stopka-kalkulatora,
+		.przycisk-zapytaj {
+			position: static;
+		}
+
+		h2 {
+			margin: 0 0 14px;
+		}
+
+		.suwak {
+			height: auto;
+			margin: 0 0 8px;
+		}
+
+		.podsumowanie-raty {
+			margin: 6px 0 0;
+
+			.wynik-raty {
+				line-height: 1.3;
+			}
+		}
+
+		.stopka-kalkulatora {
+			margin: 4px 0 0;
+		}
+
+		.przycisk-zapytaj {
+			margin: 18px 0 0;
+		}
+	}
+}
+
+// bez RRSO (pole puste w panelu) odnośnik stoi sam - bez kreski oddzielającej
+.kafel-kalkulatora .stopka-kalkulatora a:first-child {
+	margin-left: 0;
+	padding-left: 0;
+
+	&::before {
+		display: none;
+	}
+}

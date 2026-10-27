@@ -2441,3 +2441,27 @@
 		padding-bottom: 0;
 	}
 }
+
+// --- więcej filtrów niż w makiecie (np. „Rodzaj”, gdy inwestycja ma mieszkania i lokal usługowy) ---
+// 6 pól + SZUKAJ + przełącznik widoku nie mieści się w rzędzie z makiety - przełącznik wychodził
+// poza prawą krawędź okna. Pola dzielą szerokość i zawijają się do drugiego rzędu.
+@media (min-width: @desktop) {
+	.filtry-inwestycji.filtry-szerokie {
+		flex-wrap: wrap;
+
+		.pole-filtru {
+			flex: 1 1 180px;
+			min-width: 0;
+		}
+
+		.przycisk-szukaj-pigulka {
+			flex: 0 0 auto;
+			min-width: 180px;
+		}
+
+		.widok {
+			flex: 0 0 auto;
+			margin-left: auto;
+		}
+	}
+}

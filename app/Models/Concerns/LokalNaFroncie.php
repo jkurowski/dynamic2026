@@ -85,6 +85,22 @@ trait LokalNaFroncie
         return $numer === 0 ? 'parter' : (string) $numer;
     }
 
+    public function jestDomem(): bool
+    {
+        return in_array((int) $this->type, [self::TYP_DOM, self::TYP_SEGMENT], true);
+    }
+
+    /** Działka - parametr domów i segmentów (zamiast piętra) */
+    public function pokazujDzialke(): bool
+    {
+        return $this->jestDomem() && $this->plot_area > 0;
+    }
+
+    public function dzialka(): string
+    {
+        return Format::metraz($this->plot_area);
+    }
+
     public function pokazujPokoje(): bool
     {
         return (int) $this->type !== self::TYP_LOKAL_USLUGOWY && $this->rooms > 0;
@@ -159,6 +175,7 @@ trait LokalNaFroncie
             'powierzchnia' => (float) $this->area,
             'pokoje' => $this->pokazujPokoje() ? (int) $this->rooms : '',
             'pietro' => $this->pokazujPietro() ? (int) optional($this->floor)->number : '',
+            'dzialka' => $this->pokazujDzialke() ? (float) $this->plot_area : '',
             'cena' => $this->maCene() ? (float) $this->price_brutto : '',
             'status' => mb_strtolower($this->statusNapis()),
             'rodzaj' => $this->nazwaTypu(),
@@ -203,7 +220,8 @@ trait LokalNaFroncie
         if ($this->garden_area > 0) {
             $cechy[] = ['lokal-ikona-balkon.svg', 'Ogród', Format::metraz($this->garden_area)];
         }
-        if ($this->plot_area > 0) {
+        // przy domu i segmencie działka jest w parametrach u góry karty
+        if ($this->plot_area > 0 && !$this->pokazujDzialke()) {
             $cechy[] = ['lokal-ikona-metraz.svg', 'Działka', Format::metraz($this->plot_area)];
         }
 

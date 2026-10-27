@@ -38,7 +38,19 @@ class SekcjaService
 
             switch ($definicja['typ']) {
                 case 'tekst':
-                    $reguly["pola.$s"] = 'nullable|string|max:' . ($definicja['max'] ?? 255);
+                    $reguly["pola.$s"] = isset($definicja['liczba'])
+                        // liczba z przecinkiem albo kropką (np. 6,7), w zakresie [min, max]
+                        ? ['nullable', 'regex:/^\d{1,3}([,.]\d{1,2})?$/', function ($atrybut, $wartosc, $blad) use ($definicja) {
+                            [$min, $max] = $definicja['liczba'];
+                            if (!is_numeric(str_replace(',', '.', $wartosc))) {
+                                return; // zły format zgłasza regex
+                            }
+                            $liczba = (float) str_replace(',', '.', $wartosc);
+                            if ($liczba < $min || $liczba > $max) {
+                                $blad("Pole :attribute musi mieć wartość od {$min} do {$max}.");
+                            }
+                        }]
+                        : 'nullable|string|max:' . ($definicja['max'] ?? 255);
                     break;
                 case 'html':
                     $reguly["pola.$s"] = 'nullable|string|max:20000';

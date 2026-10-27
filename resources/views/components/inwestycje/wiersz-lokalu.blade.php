@@ -21,6 +21,9 @@
 		@if($lokal->pokazujPietro())
 			<span class="linia pietro"><img src="{{ asset('img/lokal-ikona-pietro.svg') }}" width="19" height="19" alt=""> Piętro: <strong>{{ $lokal->pietro() }}</strong></span>
 		@endif
+		@if($lokal->pokazujDzialke())
+			<span class="linia pietro"><img src="{{ asset('img/lokal-ikona-dzialka.svg') }}" width="19" height="19" alt=""> Działka: <strong>{{ $lokal->dzialka() }}</strong></span>
+		@endif
 	</div>
 	<div class="komorka">
 		<span class="linia"><img src="{{ asset('img/lokal-ikona-metraz.svg') }}" width="{{ $ikonaWiersza }}" height="{{ $ikonaWiersza }}" alt=""> Powierzchnia:</span>

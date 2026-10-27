@@ -1,0 +1,17 @@
+{
+ "zrodlo": "dane robocze do wersji demo (2026-10-27) - docelowe dane i rzuty dostarczy inwestor",
+ "typy": {
+  "A": {"powierzchnia": 132.40, "pokoje": 5, "taras": 18.00, "rzut": "segment-typ-a.jpg"},
+  "B": {"powierzchnia": 118.60, "pokoje": 4, "taras": 14.00, "rzut": "segment-typ-b.jpg"}
+ },
+ "segmenty": [
+  {"numer": "1A", "typ": "A", "status": 1, "dzialka": 610, "cena": 1459000, "historia_cen": [["2026-10-01 10:00:00", 1459000], ["2026-06-02 10:00:00", 1489000]]},
+  {"numer": "1B", "typ": "B", "status": 1, "dzialka": 285, "cena": 1239000, "historia_cen": []},
+  {"numer": "1C", "typ": "B", "status": 2, "dzialka": 275, "cena": 1229000, "historia_cen": []},
+  {"numer": "1D", "typ": "A", "status": 1, "dzialka": 455, "cena": 1409000, "historia_cen": []},
+  {"numer": "2A", "typ": "A", "status": 1, "dzialka": 420, "cena": 1389000, "historia_cen": []},
+  {"numer": "2B", "typ": "B", "status": 3, "dzialka": 240, "cena": 1199000, "historia_cen": []},
+  {"numer": "2C", "typ": "B", "status": 1, "dzialka": 290, "cena": 1249000, "historia_cen": []},
+  {"numer": "2D", "typ": "A", "status": 1, "dzialka": 535, "cena": 1439000, "historia_cen": [["2026-10-01 10:00:00", 1439000], ["2026-06-02 10:00:00", 1419000]]}
+ ]
+}

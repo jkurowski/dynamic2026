@@ -17,6 +17,7 @@ class FiltryOferty
 {
     private const POKOJE = ['Dowolna', '1', '2', '3', '4 i więcej'];
     private const POWIERZCHNIA = ['Dowolna', 'do 40 m²', '40 - 60 m²', '60 - 90 m²', 'powyżej 90 m²'];
+    private const DZIALKA = ['Dowolna', 'do 300 m²', '300 - 500 m²', 'powyżej 500 m²'];
     private const PIETRO = ['Dowolne', 'Parter', '1', '2', '3 i wyżej'];
     private const STATUS = ['Dowolny', 'Dostępne', 'Rezerwacja', 'Sprzedane'];
     private const CENA = ['Dowolna', 'do 600 000 zł', '600 000 - 900 000 zł', '900 000 - 1 200 000 zł', 'powyżej 1 200 000 zł'];
@@ -48,10 +49,19 @@ class FiltryOferty
 
     private static function podstawowe(Collection $lokale): array
     {
-        $filtry = [
-            'pokoje' => ['Liczba pokoi', self::POKOJE],
-            'powierzchnia' => ['Powierzchnia', self::POWIERZCHNIA],
-        ];
+        $filtry = [];
+
+        // „Liczba pokoi” nie dotyczy lokali usługowych
+        if ($lokale->contains(fn (Property $l) => $l->pokazujPokoje())) {
+            $filtry['pokoje'] = ['Liczba pokoi', self::POKOJE];
+        }
+
+        $filtry['powierzchnia'] = ['Powierzchnia', self::POWIERZCHNIA];
+
+        // „Działka” tylko przy domach i segmentach
+        if ($lokale->contains(fn (Property $l) => $l->pokazujDzialke())) {
+            $filtry['dzialka'] = ['Działka', self::DZIALKA];
+        }
 
         // „Piętro” tylko tam, gdzie ma zastosowanie (nie przy samych domach i segmentach)
         if ($lokale->contains(fn (Property $l) => $l->pokazujPietro())) {

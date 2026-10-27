@@ -6,7 +6,10 @@
        rata = K * m / (1 - (1 + m)^(-n))
 
    gdzie K to kwota kredytu, m to oprocentowanie miesięczne (roczne / 12),
-   a n to liczba miesięcy. Ten sam wzór stosują banki dla rat równych. */
+   a n to liczba miesięcy. Ten sam wzór stosują banki dla rat równych.
+
+   Oprocentowanie z atrybutu data-oprocentowanie (panel: Sekcje stron -> Kalkulator raty).
+   Karta lokalu ma trzeci suwak - wkład własny w % ceny: K = cena - wkład. */
 
 (function ($) {
 	'use strict';
@@ -16,10 +19,14 @@
 		return;
 	}
 
-	var OPROCENTOWANIE = 6.7;   // procent w skali roku, wartość z projektu
+	// procent w skali roku; 6,7 - wartość z projektu, gdyby atrybutu zabrakło
+	var OPROCENTOWANIE = parseFloat($kalkulator.attr('data-oprocentowanie')) || 6.7;
 
 	var $kwota = $kalkulator.find('[name="kwota"]');
 	var $okres = $kalkulator.find('[name="okres"]');
+	var $wklad = $kalkulator.find('[name="wklad"]');
+	var $opisWkladu = $kalkulator.find('.wartosc-wkladu');
+	var $opisKredytu = $kalkulator.find('.wartosc-kredytu');
 	var $opisKwoty = $kalkulator.find('.wartosc-kwoty');
 	var $opisOkresu = $kalkulator.find('.wartosc-okresu');
 	var $rata = $kalkulator.find('.wynik-raty');
@@ -65,19 +72,27 @@
 
 	function przelicz() {
 		var kwota = parseFloat($kwota.val());
+		var procentWkladu = $wklad.length ? parseInt($wklad.val(), 10) : 0;
+		var wklad = kwota * procentWkladu / 100;
+		var kredyt = kwota - wklad;
 		var latKredytu = parseInt($okres.val(), 10);
 		var miesiecy = latKredytu * 12;
 		var miesieczne = OPROCENTOWANIE / 100 / 12;
 
-		var rata = kwota * miesieczne / (1 - Math.pow(1 + miesieczne, -miesiecy));
+		var rata = kredyt * miesieczne / (1 - Math.pow(1 + miesieczne, -miesiecy));
 
 		$opisKwoty.text(formatKwoty === 'grosze-kropki' ? zlotowkiZKropkami(kwota) : bezGroszy(kwota));
 		$opisOkresu.text(lata(latKredytu));
+		$opisWkladu.text(procentWkladu + '% (' + bezGroszy(wklad) + ')');
+		$opisKredytu.text(zlotowkiZKropkami(kredyt));
 		// Makieta pokazuje konkretną wartość startową
 		$rata.text(pierwszyPomiar ? wynikPoczatkowy : zlotowkiZKropkami(rata));
 
 		pomaluj($kwota);
 		pomaluj($okres);
+		if ($wklad.length) {
+			pomaluj($wklad);
+		}
 	}
 
 	$kalkulator.on('input change', 'input[type="range"]', function () {

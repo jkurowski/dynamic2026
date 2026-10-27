@@ -37,4 +37,10 @@ class Format
 
         return $od === $do ? $od . ' m²' : $od . ' - ' . $do . ' m²';
     }
+
+    /** 6.7 -> „6,7%”, 6.09 -> „6,09%” */
+    public static function procent($wartosc): string
+    {
+        return rtrim(rtrim(number_format((float) $wartosc, 2, ',', ''), '0'), ',') . '%';
+    }
 }

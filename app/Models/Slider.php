@@ -88,7 +88,7 @@ class Slider extends Model
         return [
             'lokalizacja' => (string) $this->text,
             'tytul' => $this->title,
-            'link' => $this->link ?: route('menu.show', ['uri' => 'inwestycje']),
+            'link' => $this->link ?: static::linkInwestycji($this->title),
             'przycisk' => $this->link_button ?: 'Zobacz inwestycję',
             'cel' => $this->link_target ?: null,
             'alt' => $this->file_alt ?: 'Wizualizacja inwestycji ' . $this->title,
@@ -107,6 +107,17 @@ class Slider extends Model
         return asset(self::KATALOG . $szerokosc . '/' . ($webp ? 'webp/' . $base . '.webp' : $base . '.jpg'));
     }
 
+    /**
+     * Przycisk slajdu bez adresu z panelu: inwestycja o tej samej nazwie co tytuł slajdu
+     * (podstrona, strona zewnętrzna albo jej karta na liście), inaczej lista inwestycji.
+     */
+    private static function linkInwestycji(?string $tytul): string
+    {
+        $inwestycja = Investment::frontu()->first(fn (Investment $i) => mb_strtolower(trim($i->name)) === mb_strtolower(trim((string) $tytul)));
+
+        return $inwestycja ? $inwestycja->linkMenu() : route('inwestycje.index');
+    }
+
     private static function slajdyMakiety(): array
     {
         return array_map(function ($s) {
@@ -115,12 +126,15 @@ class Slider extends Model
                 ? asset("img/hero-768.$ext") . ' 768w, ' . asset("img/hero-1280.$ext") . ' 1280w, ' . asset("img/hero-1920.$ext") . ' 1920w'
                 : asset("img/$plik.$ext");
 
+            $link = static::linkInwestycji($tytul);
+
             return [
                 'lokalizacja' => $lokalizacja,
                 'tytul' => $tytul,
-                'link' => route('menu.show', ['uri' => 'inwestycje']),
+                'link' => $link,
                 'przycisk' => 'Zobacz inwestycję',
-                'cel' => null,
+                // strona inwestycji poza serwisem - w nowej karcie
+                'cel' => str_starts_with($link, url('/')) ? null : '_blank',
                 'alt' => 'Wizualizacja inwestycji ' . $tytul,
                 'zdjecieJpg' => asset('img/' . ($responsywne ? 'hero-1920' : $plik) . '.jpg'),
                 'srcsetJpg' => $srcset('jpg'),
