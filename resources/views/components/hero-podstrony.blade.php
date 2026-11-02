@@ -3,6 +3,8 @@
      Użycie: <x-hero-podstrony class="hero-finansowanie" :sciezka="['Finansowanie' => null]" zdjecie="fin-hero" alt="...">...</x-hero-podstrony> --}}
 @props(['sciezka' => [], 'zdjecie', 'alt' => ''])
 <section {{ $attributes->class(['fin-hero']) }}>
+	{{-- Do 1024px okruszki stoją nad zdjęciem (kopia w .fin-hero-tresc jest wtedy ukryta) --}}
+	<x-okruszki class="okruszki-nad-zdjeciem" :sciezka="$sciezka" />
 
 	<div class="fin-hero-tresc">
 		<x-okruszki :sciezka="$sciezka" />

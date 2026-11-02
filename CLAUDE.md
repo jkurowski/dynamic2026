@@ -302,3 +302,26 @@ Zasada: aktualizujemy tylko Bootstrap, jQuery, Inputmask, Moment, datepicker. Re
 - Kalkulator raty: założenia w Sekcjach stron `kalkulator-raty` (oprocentowanie - liczy ratę, RRSO - tylko napis, puste = niewidoczne; wkład własny startowy %, okres, „stan na”, zastrzeżenie), wspólne dla Finansowania i kart lokali. Karta lokalu: suwak wkładu własnego, kredyt = cena - wkład (wcześniej rata od pełnej ceny, a w JS 6,7% przy napisie „RRSO 6,09%”). Pole `tekst` z `'liczba' => [min, max]` (walidacja, `$s->liczba()`), `'pomoc'` = podpowiedź pod polem. `Format::procent()`.
 - Raport cen dane.gov.pl (audyt 27.10): `Api\History\IndexController` to STARA wersja (Nr faxu, data 09.09.2025 na sztywno, rodzaj „Mieszkanie / Apartament”), trasy `/api/xml/*`, brak `public/datasets`. W bazie 0 firm, 0 punktów sprzedaży, inwestycje bez `inv_*`, prospektów i company/sale_point. Do przeniesienia: kontroler z newkalter/lowicka100 (skill raport-cen-dane-gov) + domy/segmenty jako „dom jednorodzinny”.
 - Testy: Chrome „Browser 1” (Windows) jest na INNYM komputerze - nie widzi dynamic-cms.test. Lokalnie headless Chrome przez CDP (scratchpad `cdp.mjs <url> <szer> [wys] [png] [js]`).
+
+## Uwagi klienta z 30.10.2026
+- Stopka: w pasku praw link „Dynamic Investment - generalny wykonawca” → https://dynamicinvestment.pl/ (nowa karta; na telefonie w osobnej linii, `.separator-praw`).
+- Poznaj nas, sekcja „O nas”: dopisane zdanie „Generalnym wykonawcą naszych inwestycji jest Dynamic Investment” z linkiem (`.link-wykonawcy`). Przycisk-pigułka odrzucony - dosuwał się do sekcji Historia firmy.
+- Klient: kolejna wersja 2.11, gdzie trzeba - dane robocze. Dane firmy do raportu cen są już w stopce (z obecnej strony: Plonowa 24 Nowa Wola, KRS/NIP/REGON), biura w `cities`, adres Hygge w `investments.address`.
+
+## Schowek: porównanie i zbiorcze zapytanie (2026-11-02, wzorzec: schowek Kaltera)
+- `/schowek` (`schowek`, `Front\SchowekController`): lista lokali w adresie `?lokale=6,19,28` (max 10, tylko lokale widoczne na froncie, w kolejności z listy) - link da się przesłać. Schowek nadal w localStorage (glowny.js); `/schowek` bez `lokale` → `location.replace` na adres z listą. Serce w pasku bocznym i licznik → `/schowek?lokale=...`. Tryb `?ulubione=1` w wyszukiwarce zostaje, ale nic do niego nie linkuje.
+- Widok `front/schowek/index`: tabela porównania (rzut, nazwa, cena, status; wiersze Inwestycja…Termin oddania, puste wiersze pomijane, wiersze z różnymi wartościami wyróżnione - `rozne`), SPRAWDŹ / USUŃ (`.usun-ze-schowka`). LESS `schowek.less`. Na dotyku sekcja tabeli przypinana i przykrywana kartą Kontakt (animacje.js, jak w szablonie) - zamierzone.
+- Zbiorcze zapytanie: `<x-sekcje.kontakt :lokale tytul>` → ukryte pole `lokale` (id po przecinku). `ContactController::zapytanieZeSchowka()`: do wiadomości lista lokali z linkami; 1 lokal = zwykłe zapytanie o lokal; jedna inwestycja → `investment_id` (adresaci = biuro inwestycji); różne → adres główny. `client_msg.arguments.property_ids`. Mail: `nl2br(e())`.
+- Usunięte stare pliki schowka Kaltera (`Front/Clipboard`, `ClipboardFormRequest`, `ClipboardSend`, widoki `front/clipboard`, `front/contact/clipboard-form`, `front/mail/clipboard`, composer `clipboardCount`, trasy `clipboard.*`).
+- Test 2026-11-02 (headless): porównanie 1920/390/motyw jasny, przekierowanie, USUŃ, wysyłka (property_ids, investment_id) - OK; testowy klient usunięty.
+
+## Moduły CRM w panelu - NIE ruszać (decyzja 2026-11-02)
+- Klient nie wykupił CRM; porządek w CRM będzie osobno później. Nie zmieniać ekranów `admin/crm/*` (cofnięta poprawka XSS w czacie klienta - znany problem: `admin/crm/client/chat/index` wstawia treść wiadomości do innerHTML bez escapowania; do naprawy przy porządkach w CRM).
+- Wyjątek: kod, przez który przechodzi formularz frontu - `ClientRepository::createClient` i `admin/crm/client/chat/mail-template` (szablon maila `ChatSend` do biura).
+
+## Przegląd szerokości 1366/1024/720/560/320 (2026-11-02)
+- 16 podstron (headless): brak poziomego przewijania i elementów poza ekranem. Poprawione 2 błędy (oba też w szablonie):
+  - hero podstron (`.fin-hero`: Finansowanie, Wykończenie, Poznaj nas; `.inwestycja-hero`) do 1024px: okruszki były absolutne z ujemnym marginesem od szerokości zdjęcia - przy dwóch liniach wchodziły pod nagłówek. Teraz kopia `<x-okruszki class="okruszki-nad-zdjeciem">` jako pierwsze dziecko sekcji (widoczna tylko do 1024px), kopia w `.fin-hero-tresc` wtedy `display: none`. Desktop bez zmian.
+  - karta lokalu < 768px: „Wszystkie lokale” + „Następne” mieszczą się w jednej linii od 320px (odstępy 8px).
+- Skrypt kontroli: scratchpad `uklad2.js` (do `cdp.mjs`) - stopkę pomija (jest `position: fixed` pod treścią, fałszywe nakładania).
+- Kalkulator raty (2026-11-02): mechanizm gotowy, czekamy na dane od klienta (oprocentowanie - teraz robocze 6,7%, RRSO, „stan na”) - klient obiecał materiały. Wpisać w panelu: Sekcje stron → Kalkulator raty.

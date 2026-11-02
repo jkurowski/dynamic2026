@@ -1,12 +1,14 @@
 {{-- Sekcja kontaktu z formularzem - wspólna dla 6 podstron szablonu (index, finansowanie, inwestycja, lokal, poznaj-nas, wykończenie).
      Propsy przekazywane do <x-formularz-kontaktowy>. back=true domyślnie: sekcja stoi na innej stronie,
-     więc po wysyłce wracamy na nią ("Wyślij i wróć"), zamiast przenosić na /kontakt. --}}
-@props(['strona' => 'Kontakt', 'investmentId' => null, 'propertyId' => null, 'back' => true])
+     więc po wysyłce wracamy na nią ("Wyślij i wróć"), zamiast przenosić na /kontakt.
+     lokale - zbiorcze zapytanie ze schowka (kolekcja lokali). --}}
+@props(['strona' => 'Kontakt', 'investmentId' => null, 'propertyId' => null, 'back' => true, 'lokale' => null, 'tytul' => null])
 <section class="kontakt sekcja-karta" id="kontakt">
 
 	<div class="kontakt-lewa pojawia-sie">
 		<x-etykieta>KONTAKT</x-etykieta>
-		<h2 class="tytul-sekcji rozjasnia-sie">Masz pytania?<br><span class="akcent">Skontaktuj się z Biurem Sprzedaży</span></h2>
+		{{-- tytul - własny nagłówek (HTML), np. w schowku „Zapytaj o wybrane oferty” --}}
+		<h2 class="tytul-sekcji rozjasnia-sie">{!! $tytul ?? 'Masz pytania?<br><span class="akcent">Skontaktuj się z Biurem Sprzedaży</span>' !!}</h2>
 		<p class="kontakt-wstep">Masz pytania dotyczące mieszkań lub inwestycji?<br>Skontaktuj się z nami - chętnie doradzimy i pomożemy znaleźć najlepsze rozwiązanie</p>
 
 		{{-- Biura z panelu (Miasta): zakładki + dane; pierwsze aktywne biuro widoczne na start --}}
@@ -54,6 +56,6 @@
 		@endforeach
 	</div>
 
-	<x-formularz-kontaktowy :strona="$strona" :investment-id="$investmentId" :property-id="$propertyId" :back="$back" />
+	<x-formularz-kontaktowy :strona="$strona" :investment-id="$investmentId" :property-id="$propertyId" :back="$back" :lokale="$lokale" />
 
 </section>

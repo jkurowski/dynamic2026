@@ -97,6 +97,8 @@
 		<h2 class="tytul-sekcji rozjasnia-sie">Firma rodzinna<br><span class="akcent">z doświadczeniem</span></h2>
 		<p>Jesteśmy firmą z <strong>bogatymi tradycjami rodzinnymi</strong>, co w połączeniu z naszym doświadczeniem pozwoliło nam jeszcze lepiej zrozumieć potrzeby współczesnych Klientów. Wiemy dobrze, że nieruchomości mają być nie tylko użyteczne i funkcjonalne, ale także i nowoczesne.</p>
 		<p>Od początku naszej działalności wybudowaliśmy blisko <strong>1000 lokali mieszkalnych i użytkowych</strong>, których łączna powierzchnia wynosi ponad <strong>40 tysięcy metrów kwadratowych</strong>. Oferowane przez nas mieszkania i domy to nieruchomości z różnych segmentów cenowych, które łączy jedno – możliwie najwyższa jakość, a także niebanalny design.</p>
+		{{-- Uwaga klienta 30.10: krótka informacja o generalnym wykonawcy z odnośnikiem --}}
+		<p>Generalnym wykonawcą naszych inwestycji jest <a class="link-wykonawcy" href="https://dynamicinvestment.pl/" target="_blank" rel="noopener">Dynamic Investment</a>.</p>
 	</x-sekcje.zdjecie-tekst>
 
 	<!-- ============ HISTORIA FIRMY ============ -->

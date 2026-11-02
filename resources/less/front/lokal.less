@@ -63,8 +63,12 @@
 	@media (max-width: (@telefon-duzy - 1px)) {
 		padding-top: 40px;
 		flex-wrap: wrap;
+		// „Wszystkie lokale” (pierwszy lokal) jest dłuższe niż „Poprzednie” z makiety - przy 320px
+		// z odstępami 20/14px (i jeszcze 10/10px) „Następne” spadało do drugiej linii
+		column-gap: 8px;
 
 		a {
+			gap: 8px;
 			font-size: 14px;
 		}
 

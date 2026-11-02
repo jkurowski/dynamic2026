@@ -6013,6 +6013,26 @@ body.stopka-odslaniana main {
     padding-bottom: 0;
   }
 }
+.pasek-praw a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pasek-praw a:hover,
+.pasek-praw a:focus-visible {
+  color: #F17A2C;
+}
+@media (max-width: 575px) {
+  .pasek-praw .separator-praw {
+    display: block;
+    height: 4px;
+    overflow: hidden;
+    color: transparent;
+  }
+}
+.okruszki-nad-zdjeciem {
+  display: none;
+}
 .okruszki {
   margin: 0;
   color: var(--tekst-na-ciemnym);
@@ -7585,7 +7605,7 @@ body.stopka-odslaniana main {
   .fin-hero {
     display: flex;
     flex-direction: column;
-    padding-top: 132px;
+    padding-top: 130px;
     --parallaks: 1;
     --postep: 0;
     --skos: clamp(0, 1 - var(--postep) / .6, 1);
@@ -7659,16 +7679,19 @@ body.stopka-odslaniana main {
   .fin-hero .fin-hero-kolumna {
     max-width: none;
   }
-  .fin-hero .okruszki {
+  .fin-hero .fin-hero-tresc .okruszki {
+    display: none;
+  }
+  .fin-hero .okruszki-nad-zdjeciem {
     width: 100%;
     max-width: var(--kontener-maks, 1728px);
     margin: 0 auto;
     padding: 0 var(--kontener-wciecie, 24px);
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin-top: calc(-42px - 59.2719%);
+    display: block;
+    order: -2;
+    position: relative;
     z-index: 3;
+    margin-bottom: 24px;
   }
   .fin-hero .fin-hero-tresc {
     padding-top: 40px;
@@ -10123,8 +10146,10 @@ input[type="range"].tor:focus-visible {
   .nawigacja-lokalu {
     padding-top: 40px;
     flex-wrap: wrap;
+    column-gap: 8px;
   }
   .nawigacja-lokalu a {
+    gap: 8px;
     font-size: 14px;
   }
   .nawigacja-lokalu .plan-pietra {
@@ -14052,6 +14077,16 @@ input[type="range"].tor:focus-visible {
     top: 9.93173vw;
   }
 }
+.partner-o-nas .link-wykonawcy {
+  color: #DC5C0C;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.partner-o-nas .link-wykonawcy:hover,
+.partner-o-nas .link-wykonawcy:focus-visible {
+  color: #F17A2C;
+}
 .inwestycja-hero {
   position: relative;
   overflow: hidden;
@@ -14177,7 +14212,7 @@ input[type="range"].tor:focus-visible {
   .inwestycja-hero {
     display: flex;
     flex-direction: column;
-    padding-top: calc(122px + 3.534%);
+    padding-top: 130px;
     --parallaks: 1;
     --postep: 0;
     --skos: clamp(0, 1 - var(--postep) / .6, 1);
@@ -14257,16 +14292,19 @@ input[type="range"].tor:focus-visible {
   .inwestycja-hero .inwestycja-hero-kolumna {
     max-width: none;
   }
-  .inwestycja-hero .okruszki {
+  .inwestycja-hero .fin-hero-tresc .okruszki {
+    display: none;
+  }
+  .inwestycja-hero .okruszki-nad-zdjeciem {
     width: 100%;
     max-width: var(--kontener-maks, 1728px);
     margin: 0 auto;
     padding: 0 var(--kontener-wciecie, 24px);
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin-top: calc(-32px - 67.322%);
+    display: block;
+    order: -2;
+    position: relative;
     z-index: 3;
+    margin-bottom: calc(24px + 3.534%);
   }
   .inwestycja-hero .fin-hero-tresc {
     padding-top: 40px;
@@ -16550,6 +16588,269 @@ input[type="range"].tor:focus-visible {
     flex: 0 0 auto;
     margin-left: auto;
   }
+}
+.porownanie-ofert {
+  width: 100%;
+  max-width: var(--kontener-maks, 1728px);
+  margin: 0 auto;
+  padding: 0 var(--kontener-wciecie, 24px);
+  padding-top: 63px;
+  padding-bottom: 80px;
+}
+.pasek-schowka {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
+  margin: 0 0 18px;
+  color: #91929D;
+  font-size: 18px;
+}
+.pasek-schowka strong {
+  color: var(--tekst-na-ciemnym);
+}
+.pasek-schowka .legenda-roznic {
+  font-size: 15px;
+}
+.pasek-schowka .legenda-roznic::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border-left: 3px solid #DC5C0C;
+  background: rgba(220, 92, 12, 0.14);
+  vertical-align: -2px;
+}
+.schowek-pusty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 60px 20px;
+  border: 1px solid #555565;
+  border-radius: 12px;
+  background: #292942;
+  text-align: center;
+}
+.schowek-pusty p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--tekst-na-ciemnym);
+  font-size: 18px;
+  line-height: 1.7;
+}
+.przewijanie-porownania {
+  overflow-x: auto;
+  border: 1px solid #555565;
+  border-radius: 12px;
+  background: #292942;
+}
+.przewijanie-porownania:focus-visible {
+  outline: 2px solid #DC5C0C;
+  outline-offset: 2px;
+}
+.tabela-porownania {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--tekst-na-ciemnym);
+}
+.tabela-porownania th,
+.tabela-porownania td {
+  min-width: 260px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #555565;
+  text-align: center;
+  vertical-align: middle;
+}
+.tabela-porownania tr > :first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 190px;
+  width: 190px;
+  border-right: 1px solid #555565;
+  background: #292942;
+  color: #91929D;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: left;
+}
+.tabela-porownania td {
+  font-size: 18px;
+  font-weight: 600;
+}
+.tabela-porownania tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.tabela-porownania thead th {
+  padding-top: 24px;
+  padding-bottom: 24px;
+  vertical-align: top;
+}
+.tabela-porownania .rzut-porownania {
+  display: block;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+.tabela-porownania .rzut-porownania img {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: contain;
+}
+.tabela-porownania .nazwa-lokalu {
+  display: block;
+  color: var(--tekst-na-ciemnym);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+}
+.tabela-porownania .nazwa-lokalu .akcent {
+  color: #DC5C0C;
+}
+.tabela-porownania .nazwa-lokalu:hover {
+  color: #F17A2C;
+}
+.tabela-porownania .cena {
+  display: block;
+  margin: 6px 0 12px;
+  color: #DC5C0C;
+  font-size: 22px;
+  font-weight: 700;
+}
+.tabela-porownania .status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: #457C52;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+}
+.tabela-porownania .status.rezerwacja {
+  background: #DC5C0C;
+}
+.tabela-porownania .status.sprzedane {
+  background: #AC2B2B;
+}
+.tabela-porownania tr.rozne > td {
+  background: rgba(220, 92, 12, 0.08);
+}
+.tabela-porownania tr.rozne > th {
+  box-shadow: inset 3px 0 0 #DC5C0C;
+  color: var(--tekst-na-ciemnym);
+}
+.tabela-porownania .akcje-porownania td {
+  white-space: nowrap;
+}
+.tabela-porownania .przycisk-sprawdz {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  margin: 4px;
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--tekst-na-ciemnym);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+.tabela-porownania .przycisk-sprawdz::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: #DC5C0C;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--czas-zamalowania) cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tabela-porownania .przycisk-sprawdz:hover::after,
+.tabela-porownania .przycisk-sprawdz:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.tabela-porownania .przycisk-sprawdz::before {
+  content: '';
+  width: 7px;
+  height: 14px;
+  margin-right: 10px;
+  flex: 0 0 auto;
+  background: url('../img/ikona-strzalka-pigulka.svg') center / 100% 100% no-repeat;
+}
+.tabela-porownania .przycisk-sprawdz:hover,
+.tabela-porownania .przycisk-sprawdz:focus-visible {
+  border-color: #DC5C0C;
+}
+.strona-schowka .kontakt {
+  margin-top: 0;
+}
+@media (max-width: 575px) {
+  .porownanie-ofert {
+    padding-top: 32px;
+    padding-bottom: 48px;
+  }
+  .tabela-porownania th,
+  .tabela-porownania td {
+    min-width: 210px;
+    padding: 12px 14px;
+  }
+  .tabela-porownania tr > :first-child {
+    min-width: 110px;
+    width: 110px;
+    font-size: 14px;
+  }
+  .tabela-porownania td {
+    font-size: 16px;
+  }
+  .tabela-porownania .rzut-porownania img {
+    height: 150px;
+  }
+  .tabela-porownania .nazwa-lokalu {
+    font-size: 20px;
+  }
+  .tabela-porownania .cena {
+    font-size: 18px;
+  }
+}
+html.motyw-jasny .schowek-pusty,
+html.motyw-jasny .przewijanie-porownania,
+html.motyw-jasny .tabela-porownania tr > :first-child {
+  background: #F1F1F7;
+  border-color: #D8D8E2;
+}
+html.motyw-jasny .tabela-porownania th,
+html.motyw-jasny .tabela-porownania td {
+  border-color: #D8D8E2;
+}
+html.motyw-jasny .tabela-porownania tr > :first-child,
+html.motyw-jasny .pasek-schowka {
+  color: #6B6A75;
+}
+html.motyw-jasny .tabela-porownania .rzut-porownania {
+  border: 1px solid #D8D8E2;
+}
+html.motyw-jasny .tabela-porownania .przycisk-sprawdz {
+  border-color: var(--tekst-na-ciemnym);
 }
 html.motyw-jasny {
   --tekst-na-ciemnym: #25253A;

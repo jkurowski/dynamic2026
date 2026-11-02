@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Notification;
  * Formularz kontaktowy frontu - jeden dla wszystkich kontekstów (wzorzec: poligonowa).
  *
  * Kontekst przychodzi w polach ukrytych: `page` (nazwa strony), `investment_id`, `property_id`,
- * `back` ("Wyślij i wróć": po wysyłce powrót na stronę formularza zamiast na /kontakt).
+ * `back` ("Wyślij i wróć": po wysyłce powrót na stronę formularza zamiast na /kontakt),
+ * `lokale` (zbiorcze zapytanie ze schowka - lista lokali trafia do treści wiadomości).
  * Każde zgłoszenie zakłada / aktualizuje klienta, jego wiadomość i zgody RODO (ClientObserver).
  */
 class ContactController extends Controller
@@ -49,6 +50,10 @@ class ContactController extends Controller
     {
         $property = $request->filled('property_id') ? Property::find($request->input('property_id')) : null;
 
+        if ($request->filled('lokale')) {
+            $property = $this->zapytanieZeSchowka($request);
+        }
+
         $this->store($request, $property);
 
         if ($request->boolean('back')) {
@@ -67,6 +72,38 @@ class ContactController extends Controller
         $this->store($request, Property::findOrFail($id));
 
         return redirect()->back()->with('success', self::SENT_MESSAGE);
+    }
+
+    /**
+     * Zbiorcze zapytanie ze schowka: lista lokali (nazwa, inwestycja, metraż, cena, adres karty) dopisana do wiadomości -
+     * widać ją w panelu (Skrzynka) i w mailu do biura. Jeden lokal = zwykłe zapytanie o lokal; lokale jednej
+     * inwestycji = zapytanie przy inwestycji (adresaci = biuro inwestycji); różne inwestycje = adres główny.
+     */
+    private function zapytanieZeSchowka(Request $request): ?Property
+    {
+        $lokale = SchowekController::lokale($request->input('lokale'));
+        if ($lokale->isEmpty()) {
+            return null;
+        }
+
+        $lista = $lokale->map(fn (Property $l) => sprintf('- %s, %s, %s, %s - %s',
+            $l->nazwaPelna(), $l->investment->name, $l->metraz(),
+            $l->maCene() ? $l->cena() : $l->statusNapis(), $l->link()))->implode("
+");
+
+        $request->merge(['message' => trim($request->input('message')) . "
+
+Lokale ze schowka (" . $lokale->count() . "):
+" . $lista]);
+
+        if ($lokale->count() === 1) {
+            return $lokale->first();
+        }
+        if ($lokale->pluck('investment_id')->unique()->count() === 1) {
+            $request->merge(['investment_id' => $lokale->first()->investment_id]);
+        }
+
+        return null;
     }
 
     private function store(Request $request, ?Property $property = null): void

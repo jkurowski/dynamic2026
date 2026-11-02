@@ -136,7 +136,7 @@
 	.inwestycja-hero {
 		display: flex;
 		flex-direction: column;
-		padding-top: calc(122px + 3.534%);
+		padding-top: 130px;
 
 		.tlo-strony(
 			~".inwestycja-zdjecie";
@@ -186,13 +186,20 @@
 			max-width: none;
 		}
 
-		.okruszki {
+		// Okruszki nad zdjęciem (kopia .okruszki-nad-zdjeciem, pierwsza w sekcji). Pozycja
+		// absolutna z makiety, liczona od szerokości zdjęcia, chowała je pod nagłówkiem,
+		// gdy zawijały się na dwie linie.
+		.fin-hero-tresc .okruszki {
+			display: none;
+		}
+
+		.okruszki-nad-zdjeciem {
 			.kontener();
-			position: absolute;
-			left: 0;
-			top: 0;
-			margin-top: ~"calc(-32px - 67.322%)";
+			display: block;
+			order: -2;
+			position: relative;
 			z-index: 3;
+			margin-bottom: ~"calc(24px + 3.534%)";
 		}
 
 		.fin-hero-tresc {

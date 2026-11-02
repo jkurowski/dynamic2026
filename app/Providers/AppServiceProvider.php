@@ -168,11 +168,6 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('current_locale', app()->getLocale());
 
-        view()->composer('*', function ($view) {
-            $items = session('clipboard.items');
-            $view->with('clipboardCount', $items ? 1 : 0);
-        });
-
         View::share('available_locales', config('app.available_locales'));
         View::share('rules', RodoRules::orderBy('sort')->whereActive(1)->get());
         View::share('cities', City::where('active', 1)->orderBy('sort')->get());

@@ -343,3 +343,25 @@ body.stopka-odslaniana {
 		padding-bottom: 0;
 	}
 }
+
+// Link do generalnego wykonawcy (uwaga klienta 30.10) - w pasku praw, w kolorze napisu
+.pasek-praw a {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+
+	&:hover,
+	&:focus-visible {
+		color: @pomaranczowy-jasny;
+	}
+}
+
+@media (max-width: (@telefon-duzy - 1px)) {
+	// na telefonie link w osobnej linii zamiast kropki
+	.pasek-praw .separator-praw {
+		display: block;
+		height: 4px;
+		overflow: hidden;
+		color: transparent;
+	}
+}

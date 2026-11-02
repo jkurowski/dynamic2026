@@ -28,6 +28,8 @@
 @section('content')
 	<!-- ============ NAGŁÓWEK INWESTYCJI ============ -->
 	<section class="inwestycja-hero">
+		{{-- Do 1024px okruszki stoją nad zdjęciem (kopia w .fin-hero-tresc jest wtedy ukryta) --}}
+		<x-okruszki class="okruszki-nad-zdjeciem" :sciezka="['Inwestycje' => route('inwestycje.index'), $inwestycja->name => null]" />
 		<div class="fin-hero-tresc">
 			<x-okruszki :sciezka="['Inwestycje' => route('inwestycje.index'), $inwestycja->name => null]" />
 			<div class="inwestycja-hero-kolumna pojawia-sie">

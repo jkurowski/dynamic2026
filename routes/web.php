@@ -104,10 +104,8 @@ Route::middleware(['restrictIp'])->group(function () {
         Route::get('/inwestycje/{inwestycja}/{lokal}', 'InwestycjeController@lokal')->where(['inwestycja' => '[a-z0-9\-]+', 'lokal' => '\d+(-[a-z0-9\-]*)?'])->name('inwestycje.lokal');
         Route::get('/wybierz-nieruchomosc', 'WyszukiwarkaController@index')->name('wyszukiwarka');
 
-        Route::post('/clipboard', 'Clipboard\IndexController@store')->name('clipboard.store');
-        Route::post('/clipboard/send', 'Clipboard\IndexController@send')->name('clipboard.send');
-        Route::get('/schowek', 'Clipboard\IndexController@index')->name('clipboard.index');
-        Route::delete('/clipboard', 'Clipboard\IndexController@destroy')->name('clipboard.destroy');
+        // Schowek: porównanie zapisanych lokali + zbiorcze zapytanie (lista w localStorage, ?lokale=1,2,3)
+        Route::get('/schowek', 'SchowekController@index')->name('schowek');
 
         Route::resource('/aktualnosci', 'ArticleController')->only(['index', 'show']);
         Route::resource('/gallery', 'GalleryController');

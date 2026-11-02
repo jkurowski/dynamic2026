@@ -185,6 +185,11 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
                 $arguments['investment_id'] = (int) $attributes['investment_id'];
             }
 
+            // Zbiorcze zapytanie ze schowka - wszystkie lokale (pojedynczy lokal ma property_id wyżej)
+            if (!empty($attributes['lokale']) && !isset($arguments['property_id'])) {
+                $arguments['property_ids'] = array_map('intval', explode(',', $attributes['lokale']));
+            }
+
             // Leady z portali (ProcessLeads)
             if ($source && isset($attributes['is_external_source'])) {
                 $arguments['is_external'] = $attributes['is_external_source'];

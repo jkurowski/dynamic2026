@@ -55,5 +55,5 @@
 
 	</div>
 
-	<p class="pasek-praw">Copyright © {{ date('Y') }} Dynamic Development All Rights Reserved</p>
+	<p class="pasek-praw">Copyright © {{ date('Y') }} Dynamic Development All Rights Reserved<span class="separator-praw"> · </span><a href="https://dynamicinvestment.pl/" target="_blank" rel="noopener">Dynamic Investment - generalny wykonawca</a></p>
 </footer>

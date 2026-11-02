@@ -36,6 +36,8 @@ class ContactFormRequest extends FormRequest
             'back' => 'nullable|boolean',
             'investment_id' => 'nullable|integer|exists:investments,id',
             'property_id' => 'nullable|integer|exists:properties,id',
+            // Zbiorcze zapytanie ze schowka: id lokali po przecinku
+            'lokale' => ['nullable', 'string', 'max:200', 'regex:/^\d+(,\d+)*$/'],
         ];
 
         // Wymagane zgody - DOKŁADNIE ten sam zestaw, który pokazał formularz (ta sama inwestycja).

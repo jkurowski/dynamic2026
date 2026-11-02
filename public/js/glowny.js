@@ -526,9 +526,9 @@
 					(aktywny ? ' z ulubionych' : ' do ulubionych'),
 			});
 		});
+		// Schowek (/schowek) dostaje listę w adresie - serwer składa z niej porównanie
 		$('.licznik-ulubionych').text(ulubione.length).closest('a').each(function () {
-			var adres = (this.getAttribute('href') || '').split('?')[0];
-			this.setAttribute('href', adres + '?ulubione=1');
+			this.setAttribute('href', adresSchowka(ulubione));
 		});
 		ustawWidokUlubionych(ulubione);
 		przeliczWyniki();
@@ -547,6 +547,35 @@
 		zapiszUlubione(ulubione);
 		aktualizujUlubione();
 	});
+
+	// --- schowek: porównanie zapisanych lokali (/schowek?lokale=12,15) ---
+	var ADRES_SCHOWKA = '/schowek';
+
+	function adresSchowka(ulubione) {
+		var numery = ulubione.map(function (id) {
+			return String(id).replace(/\D/g, '');
+		}).filter(Boolean);
+		return ADRES_SCHOWKA + (numery.length ? '?lokale=' + numery.join(',') : '');
+	}
+
+	var $porownanie = $('.porownanie-ofert[data-schowek]');
+	if ($porownanie.length) {
+		// Wejście bez listy w adresie (np. z menu) - lista z przeglądarki. Adres z listą (np. przesłany link) zostawiamy.
+		if (!new URLSearchParams(window.location.search).has('lokale') && pobierzUlubione().length) {
+			window.location.replace(adresSchowka(pobierzUlubione()));
+		}
+
+		$porownanie.on('click', '.usun-ze-schowka', function () {
+			var id = $(this).data('ulubione-id');
+			zapiszUlubione(pobierzUlubione().filter(function (zapisany) {
+				return zapisany !== id;
+			}));
+			var zostaja = String($porownanie.data('schowek')).split(',').filter(function (numer) {
+				return numer && 'lokal-' + numer !== id;
+			});
+			window.location.replace(adresSchowka(zostaja));
+		});
+	}
 
 	$(window).on('storage', aktualizujUlubione);
 	ustawNaglowekUlubionych();

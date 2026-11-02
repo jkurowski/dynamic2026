@@ -34,7 +34,7 @@
                         @isset($property->name)<p style="margin:0"><b>Lokal:</b> {{ $property->name }}</p>@endisset
                         @endif
                         <hr style="border:0;border-bottom:1px solid #ececec" />
-                        <p>{{ $request->message }}</p>
+                        <p>{!! nl2br(e($request->message)) !!}</p>
                     </td>
                 </tr>
             </table>

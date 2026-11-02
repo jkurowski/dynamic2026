@@ -1,0 +1,285 @@
+// Schowek - porównanie zapisanych lokali (front/schowek/index.blade.php). W szablonie nie ma tej strony:
+// tabela korzysta z kolorów i elementów listy lokali w wyszukiwarce (wyniki.less).
+
+.porownanie-ofert {
+	.kontener();
+	padding-top: 63px;
+	padding-bottom: 80px;
+}
+
+.pasek-schowka {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 8px 24px;
+	margin: 0 0 18px;
+	color: #91929D;
+	font-size: 18px;
+
+	strong {
+		color: var(--tekst-na-ciemnym);
+	}
+
+	.legenda-roznic {
+		font-size: 15px;
+
+		&::before {
+			content: '';
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			margin-right: 8px;
+			border-left: 3px solid @pomaranczowy;
+			background: fade(@pomaranczowy, 14%);
+			vertical-align: -2px;
+		}
+	}
+}
+
+.schowek-pusty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 28px;
+	padding: 60px 20px;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	background: #292942;
+	text-align: center;
+
+	p {
+		max-width: 640px;
+		margin: 0;
+		color: var(--tekst-na-ciemnym);
+		font-size: 18px;
+		line-height: 1.7;
+	}
+}
+
+// Przy wielu ofertach tabela przewija się w poziomie, kolumna z nazwami parametrów stoi w miejscu
+.przewijanie-porownania {
+	overflow-x: auto;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	background: #292942;
+
+	&:focus-visible {
+		outline: 2px solid @pomaranczowy;
+		outline-offset: 2px;
+	}
+}
+
+.tabela-porownania {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	color: var(--tekst-na-ciemnym);
+
+	th,
+	td {
+		min-width: 260px;
+		padding: 16px 24px;
+		border-bottom: 1px solid @granat-ramka;
+		text-align: center;
+		vertical-align: middle;
+	}
+
+	tr > :first-child {
+		position: sticky;
+		left: 0;
+		z-index: 1;
+		min-width: 190px;
+		width: 190px;
+		border-right: 1px solid @granat-ramka;
+		background: #292942;
+		color: #91929D;
+		font-size: 16px;
+		font-weight: 400;
+		text-align: left;
+	}
+
+	td {
+		font-size: 18px;
+		font-weight: 600;
+	}
+
+	tbody tr:last-child > * {
+		border-bottom: 0;
+	}
+
+	// nagłówek kolumny: rzut, nazwa, cena, status
+	thead th {
+		padding-top: 24px;
+		padding-bottom: 24px;
+		vertical-align: top;
+	}
+
+	.rzut-porownania {
+		display: block;
+		margin-bottom: 16px;
+		border-radius: 8px;
+		overflow: hidden;
+		background: @bialy;
+
+		img {
+			display: block;
+			width: 100%;
+			height: 190px;
+			object-fit: contain;
+		}
+	}
+
+	.nazwa-lokalu {
+		display: block;
+		color: var(--tekst-na-ciemnym);
+		font-size: 24px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-decoration: none;
+
+		.akcent {
+			color: @pomaranczowy;
+		}
+
+		&:hover {
+			color: @pomaranczowy-jasny;
+		}
+	}
+
+	.cena {
+		display: block;
+		margin: 6px 0 12px;
+		color: @pomaranczowy;
+		font-size: 22px;
+		font-weight: 700;
+	}
+
+	.status {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 150px;
+		height: 36px;
+		padding: 0 14px;
+		border-radius: 6px;
+		background: #457C52;
+		color: @bialy;
+		font-size: @tekst-drobny;
+		font-weight: 700;
+
+		&.rezerwacja {
+			background: @pomaranczowy;
+		}
+
+		&.sprzedane {
+			background: #AC2B2B;
+		}
+	}
+
+	// parametry, którymi oferty się różnią
+	tr.rozne > td {
+		background: fade(@pomaranczowy, 8%);
+	}
+
+	tr.rozne > th {
+		box-shadow: inset 3px 0 0 @pomaranczowy;
+		color: var(--tekst-na-ciemnym);
+	}
+
+	.akcje-porownania td {
+		white-space: nowrap;
+	}
+
+	.przycisk-sprawdz {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+		margin: 4px;
+		padding: 0 24px;
+		border: 1px solid fade(@bialy, 70%);
+		border-radius: 20px;
+		background: transparent;
+		color: var(--tekst-na-ciemnym);
+		font-size: 13px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: border-color @czas-zamalowania @krzywa-zamalowania;
+		.zamalowanie(@pomaranczowy);
+		.ukos-przycisku();
+
+		&:hover,
+		&:focus-visible {
+			border-color: @pomaranczowy;
+		}
+	}
+}
+
+.strona-schowka .kontakt {
+	margin-top: 0;
+}
+
+@media (max-width: (@telefon-duzy - 1px)) {
+	.porownanie-ofert {
+		padding-top: 32px;
+		padding-bottom: 48px;
+	}
+
+	.tabela-porownania {
+		th,
+		td {
+			min-width: 210px;
+			padding: 12px 14px;
+		}
+
+		tr > :first-child {
+			min-width: 110px;
+			width: 110px;
+			font-size: 14px;
+		}
+
+		td {
+			font-size: 16px;
+		}
+
+		.rzut-porownania img {
+			height: 150px;
+		}
+
+		.nazwa-lokalu {
+			font-size: 20px;
+		}
+
+		.cena {
+			font-size: 18px;
+		}
+	}
+}
+
+// ================= motyw jasny =================
+html.motyw-jasny {
+	.schowek-pusty,
+	.przewijanie-porownania,
+	.tabela-porownania tr > :first-child {
+		background: @j-tlo-kafel;
+		border-color: @j-ramka;
+	}
+
+	.tabela-porownania th,
+	.tabela-porownania td {
+		border-color: @j-ramka;
+	}
+
+	.tabela-porownania tr > :first-child,
+	.pasek-schowka {
+		color: @j-tekst-slaby;
+	}
+
+	.tabela-porownania .rzut-porownania {
+		border: 1px solid @j-ramka;
+	}
+
+	.tabela-porownania .przycisk-sprawdz {
+		border-color: var(--tekst-na-ciemnym);
+	}
+}
