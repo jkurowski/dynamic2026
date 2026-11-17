@@ -87,19 +87,29 @@
 			<h2 class="tytul-sekcji jasny na-srodku rozjasnia-sie">Sprawdź <span class="akcent">realizacje</span></h2>
 		</div>
 
+		{{-- Zdjęcia realizacji od klienta (16.11.2026, "zdjęcia innych realizacji"). Taśma wyróżnia środkowe
+		     zdjęcie (nth-child(3n + 2)) - liczba zdjęć musi być nieparzysta i dawać środek 3n + 2: 3, 9, 15... --}}
+		@php
+			$realizacje = [
+				'sypialnia z zagłówkiem',
+				'łazienka z wanną wolnostojącą',
+				'jadalnia',
+				'kuchnia z wyspą',
+				'salon z kuchnią i jadalnią',
+				'salon',
+				'kuchnia z podświetlaną ścianą',
+				'łazienka z widokiem na ogród',
+				'sypialnia z łazienką',
+			];
+		@endphp
 		<div class="tasma-realizacji pojawia-sie">
-			<picture>
-				<source type="image/webp" srcset="{{ asset('img/wyk-galeria-3.webp') }}">
-				<img src="{{ asset('img/wyk-galeria-3.jpg') }}" width="905" height="552" alt="Realizacja wykończenia - salon" loading="lazy">
-			</picture>
-			<picture>
-				<source type="image/webp" srcset="{{ asset('img/wyk-galeria-1.webp') }}">
-				<img src="{{ asset('img/wyk-galeria-1.jpg') }}" width="994" height="606" alt="Realizacja wykończenia - kuchnia z salonem" loading="lazy">
-			</picture>
-			<picture>
-				<source type="image/webp" srcset="{{ asset('img/wyk-galeria-2.webp') }}">
-				<img src="{{ asset('img/wyk-galeria-2.jpg') }}" width="905" height="552" alt="Realizacja wykończenia - sypialnia" loading="lazy">
-			</picture>
+			@foreach($realizacje as $nr => $opis)
+				@php $plik = 'img/wyk-realizacja-' . ($nr + 1); @endphp
+				<picture>
+					<source type="image/webp" srcset="{{ asset($plik . '-800.webp') }} 800w, {{ asset($plik . '.webp') }} 1600w" sizes="(max-width: 1024px) 100vw, 52vw">
+					<img src="{{ asset($plik . '.jpg') }}" srcset="{{ asset($plik . '-800.jpg') }} 800w, {{ asset($plik . '.jpg') }} 1600w" sizes="(max-width: 1024px) 100vw, 52vw" width="905" height="552" alt="Realizacja wykończenia - {{ $opis }}" loading="lazy">
+				</picture>
+			@endforeach
 		</div>
 
 		<div class="nawigacja-realizacji pojawia-sie opoznienie-2">
