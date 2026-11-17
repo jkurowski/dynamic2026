@@ -71,10 +71,14 @@ return [
         'investment_uploads' => [
             'driver' => 'local',
             'root'   => public_path() . '/investment',
+            // pliki publiczne - bez tego Flysystem zakłada nowe katalogi 0700 i pliki 0600 (403 na serwerze, np. investment/plan 17.11)
+            'visibility' => 'public',
         ],
         'dataset_uploads' => [
             'driver' => 'local',
             'root'   => public_path() . '/datasets',
+            // pliki publiczne - bez tego Flysystem zakłada nowe katalogi 0700 i pliki 0600 (403 na serwerze, np. investment/plan 17.11)
+            'visibility' => 'public',
         ],
     ],
 

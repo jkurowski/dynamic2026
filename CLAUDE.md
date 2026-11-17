@@ -274,6 +274,7 @@ Zasada: aktualizujemy tylko Bootstrap, jQuery, Inputmask, Moment, datepicker. Re
 - Konsola SSH (użytkownik hocancrm) bierze ustawienia PHP głównej domeny developro.pl (`open_basedir` = httpdocs/developro2018) - artisan uruchamiać: `php -d open_basedir= -d memory_limit=512M artisan ...`. Nie poszerzać open_basedir domeny developro.pl w Plesku.
 - 2026-10-14: na serwerze wykonane `demo:hygge` (4 inwestycje, 23 lokale).
 - 2026-10-27: na serwerze wykonane `demo:lake-village` (8 segmentów).
+- Dyski `investment_uploads` i `dataset_uploads` mają `visibility: public` (2026-11-17) - bez tego `storeAs` na serwerze zakładał nowe katalogi 0700 / pliki 0600 → 403 (plan Lake Village w `public/investment/plan`). Lokalnie (Windows) niewidoczne.
 - Serwer trzyma config w cache: po zmianie plików w `config/` (np. nowa sekcja w `config/sekcje.php`) uruchomić `php -d open_basedir= artisan config:clear` (bez tego 500 na Finansowaniu 2026-10-27). NIE `config:cache`/`optimize`.
 
 ## Inwestycje na nowym froncie - wersja demo (2026-10-14)
