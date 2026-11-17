@@ -69,6 +69,18 @@
 			</svg>
 			</div>
 			<p class="podpowiedz-planu">Przesuń plan w bok, aby zobaczyć wszystkie domy.</p>
+			@if($wybrany)
+				<script>
+					// na telefonie plan jest szerszy od ekranu - wybrany dom na środek widoku
+					(function () {
+						var ramka = document.currentScript.parentNode.querySelector('.plan-przewijany');
+						var dom = ramka && ramka.querySelector('[aria-current] polygon');
+						if (!dom || ramka.scrollWidth <= ramka.clientWidth) return;
+						var r = ramka.getBoundingClientRect(), d = dom.getBoundingClientRect();
+						ramka.scrollLeft = d.left - r.left + d.width / 2 - ramka.clientWidth / 2;
+					})();
+				</script>
+			@endif
 		@else
 			<svg viewBox="0 0 {{ $szerokoscPlanu }} {{ $wysokoscPlanu }}" role="img" aria-label="Schemat osiedla {{ $inwestycja->name }}">
 				@foreach($budynki as $nrBudynku => $segmenty)
