@@ -36,15 +36,17 @@
 			<span class="blad">{{ $bledy->first('name') ?: 'Podaj imię i nazwisko.' }}</span>
 		</div>
 		<div @class(['pole', 'ma-blad' => $bledy->has('phone')])>
-			<input type="tel" name="phone" value="{{ old('phone') }}" placeholder="Telefon*" maxlength="30" required>
+			{{-- wymagany telefon LUB e-mail (decyzja klienta 13.11) - komunikat zależy od tego, czy pole jest puste (js/formularz.js) --}}
+			<input type="tel" name="phone" value="{{ old('phone') }}" placeholder="Telefon**" maxlength="30">
 			<img src="{{ asset('img/ikona-telefon-form.svg') }}" width="31" height="31" alt="">
-			<span class="blad">{{ $bledy->first('phone') ?: 'Podaj numer telefonu (min. 9 cyfr).' }}</span>
+			<span class="blad" data-zly="Podaj numer telefonu (min. 9 cyfr)." data-brak="Podaj numer telefonu lub adres e-mail.">{{ $bledy->first('phone') ?: 'Podaj numer telefonu (min. 9 cyfr).' }}</span>
 		</div>
 		<div @class(['pole', 'ma-blad' => $bledy->has('email')])>
-			<input type="email" name="email" value="{{ old('email') }}" placeholder="E-mail" maxlength="191">
+			<input type="email" name="email" value="{{ old('email') }}" placeholder="E-mail**" maxlength="191">
 			<img src="{{ asset('img/ikona-koperta.svg') }}" width="31" height="31" alt="">
 			<span class="blad">{{ $bledy->first('email') ?: 'Podaj poprawny adres e-mail.' }}</span>
 		</div>
+		<p class="podpowiedz-formularza">** wystarczy jedno: telefon lub e-mail</p>
 		<div @class(['pole', 'ma-blad' => $bledy->has('message')])>
 			<textarea name="message" placeholder="Wiadomość*" maxlength="5000" required>{{ old('message', $wiadomosc) }}</textarea>
 			<img src="{{ asset('img/ikona-olowek.svg') }}" width="31" height="31" alt="">

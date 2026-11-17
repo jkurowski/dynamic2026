@@ -33,65 +33,8 @@
 		</ul>
 	</x-hero-podstrony>
 
-	<!-- ============ KALKULATOR RATY ============ -->
-	<section class="kalkulator-sekcja" id="kalkulator">
-
-		<div class="kalkulator-opis pojawia-sie">
-			<x-etykieta>OBLICZ RATĘ</x-etykieta>
-			<h2 class="tytul-sekcji rozjasnia-sie">Zapewniamy pomoc<br><span class="akcent">w uzyskaniu kredytu</span></h2>
-			<p>Współpracujący z Dynamic Development ekspert kredytowy przedstawi bogaty wybór produktów hipotecznych, odpowie na wszelkie pytania,<br class="lamanie-desktop"> a także doradzi w wyborze właściwego rodzaju oprocentowania. Przeprowadzi on także pełną analizę zdolności kredytowej, by wniosek<br class="lamanie-desktop"> o hipotekę zakończył się korzystnie dla Klienta.</p>
-			<x-przycisk-pigulka href="#kontakt" class="na-tle">SKONTAKTUJ SIĘ Z DORADCĄ</x-przycisk-pigulka>
-		</div>
-
-		{{-- Założenia (oprocentowanie, RRSO, okres, stan na) - Sekcje stron „kalkulator-raty”, wspólne z kartą lokalu --}}
-		@php $kalk = sekcja('kalkulator-raty'); @endphp
-		<div class="karta-kalkulatora pojawia-sie opoznienie-1" id="kalkulatorRaty" data-oprocentowanie="{{ $kalk->liczba('oprocentowanie') }}"{!! $kalk->edycja() !!}>
-			<h2>Kalkulator raty kredytowej</h2>
-			<p class="wprowadzenie">Oblicz przybliżoną miesięczną ratę kredytu hipotecznego.</p>
-
-			<div class="suwak">
-				<div class="opis">
-					<label class="podpis" for="suwakKwoty">Kwota kredytu</label>
-					<span class="wartosc wartosc-kwoty">500 000 zł</span>
-				</div>
-				<input class="tor" type="range" id="suwakKwoty" name="kwota"
-				       min="100000" max="1200000" step="10000" value="500000"
-				       aria-label="Kwota kredytu w złotych">
-			</div>
-
-			<div class="suwak">
-				<div class="opis">
-					<label class="podpis" for="suwakOkresu">Okres kredytowania</label>
-					<span class="wartosc wartosc-okresu">{{ (int) $kalk->liczba('okres') }} lat</span>
-				</div>
-				<!-- Zakres dobrany tak, żeby uchwyt dla 20 lat stanął tam, gdzie stoi
-				     w makiecie: wypełnienie 252px z 698px toru (Rectangle 328). -->
-				<input class="tor" type="range" id="suwakOkresu" name="okres"
-				       min="5" max="47" step="1" value="{{ (int) $kalk->liczba('okres') }}"
-				       aria-label="Okres kredytowania w latach">
-			</div>
-
-			<p class="oprocentowanie">
-				Oprocentowanie: <span class="akcent">{{ \App\Support\Format::procent($kalk->liczba('oprocentowanie')) }}</span>
-				@if($kalk->tekst('rrso'))
-					· RRSO: <span class="akcent">{{ \App\Support\Format::procent($kalk->liczba('rrso')) }}</span>
-				@endif
-				@if($kalk->tekst('aktualizacja'))
-					<span class="stan-na">(stan na {{ $kalk->tekst('aktualizacja') }})</span>
-				@endif
-			</p>
-
-			<div class="podsumowanie-raty">
-				<span class="podpis">Szacunkowa rata:</span>
-				<span class="wynik-raty" role="status">0,00 zł</span>
-			</div>
-
-			<p class="zastrzezenie">Rata równa (annuitetowa) dla podanej kwoty kredytu. {{ $kalk->tekst('zastrzezenie') }}</p>
-		</div>
-
-	</section>
-
 	<!-- ============ PARTNER KREDYTOWY ============ -->
+	{{-- zaraz pod nagłówkiem (uwaga klienta 11.11 - kontakt do doradcy bez szukania) --}}
 	<section class="partner-sekcja sekcja-karta">
 
 		<div class="partner-opis pojawia-sie">
@@ -151,6 +94,64 @@
 					<p>Doradca finansowy pomoże umówić spotkanie w dogodnym terminie<br class="lamanie-desktop"> i poprowadzi przez cały proces finansowania</p>
 				</div>
 			</div>
+		</div>
+
+	</section>
+
+	<!-- ============ KALKULATOR RATY ============ -->
+	<section class="kalkulator-sekcja" id="kalkulator">
+
+		<div class="kalkulator-opis pojawia-sie">
+			<x-etykieta>OBLICZ RATĘ</x-etykieta>
+			<h2 class="tytul-sekcji rozjasnia-sie">Zapewniamy pomoc<br><span class="akcent">w uzyskaniu kredytu</span></h2>
+			<p>Współpracujący z Dynamic Development ekspert kredytowy przedstawi bogaty wybór produktów hipotecznych, odpowie na wszelkie pytania,<br class="lamanie-desktop"> a także doradzi w wyborze właściwego rodzaju oprocentowania. Przeprowadzi on także pełną analizę zdolności kredytowej, by wniosek<br class="lamanie-desktop"> o hipotekę zakończył się korzystnie dla Klienta.</p>
+			<x-przycisk-pigulka href="#kontakt" class="na-tle">SKONTAKTUJ SIĘ Z DORADCĄ</x-przycisk-pigulka>
+		</div>
+
+		{{-- Założenia (oprocentowanie, RRSO, okres, stan na) - Sekcje stron „kalkulator-raty”, wspólne z kartą lokalu --}}
+		@php $kalk = sekcja('kalkulator-raty'); @endphp
+		<div class="karta-kalkulatora pojawia-sie opoznienie-1" id="kalkulatorRaty" data-oprocentowanie="{{ $kalk->liczba('oprocentowanie') }}"{!! $kalk->edycja() !!}>
+			<h2>Kalkulator raty kredytowej</h2>
+			<p class="wprowadzenie">Oblicz przybliżoną miesięczną ratę kredytu hipotecznego.</p>
+
+			<div class="suwak">
+				<div class="opis">
+					<label class="podpis" for="suwakKwoty">Kwota kredytu</label>
+					<span class="wartosc wartosc-kwoty">500 000 zł</span>
+				</div>
+				<input class="tor" type="range" id="suwakKwoty" name="kwota"
+				       min="100000" max="1200000" step="10000" value="500000"
+				       aria-label="Kwota kredytu w złotych">
+			</div>
+
+			<div class="suwak">
+				<div class="opis">
+					<label class="podpis" for="suwakOkresu">Okres kredytowania</label>
+					<span class="wartosc wartosc-okresu">{{ (int) $kalk->liczba('okres') }} lat</span>
+				</div>
+				<!-- Zakres dobrany tak, żeby uchwyt dla 20 lat stanął tam, gdzie stoi
+				     w makiecie: wypełnienie 252px z 698px toru (Rectangle 328). -->
+				<input class="tor" type="range" id="suwakOkresu" name="okres"
+				       min="5" max="47" step="1" value="{{ (int) $kalk->liczba('okres') }}"
+				       aria-label="Okres kredytowania w latach">
+			</div>
+
+			<p class="oprocentowanie">
+				Oprocentowanie: <span class="akcent">{{ \App\Support\Format::procent($kalk->liczba('oprocentowanie')) }}</span>
+				@if($kalk->tekst('rrso'))
+					· RRSO: <span class="akcent">{{ \App\Support\Format::procent($kalk->liczba('rrso')) }}</span>
+				@endif
+				@if($kalk->tekst('aktualizacja'))
+					<span class="stan-na">(stan na {{ $kalk->tekst('aktualizacja') }})</span>
+				@endif
+			</p>
+
+			<div class="podsumowanie-raty">
+				<span class="podpis">Szacunkowa rata:</span>
+				<span class="wynik-raty" role="status">0,00 zł</span>
+			</div>
+
+			<p class="zastrzezenie">Rata równa (annuitetowa) dla podanej kwoty kredytu. {{ $kalk->tekst('zastrzezenie') }}</p>
 		</div>
 
 	</section>

@@ -1,0 +1,198 @@
+// Plan osiedla z zaznaczonym lokalem - domy i segmenty (karta lokalu i podstrona inwestycji).
+// Na razie schemat z numerów lokali (components/inwestycje/plan-osiedla), docelowo plan od klienta.
+
+.plan-osiedla {
+	.kontener();
+	padding-top: 80px;
+	padding-bottom: 40px;
+	color: var(--tekst-na-ciemnym);
+
+	.tytul-sekcji {
+		margin-bottom: 30px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-top: 50px;
+		padding-bottom: 20px;
+	}
+}
+
+.plan-osiedla-ramka {
+	padding: 30px;
+	border: 1px solid @granat-ramka;
+	border-radius: 12px;
+	background: @granat-karta;
+
+	svg {
+		display: block;
+		width: 100%;
+		max-width: 900px;
+		height: auto;
+		margin: 0 auto;
+	}
+
+	a {
+		cursor: pointer;
+		text-decoration: none;
+	}
+
+	text {
+		fill: @bialy;
+		font-family: @font;
+		font-size: 24px;
+		font-weight: 700;
+		text-decoration: none;
+		pointer-events: none;
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		padding: 16px;
+	}
+}
+
+// kolory statusów jak w plakietkach lokali
+.segment-planu {
+	stroke: fade(@bialy, 40%);
+	stroke-width: 2;
+	transition: opacity @czas-animacji ease;
+
+	&.dostepne {
+		fill: #457C52;
+	}
+
+	&.rezerwacja {
+		fill: @pomaranczowy;
+	}
+
+	&.sprzedane {
+		fill: #AC2B2B;
+	}
+
+	a:hover & {
+		opacity: .8;
+	}
+
+	&.wybrany {
+		fill: @bialy;
+		stroke: @pomaranczowy;
+		stroke-width: 8;
+	}
+}
+
+a[aria-current] text {
+	fill: @granat;
+}
+
+.droga-planu {
+	fill: fade(@bialy, 12%);
+}
+
+.legenda-planu {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px 28px;
+	margin: 24px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 16px;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.znacznik {
+		width: 18px;
+		height: 18px;
+		border-radius: 4px;
+
+		&.dostepne {
+			background: #457C52;
+		}
+
+		&.rezerwacja {
+			background: @pomaranczowy;
+		}
+
+		&.sprzedane {
+			background: #AC2B2B;
+		}
+
+		&.wybrany {
+			background: @bialy;
+			border: 3px solid @pomaranczowy;
+		}
+	}
+}
+
+.uwaga-planu {
+	margin: 14px 0 0;
+	font-size: @tekst-drobny;
+	text-align: center;
+	opacity: .7;
+}
+
+// plan ze zdjęcia (obrysy domów z panelu) - jednostki SVG = piksele obrazka planu
+.plan-ze-zdjecia {
+	svg {
+		max-width: none;
+		border-radius: 8px;
+	}
+
+	.segment-planu {
+		stroke: @bialy;
+		stroke-width: 1;
+		fill-opacity: .55;
+
+		a:hover & {
+			opacity: 1;
+			fill-opacity: .8;
+		}
+
+		&.wybrany {
+			fill: @bialy;
+			fill-opacity: .6;
+			stroke: @pomaranczowy;
+			stroke-width: 3;
+		}
+	}
+
+	text {
+		font-size: 11px;
+		paint-order: stroke;
+		stroke: fade(#000, 45%);
+		stroke-width: 2px;
+	}
+
+	a[aria-current] text {
+		fill: @granat;
+		stroke: none;
+	}
+
+	.podpowiedz-planu {
+		display: none;
+		margin: 10px 0 0;
+		font-size: @tekst-drobny;
+		text-align: center;
+		opacity: .7;
+	}
+
+	@media (max-width: (@tablet - 1px)) {
+		.plan-przewijany {
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+			border-radius: 8px;
+		}
+
+		svg {
+			width: 680px;
+			border-radius: 0;
+		}
+
+		.podpowiedz-planu {
+			display: block;
+		}
+	}
+}

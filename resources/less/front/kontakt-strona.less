@@ -679,3 +679,27 @@
 		margin-top: 3.69792vw;
 	}
 }
+
+// --- telefon główny + formularz pod biurami (uwaga klienta 11.11) ---
+.kontakt-formularz {
+	.kontener();
+	padding-bottom: 95px;
+
+	.kontakt-gora {
+		padding-bottom: 0;
+	}
+
+	// nagłówek sekcji zamiast H1 - pierwsza ramka telefonu bliżej tytułu
+	.skrot-kontaktu {
+		margin-top: 40px;
+	}
+
+	@media (max-width: @duzy-ekran) {
+		padding-bottom: 60px;
+	}
+}
+
+// wstęp strony (bez formularza) - biura zaraz pod nim
+.kontakt-wstep-strony {
+	padding-bottom: 0;
+}

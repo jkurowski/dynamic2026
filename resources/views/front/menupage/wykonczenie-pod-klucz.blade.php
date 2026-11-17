@@ -8,11 +8,12 @@
 	<!-- ============ NAGŁÓWEK PODSTRONY ============ -->
 	<x-hero-podstrony class="hero-wykonczenie" :sciezka="['Wykończenie pod klucz' => null]" zdjecie="wyk-hero" alt="Wykończone pod klucz wnętrze mieszkania">
 		<x-etykieta>WYKOŃCZENIE POD KLUCZ</x-etykieta>
-		<h1 class="tytul-sekcji rozjasnia-sie">Wprowadź się<br><span class="akcent">na gotowe mieszkanie</span></h1>
+		{{-- uwagi klienta 11-13.11: nie „wprowadź się NA mieszkanie” i nie komunikujemy wykończenia przed odbiorem - wykończenie robi partner po odbiorze kluczy --}}
+		<h1 class="tytul-sekcji rozjasnia-sie">Wprowadź się<br><span class="akcent">do gotowego wnętrza</span></h1>
 
 		<div class="wstep pojawia-sie">
-			<p>Po zakupie możesz otrzymać gotowe do zamieszkania wnętrze - bez samodzielnego koordynowania ekip, materiałów i harmonogramów. My zajmiemy się wszystkim, bez stresu.</p>
-			<p>Nasze doświadczenie i sprawdzony proces pozwalają przeprowadzić wykończenie sprawnie, bezpiecznie i zgodnie z Twoimi oczekiwaniami</p>
+			<p>Po odbiorze kluczy nasz partner, firma Complex, wykończy Twoje mieszkanie lub dom pod klucz - bez samodzielnego koordynowania ekip, materiałów i harmonogramów.</p>
+			<p>Doświadczenie i sprawdzony proces partnera pozwalają przeprowadzić wykończenie sprawnie, bezpiecznie i zgodnie z Twoimi oczekiwaniami</p>
 		</div>
 
 		<div class="para-przyciskow pojawia-sie opoznienie-1">
@@ -22,6 +23,31 @@
 			<x-przycisk-pigulka href="#realizacje" class="na-tle">SPRAWDŹ REALIZACJE</x-przycisk-pigulka>
 		</div>
 	</x-hero-podstrony>
+
+	<!-- ============ PARTNER WYKOŃCZENIA ============ -->
+	{{-- zaraz pod nagłówkiem - kontakt do partnera bez szukania (uwagi 11.11) --}}
+	<x-sekcje.zdjecie-tekst zdjecie="wyk-partner" alt="Ekipa wykończeniowa przy pracy">
+		<x-etykieta>PARTNER WYKOŃCZENIA</x-etykieta>
+		<h2 class="tytul-sekcji rozjasnia-sie">Współpracujemy<br><span class="akcent">z firmą Complex</span></h2>
+		<p>Współpracujemy z doświadczonym partnerem, który po odbiorze kluczy wspiera naszych Klientów w wykończeniu mieszkań i domów pod klucz. Dzięki temu cały proces przebiega sprawniej - od pierwszej rozmowy po gotowe, komfortowe wnętrze</p>
+
+		<p class="zapraszamy">Zapraszamy do kontaktu:</p>
+
+		<ul class="kontakt-partnera">
+			<li>
+				<span class="ramka"><img src="{{ asset('img/wyk-ikona-telefon.svg') }}" width="44" height="44" alt=""></span>
+				<span class="tresc">Telefon<br><a href="tel:+48602311992">+48 602 311 992</a></span>
+			</li>
+			<li>
+				<span class="ramka"><img src="{{ asset('img/wyk-ikona-mail.svg') }}" width="44" height="44" alt=""></span>
+				<span class="tresc">Adres e-mail<br><a href="mailto:complex.wykonczenia@gmail.com">complex.wykonczenia@gmail.com</a></span>
+			</li>
+			<li>
+				<span class="ramka"><img src="{{ asset('img/wyk-ikona-www.svg') }}" width="44" height="44" alt=""></span>
+				<span class="tresc">Strona internetowa<br><a href="https://www.wykonczenia.warszawa.pl" target="_blank" rel="noopener">wykonczenia.warszawa.pl</a></span>
+			</li>
+		</ul>
+	</x-sekcje.zdjecie-tekst>
 
 	<!-- ============ KORZYŚCI ============ -->
 	<section class="korzysci-sekcja">
@@ -48,30 +74,10 @@
 			<li class="kafel-korzysci pojawia-sie opoznienie-3">
 				<img src="{{ asset('img/wyk-ikona-klucz.svg') }}" width="79" height="79" alt="">
 				<h2>Gotowość<br>do zamieszkania</h2>
-				<p>Odbierasz mieszkanie<br>przygotowane do codziennego<br>użytkowania</p>
+				<p>Po zakończeniu prac wnętrze<br>jest przygotowane do codziennego<br>użytkowania</p>
 			</li>
 		</ul>
 	</section>
-
-	<!-- ============ PARTNER WYKOŃCZENIA ============ -->
-	<x-sekcje.zdjecie-tekst zdjecie="wyk-partner" alt="Ekipa wykończeniowa przy pracy">
-		<x-etykieta>PARTNER WYKOŃCZENIA</x-etykieta>
-		<h2 class="tytul-sekcji rozjasnia-sie">Współpracujemy<br><span class="akcent">z firmą Complex</span></h2>
-		<p>Współpracujemy z doświadczonym partnerem, który wspiera naszych Klientów w zakresie wykończenia mieszkań pod klucz. Dzięki temu cały proces przebiega sprawniej - od pierwszej rozmowy po gotowe, komfortowe wnętrze</p>
-
-		<p class="zapraszamy">Zapraszamy do kontaktu:</p>
-
-		<ul class="kontakt-partnera">
-			<li>
-				<span class="ramka"><img src="{{ asset('img/wyk-ikona-telefon.svg') }}" width="44" height="44" alt=""></span>
-				<span class="tresc">Telefon<br><a href="tel:+48602311992">+48 602 311 992</a></span>
-			</li>
-			<li>
-				<span class="ramka"><img src="{{ asset('img/wyk-ikona-mail.svg') }}" width="44" height="44" alt=""></span>
-				<span class="tresc">Adres e-mail<br><a href="mailto:complex.wykonczenia@gmail.com">complex.wykonczenia@gmail.com</a></span>
-			</li>
-		</ul>
-	</x-sekcje.zdjecie-tekst>
 
 	<!-- ============ GALERIA REALIZACJI ============ -->
 	<section class="galeria-realizacji" id="realizacje">

@@ -6,6 +6,8 @@ use App\Models\Investment;
 use App\Models\Property;
 use App\Models\PropertyPrice;
 use App\Models\PropertyPriceComponent;
+use App\Observers\PropertyObserver;
+use App\Services\InvestmentService;
 use App\Services\PropertyService;
 use Illuminate\Console\Command;
 use Illuminate\Http\UploadedFile;
@@ -14,8 +16,11 @@ use Illuminate\Support\Facades\File;
 
 /**
  * Wersja demo segmentów (uwaga klienta 27.10: pełny przykład domu/segmentu od wyszukania do karty).
- * Segmenty Lake Village dostają podstronę u nas (zamiast linku do lakevillage.pl) i 8 segmentów
- * z danymi roboczymi i roboczymi rzutami (database/demo/lake-village).
+ * Segmenty Lake Village dostają podstronę u nas (zamiast linku do lakevillage.pl).
+ * Od 17.11: 16 domów etapu V z https://lakevillage.pl/etap-5 (numery, powierzchnie, działki, statusy, ceny)
+ * + plan osiedla z obrysami domów - zapis jak z panelu: plan inwestycji (investments_plans) i pola
+ * „Współrzędne punktów” (cords) / „HTML” (html) domu. Pokoje, taras i rzut nadal robocze.
+ * Segmenty spoza pliku (robocze 1A-2D z 27.10) są usuwane.
  *
  *   php artisan demo:lake-village     (po demo:hygge - inwestycja musi istnieć)
  *
@@ -25,7 +30,7 @@ class DemoLakeVillage extends Command
 {
     protected $signature = 'demo:lake-village';
 
-    protected $description = 'Demo segmentów: Lake Village z 8 segmentami (dane robocze, database/demo/lake-village)';
+    protected $description = 'Demo segmentów: Lake Village - 16 domów etapu V z planem osiedla (database/demo/lake-village)';
 
     private const KATALOG = 'database/demo/lake-village/';
 
@@ -34,13 +39,12 @@ class DemoLakeVillage extends Command
     /** Składniki ceny segmentu (1 obowiązkowy, 2 opcjonalny) */
     private const SKLADNIKI_CENY = [
         ['Koszt aktu notarialnego', 1],
-        ['Wykończenie pod klucz', 2],
     ];
 
     /** Część działki pod budynkiem i podjazdem - reszta to ogród */
     private const ZABUDOWA = 70;
 
-    public function handle(PropertyService $propertyService): int
+    public function handle(PropertyService $propertyService, InvestmentService $investmentService): int
     {
         $inwestycja = Investment::where('slug', self::SLUG)->first();
         if (!$inwestycja) {
@@ -65,9 +69,14 @@ class DemoLakeVillage extends Command
                     $inwestycja->save();
 
                     $this->segmenty($inwestycja, $dane, $propertyService);
+                    $this->usunPozostale($inwestycja, $dane);
                 });
             });
         });
+
+        // plan osiedla - jak „Plan inwestycji” w panelu (stary plik usuwa sam serwis)
+        $plan = base_path(self::KATALOG . $dane['plan']);
+        $investmentService->uploadPlan($inwestycja, new UploadedFile($plan, $dane['plan'], 'image/jpeg', null, true));
 
         $this->info('Gotowe. Źródło: ' . $dane['zrodlo']);
 
@@ -104,6 +113,8 @@ class DemoLakeVillage extends Command
                 'name_list' => $nazwa,
                 'number_order' => $kolejnosc + 1,
                 'rooms' => $typ['pokoje'],
+                'cords' => $this->cords($s['obrys']),
+                'html' => $this->html($s['obrys'], $nazwa),
                 'area' => $typ['powierzchnia'],
                 'area_search' => $typ['powierzchnia'],
                 'price' => $s['cena'],
@@ -111,7 +122,7 @@ class DemoLakeVillage extends Command
                 'price_search' => $s['cena'],
                 'vat' => 0,
                 'plot_area' => $s['dzialka'],
-                'garden_area' => $s['dzialka'] - self::ZABUDOWA,
+                'garden_area' => round($s['dzialka'] - self::ZABUDOWA, 2),
                 'terrace_area' => $typ['taras'],
                 'promotion_price_show' => 0,
                 'active' => 1,
@@ -123,8 +134,39 @@ class DemoLakeVillage extends Command
             $this->historiaCen($lokal, $s, $typ['powierzchnia']);
             $lokal->priceComponents()->sync($skladniki);
 
-            $this->line(sprintf('  %-12s typ %s, działka %d m², %s zł', $nazwa, $s['typ'], $s['dzialka'], number_format($s['cena'], 0, ',', ' ')));
+            $this->line(sprintf('  %-14s działka %6.2f m², %s', $nazwa, $s['dzialka'], $s['cena'] ? number_format($s['cena'], 0, ',', ' ') . ' zł' : 'bez ceny'));
         }
+    }
+
+    /** Obrys w formacie edytora planu w panelu (mappa-backbone: getAreaTag) */
+    private function cords(array $obrys): string
+    {
+        $punkty = implode(',', array_map(fn ($p) => '{"x":' . $p[0] . ',"y":' . $p[1] . '}', $obrys));
+
+        return '{"shape": "poly","selected": false,"points":[' . $punkty . ']},' . "\n";
+    }
+
+    /** Obrys jako znacznik <area> (mappa-backbone: getHTMLAreaTag) - z niego czyta front */
+    private function html(array $obrys, string $nazwa): string
+    {
+        $coords = implode(',', array_map(fn ($p) => $p[0] . ',' . $p[1], $obrys));
+
+        return " <area\n shape=\"poly\"\n href=\"\"\n alt=\"" . e($nazwa) . "\"\n coords=\"" . $coords . "\"\n />\n";
+    }
+
+    /** Segmenty inwestycji, których nie ma w pliku (robocze 1A-2D) - razem z rzutami, historią cen i składnikami */
+    private function usunPozostale(Investment $inwestycja, array $dane): void
+    {
+        $numery = array_column($dane['segmenty'], 'numer');
+
+        Property::where('investment_id', $inwestycja->id)->whereNotIn('number', $numery)->get()
+            ->each(function (Property $lokal) {
+                PropertyPrice::where('property_id', $lokal->id)->delete();
+                $lokal->priceComponents()->detach();
+                $lokal->delete();
+                app(PropertyObserver::class)->deleted($lokal); // pliki rzutu (zdarzenia wyłączone)
+                $this->line('  usunięty ' . $lokal->name);
+            });
     }
 
     /** Historia cen od najnowszej - każda para to zmiana stara -> nowa (jak w demo:hygge) */

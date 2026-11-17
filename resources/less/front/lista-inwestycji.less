@@ -137,6 +137,18 @@
 		transform: scale(1.04);
 	}
 
+	// karta „WKRÓTCE” nigdzie nie prowadzi - bez przybliżenia, które sugeruje kliknięcie
+	&.bez-linku:hover .zdjecie img {
+		transform: none;
+	}
+
+	// zdjęcie jako link (przekrywa kadr razem z plakietką)
+	.link-zdjecia {
+		position: absolute;
+		inset: 0;
+		z-index: 2;
+	}
+
 	@media (max-width: @duzy-ekran) {
 		.zdjecie {
 			// Kadr zachowuje proporcję 828x399 z ramki 1920px

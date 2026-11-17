@@ -10,13 +10,17 @@
 		$inwestycja->cenaOd() ? ['ikona-cena.svg', 'CENY OD', $inwestycja->cenaOd()] : null,
 	], fn ($p) => $p && ($p[1] || $p[2]));
 @endphp
-<article @class(['karta-inwestycji', 'pojawia-sie', $opoznienie]) id="{{ $inwestycja->slug }}">
+<article @class(['karta-inwestycji', 'pojawia-sie', $opoznienie, 'bez-linku' => !$link]) id="{{ $inwestycja->slug }}">
 	<div class="zdjecie">
 		<picture>
 			<source type="image/webp" srcset="{{ $inwestycja->zdjecieKarty(true) }}">
 			<img src="{{ $inwestycja->zdjecieKarty() }}" width="843" height="464" alt="Wizualizacja inwestycji {{ $inwestycja->name }}" loading="lazy">
 		</picture>
 		<span class="plakietka-inwestycji">{{ $inwestycja->plakietka() }}</span>
+		{{-- całe zdjęcie prowadzi tam, gdzie „ZOBACZ INWESTYCJĘ” (uwaga klienta 10.11 - przybliżające się zdjęcie sugerowało przejście) --}}
+		@if($link)
+			<a class="link-zdjecia" href="{{ $link }}" tabindex="-1" aria-hidden="true" @if($inwestycja->linkZewnetrzny()) target="_blank" rel="noopener" @endif></a>
+		@endif
 	</div>
 	<div class="karta-inwestycji-dol">
 		<div class="opis">

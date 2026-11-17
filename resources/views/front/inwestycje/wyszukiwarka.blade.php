@@ -62,4 +62,29 @@
 			</ul>
 		</section>
 	@endforeach
+
+	<!-- ============ POZOSTAŁE INWESTYCJE (bez lokali w wyszukiwarce) ============ -->
+	@if($pozostale->isNotEmpty())
+	<section class="pozostale-inwestycje pojawia-sie" aria-labelledby="pozostale-naglowek">
+		<h2 id="pozostale-naglowek">Pozostałe inwestycje</h2>
+		<p>Oferta tych inwestycji nie jest jeszcze dostępna w wyszukiwarce - szczegóły na stronie inwestycji albo w Biurze Sprzedaży.</p>
+		@foreach($pozostale as $inwestycja)
+			<div class="baner-grupy">
+				<picture>
+					<source type="image/webp" srcset="{{ $inwestycja->zdjecieKarty(true) }}">
+					<img src="{{ $inwestycja->zdjecieKarty() }}" width="1680" height="150" alt="" loading="lazy">
+				</picture>
+				<div class="opis">
+					<h3>{{ $inwestycja->name }}</h3>
+					<p class="lokalizacja"><img src="{{ asset('img/ikona-adres.svg') }}" width="26" height="26" alt=""> {{ \App\Support\FiltryOferty::lokalizacja($inwestycja) }}</p>
+				</div>
+				@if($inwestycja->link())
+					<a class="przycisk-inwestycji" href="{{ $inwestycja->link() }}" @if($inwestycja->linkZewnetrzny()) target="_blank" rel="noopener" @endif>STRONA INWESTYCJI</a>
+				@else
+					<span class="przycisk-inwestycji">WKRÓTCE</span>
+				@endif
+			</div>
+		@endforeach
+	</section>
+	@endif
 @endsection

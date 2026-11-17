@@ -16,6 +16,7 @@
 	]);
 	$zakladki = array_filter([
 		'mieszkania' => 'Znajdź ' . $produkt,
+		'plan-osiedla' => $lokale->contains(fn ($l) => $l->jestDomem()) ? 'Plan osiedla' : null,
 		'opis' => $tresci ? 'Opis inwestycji' : null,
 		'lokalizacja' => $tresci ? 'Lokalizacja' : null,
 		'atuty' => $tresci ? 'Atuty inwestycji' : null,
@@ -93,6 +94,9 @@
 		</ul>
 		<p class="brak-wynikow-oferty" hidden>Brak lokali spełniających wybrane kryteria.</p>
 	</div>
+
+	<!-- ============ PLAN OSIEDLA (domy i segmenty) ============ -->
+	<x-inwestycje.plan-osiedla :inwestycja="$inwestycja" />
 
 	@if($tresci)
 		@include($tresci)

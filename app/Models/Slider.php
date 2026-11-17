@@ -17,12 +17,15 @@ class Slider extends Model
 
     /**
      * Slajdy z makiety (dynamic-front) - pokazywane, dopóki w panelu nie ma żadnego aktywnego slajdu.
+     * Makieta miała przy Konstancinie, Lake Village i Zielonej Polanie przypadkowe zdjęcia (kuchnia, Łazienki,
+     * lobby biura) - uwaga klienta 10.11, teraz wizualizacje z kart inwestycji (ok. 835 px szerokości;
+     * docelowo większe wizualizacje wgrane w panelu Slider).
      */
     private const SLAJDY_MAKIETY = [
         ['WARSZAWA · MOKOTÓW', 'Dom Hygge Twin', 'hero', true],
-        ['CHYLICE · KONSTANCIN-JEZIORNA', 'Konstancin Riverside House', 'hero-konstancin-hd', false],
-        ['ZALESIE GÓRNE · GM. PIASECZNO', 'Segmenty Lake Village', 'hero-lake-hd', false],
-        ['NOWA WOLA · GM. LESZNOWOLA', 'Zespół willowy Zielona Polana', 'poznaj-onas', false],
+        ['CHYLICE · KONSTANCIN-JEZIORNA', 'Konstancin Riverside House', 'lista-konstancin', false],
+        ['ZALESIE GÓRNE · GM. PIASECZNO', 'Segmenty Lake Village', 'lista-lake-village', false],
+        ['NOWA WOLA · GM. LESZNOWOLA', 'Zespół willowy Zielona Polana', 'lista-zielona-polana', false],
     ];
 
     /**

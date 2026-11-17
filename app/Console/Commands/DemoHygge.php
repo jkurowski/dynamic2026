@@ -37,7 +37,7 @@ class DemoHygge extends Command
         ['Koszt aktu notarialnego', 1],
         ['Koszty utrzymania nieruchomości do czasu powstania wspólnoty', 1],
         ['Opłaty do wspólnoty', 1],
-        ['Wykończenie pod klucz', 2],
+        // bez „Wykończenia pod klucz” - klient nie komunikuje wykończenia przed odbiorem (11.11.2026)
     ];
 
     public function handle(PropertyService $propertyService): int
@@ -71,10 +71,11 @@ class DemoHygge extends Command
                  'meta_title' => 'Dom Hygge Twin - mieszkania na Mokotowie', 'meta_description' => 'Apartamenty i lokale usługowe w Domu Hygge Twin przy ul. Bobrowieckiej 4B na warszawskim Mokotowie.']],
             ['konstancin-riverside-house', 'Konstancin Riverside House', 'CHYLICE', 'Konstancin-Jeziorna', 'Domy w Konstancinie-Jeziornej', null, 'lista-konstancin', [59.3, 79.9], ['type' => 3]],
             ['zespol-willowy-zielona-polana', 'Zespół willowy Zielona Polana', 'NOWA WOLA', 'gm. Lesznowola', 'Domy w Nowej Woli', 'http://www.zielonapolana.pl/', 'lista-zielona-polana', [45.5, 81.3], ['type' => 3]],
-            ['segmenty-lake-village', 'Segmenty Lake Village', 'ZALESIE GÓRNE', 'gm. Piaseczno', 'Segmenty w Zalesiu Górnym', null, 'lista-lake-village', [44.6, 78.3], ['type' => 3]],
+            ['segmenty-lake-village', 'Segmenty Lake Village', 'ZALESIE GÓRNE', 'gm. Piaseczno', 'Segmenty w Zalesiu Górnym', null, 'lista-lake-village', [44.6, 78.3], ['type' => 3, 'lat' => 52.0296, 'lng' => 21.0409]],
         ];
 
         $hygge = null;
+        // Lake Village: Zalesie Górne - prawdziwe lat/lng (z $inne) zamiast pinezki z makiety (stała w Nowej Woli)
         foreach ($inwestycje as $kolejnosc => [$slug, $nazwa, $miejsce, $adres, $wstep, $zewnetrzny, $zdjecie, [$left, $top], $inne]) {
             $inwestycja = Investment::firstOrNew(['slug' => $slug]);
             $inwestycja->fill(array_merge([

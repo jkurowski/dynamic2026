@@ -19,7 +19,13 @@
 	// Reguły dla poszczególnych pól. Zwracają true, gdy wartość jest poprawna.
 	var reguly = {
 		name: function (v) { return v.trim().length >= 3; },
-		phone: function (v) { return v.replace(/\D/g, '').length >= 9; },
+		// telefon albo e-mail (wystarczy jedno) - pusty telefon jest dobry, gdy podano e-mail
+		phone: function (v) {
+			if (v.trim() === '') {
+				return $formularz.find('[name="email"]').val().trim() !== '';
+			}
+			return v.replace(/\D/g, '').length >= 9;
+		},
 		email: function (v) { return v === '' || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v); },
 		message: function (v) { return v.trim().length >= 10; }
 	};
@@ -35,6 +41,11 @@
 			return true;
 		}
 		var poprawne = regula($wejscie.val());
+		// komunikat telefonu: brak obu danych kontaktowych albo za krótki numer
+		var $blad = $pole.find('.blad[data-brak]');
+		if ($blad.length && !poprawne) {
+			$blad.text($wejscie.val().trim() === '' ? $blad.data('brak') : $blad.data('zly'));
+		}
 		$pole.toggleClass('ma-blad', !poprawne).toggleClass('poprawne', poprawne && $wejscie.val() !== '');
 		return poprawne;
 	}
@@ -88,6 +99,15 @@
 		}
 		$(this).closest('.zgoda').toggleClass('ma-blad', !$(this).is(':checked'));
 		pokazBledy();
+	});
+
+	// wpisany e-mail zdejmuje błąd pustego telefonu (i odwrotnie)
+	$formularz.on('input blur', '[name="email"]', function () {
+		var $telefon = $formularz.find('[name="phone"]').closest('.pole');
+		if ($telefon.hasClass('ma-blad')) {
+			sprawdzPole($telefon);
+			odswiez();
+		}
 	});
 
 	function odswiez() {

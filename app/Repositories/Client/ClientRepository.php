@@ -116,7 +116,7 @@ class ClientRepository extends BaseRepository implements ClientRepositoryInterfa
         $email = trim((string) ($attributes['email'] ?? $attributes['mail'] ?? ''));
         $lastname = $attributes['lastname'] ?? $attributes['surname'] ?? null;
 
-        // Formularz nie wymaga e-maila (wymagany jest telefon), a clients.mail jest NOT NULL i służy do
+        // Formularz wymaga telefonu LUB e-maila (decyzja klienta 13.11), a clients.mail jest NOT NULL i służy do
         // rozpoznania klienta. Bez e-maila - adres zastępczy, oznaczony flagą, na który niczego nie wysyłamy.
         $isRandomEmail = $email === '';
         if ($isRandomEmail) {

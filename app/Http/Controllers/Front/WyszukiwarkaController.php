@@ -17,13 +17,16 @@ class WyszukiwarkaController extends Controller
 {
     public function index()
     {
-        $inwestycje = Investment::naFroncie()->with('city')->get()
-            ->filter(fn (Investment $i) => $i->maPodstrone())
-            ->values();
+        [$inwestycje, $pozostale] = Investment::naFroncie()->with('city')->get()
+            ->partition(fn (Investment $i) => $i->maPodstrone());
+        $inwestycje = $inwestycje->values();
 
         return view('front.inwestycje.wyszukiwarka', [
             'page' => Page::where('uri', 'wybierz-nieruchomosc')->first(),
             'inwestycje' => $inwestycje,
+            // bez lokali w serwisie (strona inwestycji poza serwisem albo „wkrótce”) - pod wynikami, żeby lista
+            // nie sugerowała, że w sprzedaży są tylko inwestycje z wyszukiwarki (uwaga klienta 10.11)
+            'pozostale' => $pozostale->values(),
             'filtry' => FiltryOferty::dlaWyszukiwarki($inwestycje),
         ]);
     }

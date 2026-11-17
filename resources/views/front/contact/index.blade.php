@@ -7,11 +7,13 @@
 
 @section('content')
 @php $biura = \App\Models\City::biura(); @endphp
-	<!-- ============ NAGŁÓWEK PODSTRONY + FORMULARZ ============ -->
+	<!-- ============ NAGŁÓWEK PODSTRONY ============ -->
+	{{-- Kolejność (uwaga klienta 11.11): wstęp, BIURA z telefonami, dopiero niżej telefon główny i formularz -
+	     inaczej klienci nie dochodzą do biur i ze wszystkim dzwonią na numer główny --}}
 	<section class="naglowek-strony">
 		<x-okruszki :sciezka="['Kontakt' => null]" />
 
-		<div class="kontakt-gora">
+		<div class="kontakt-gora kontakt-wstep-strony">
 			<div class="kolumna-tekst pojawia-sie">
 				<x-etykieta>KONTAKT</x-etykieta>
 				<h1 class="tytul-sekcji jasny rozjasnia-sie">Skontaktuj się <span class="akcent">z nami</span></h1>
@@ -20,24 +22,7 @@
 					<p>Wiemy, że wybór pierwszego mieszkania lub domu w Warszawie lub okolicy nie jest najłatwiejszym zadaniem. Właśnie dlatego wspieramy naszych Klientów od początku procesu, czyli wyboru inwestycji, aż do jego zakończenia, czyli sfinalizowania transakcji.</p>
 					<p>Jeśli masz jakiekolwiek pytania odnośnie naszej działalności, gotowych inwestycji, a także sposobów finansowania i mieszkań pod klucz, to możesz się z nami skontaktować!</p>
 				</div>
-
-				<ul class="skrot-kontaktu">
-				<li>
-					<span class="ramka-ikony"><img src="{{ asset('img/ikona-sluchawka.svg') }}" width="54" height="54" alt=""></span>
-					<span class="tresc">Telefon<br><a href="tel:+48576786666">+48 576 786 666</a></span>
-				</li>
-				<li>
-					<span class="ramka-ikony"><img src="{{ asset('img/ikona-koperta.svg') }}" width="54" height="54" alt=""></span>
-					<span class="tresc">Adres e-mail<br><a href="mailto:biuro@dynamicdevelopment.pl">biuro@dynamicdevelopment.pl</a></span>
-				</li>
-				<li>
-					<span class="ramka-ikony"><img src="{{ asset('img/ikona-zegar.svg') }}" width="54" height="54" alt=""></span>
-					<span class="tresc">Godziny otwarcia<br><strong>poniedziałek-piątek 9:00-17:00</strong></span>
-				</li>
-				</ul>
 			</div>
-
-			<x-formularz-kontaktowy :strona="$page->title ?? 'Kontakt'" />
 		</div>
 	</section>
 
@@ -64,7 +49,7 @@
 						@if($biuro->phone)
 						<li>
 							<img src="{{ asset('img/ikona-sluchawka.svg') }}" width="46" height="46" alt="">
-							<span class="tresc"><strong>Telefon</strong><br>{!! $biuro->phone !!}</span>
+							<span class="tresc"><strong>Telefon</strong><br>{!! $biuro->telefonZLinkami() !!}</span>
 						</li>
 						@endif
 						@if($biuro->working_hours)
@@ -81,6 +66,34 @@
 			</li>
 			@endforeach
 		</ul>
+	</section>
+
+	<!-- ============ TELEFON GŁÓWNY + FORMULARZ ============ -->
+	<section class="kontakt-formularz">
+		<div class="kontakt-gora">
+			<div class="kolumna-tekst pojawia-sie">
+				<x-etykieta>NAPISZ LUB ZADZWOŃ</x-etykieta>
+				<h2 class="tytul-sekcji jasny rozjasnia-sie">Masz pytanie? <span class="akcent">Odpowiemy</span></h2>
+
+				<ul class="skrot-kontaktu">
+				<li>
+					<span class="ramka-ikony"><img src="{{ asset('img/ikona-sluchawka.svg') }}" width="54" height="54" alt=""></span>
+					{{-- drugi numer na wypadek, gdyby pierwszy był zajęty (uwaga klienta 11.11) --}}
+					<span class="tresc">Telefon<br><a href="tel:+48576786666">+48 576 786 666</a><br><a href="tel:+48512379056">+48 512 379 056</a></span>
+				</li>
+				<li>
+					<span class="ramka-ikony"><img src="{{ asset('img/ikona-koperta.svg') }}" width="54" height="54" alt=""></span>
+					<span class="tresc">Adres e-mail<br><a href="mailto:biuro@dynamicdevelopment.pl">biuro@dynamicdevelopment.pl</a></span>
+				</li>
+				<li>
+					<span class="ramka-ikony"><img src="{{ asset('img/ikona-zegar.svg') }}" width="54" height="54" alt=""></span>
+					<span class="tresc">Godziny otwarcia<br><strong>poniedziałek-piątek 9:00-17:00</strong></span>
+				</li>
+				</ul>
+			</div>
+
+			<x-formularz-kontaktowy :strona="$page->title ?? 'Kontakt'" />
+		</div>
 	</section>
 
 	<!-- ============ MAPA BIUR ============ -->

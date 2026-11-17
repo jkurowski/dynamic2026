@@ -12,7 +12,10 @@
 		<p class="kontakt-wstep">Masz pytania dotyczące mieszkań lub inwestycji?<br>Skontaktuj się z nami - chętnie doradzimy i pomożemy znaleźć najlepsze rozwiązanie</p>
 
 		{{-- Biura z panelu (Miasta): zakładki + dane; pierwsze aktywne biuro widoczne na start --}}
-		@php $biura = \App\Models\City::biura(); @endphp
+		@php
+			$biura = \App\Models\City::biura();
+			$zTelefonem = $biura->filter(fn ($b) => filled($b->phone))->values();
+		@endphp
 		<div class="zakladki-biur">
 			@foreach($biura as $biuro)
 				<button type="button" @class(['aktywna' => $loop->first]) data-biuro="{{ $biuro->slug }}">{{ mb_strtoupper($biuro->name) }}</button>
@@ -41,14 +44,22 @@
 					</span>
 				</li>
 				@endif
-				@if($biuro->phone)
-				<li>
+				{{-- Telefony WSZYSTKICH biur w kolumnach - widoczne bez przełączania zakładek (uwaga klienta 11.11);
+				     zakładka zmienia tylko adres i godziny --}}
+				@if($zTelefonem->isNotEmpty())
+				<li class="telefony-biur">
 					<span class="ikona-ramka"><img src="{{ asset('img/ikona-sluchawka.svg') }}" width="69" height="69" alt=""></span>
-					<span class="tresc mocny">
-						Telefon<br>
-						{!! $biuro->telefonZLinkami() !!}
+					<span class="tresc">
+						Telefon
+						<span class="kolumny-telefonow">
+							@foreach($zTelefonem as $biuroTelefon)
+								<span class="telefon-biura">
+									<span class="nazwa-biura">Biuro {{ $biuroTelefon->name }}</span>
+									<span class="numery">{!! $biuroTelefon->telefonZLinkami() !!}</span>
+								</span>
+							@endforeach
+						</span>
 					</span>
-					<span class="znak-kontaktu" aria-hidden="true"></span>
 				</li>
 				@endif
 			</ul>

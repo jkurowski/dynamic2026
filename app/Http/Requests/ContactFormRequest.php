@@ -8,7 +8,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Formularz kontaktowy frontu (kontakt, sekcje kontaktu, inwestycja, lokal). Wzorzec: poligonowa.
- * Jedno pole "Imię i nazwisko" (name), telefon wymagany, e-mail opcjonalny - jak w projekcie Figma.
+ * Jedno pole "Imię i nazwisko" (name). Wymagany telefon LUB e-mail, nie oba (decyzja klienta 13.11.2026 -
+ * część osób nie chce podawać numeru). Bez e-maila klient dostaje adres zastępczy (ClientRepository::createClient).
  */
 class ContactFormRequest extends FormRequest
 {
@@ -23,7 +24,7 @@ class ContactFormRequest extends FormRequest
         // dłuższa wartość dałaby błąd zapisu (500) zamiast komunikatu walidacji.
         $rules = [
             'name' => 'required|string|max:150',
-            'phone' => 'required|string|max:30',
+            'phone' => ['required_without:email', 'nullable', 'string', 'max:30', 'regex:/^(?:\D*\d){9}/'],
             'email' => 'nullable|email:rfc|max:191',
             'message' => 'required|string|max:5000',
             // Token wymagany tylko, gdy reCAPTCHA jest skonfigurowana w panelu (Ustawienia -> SEO)
@@ -58,7 +59,8 @@ class ContactFormRequest extends FormRequest
     {
         return [
             'name.required' => 'Podaj imię i nazwisko.',
-            'phone.required' => 'Podaj numer telefonu.',
+            'phone.required_without' => 'Podaj numer telefonu lub adres e-mail.',
+            'phone.regex' => 'Podaj numer telefonu (min. 9 cyfr).',
             'email.email' => 'Podaj poprawny adres e-mail.',
             'message.required' => 'Napisz wiadomość.',
             'rule_*.required' => 'Zaznacz wymaganą zgodę na przetwarzanie danych.',

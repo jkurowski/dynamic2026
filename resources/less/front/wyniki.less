@@ -728,6 +728,75 @@
 	}
 }
 
+// Inwestycje bez lokali w serwisie - pod wynikami (uwaga klienta 10.11). Poza .grupa-wynikow, więc filtry ich nie ukrywają.
+.pozostale-inwestycje {
+	.kontener();
+	margin-top: 20px;
+	margin-bottom: 60px;
+	color: var(--tekst-na-ciemnym);
+
+	> h2 {
+		margin: 0 0 8px;
+		font-size: 32px;
+		font-weight: 700;
+	}
+
+	> p {
+		margin: 0 0 24px;
+		font-size: @tekst-sekcja;
+		opacity: .85;
+	}
+
+	.baner-grupy {
+		border-radius: 12px;
+		margin-bottom: 20px;
+
+		// wizualizacje Konstancina i ZP są jasne - bez przyciemnienia biały tekst i przyciski były nieczytelne
+		> picture::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(90deg, fade(@granat, 88%) 0%, fade(@granat, 60%) 55%, fade(@granat, 80%) 100%);
+		}
+
+		h3 {
+			margin: 0;
+			color: var(--tekst-na-ciemnym);
+			font-size: 36px;
+			font-weight: 700;
+			line-height: 1.21;
+		}
+
+		// span „WKRÓTCE” - bez strzałki i podświetlenia
+		span.przycisk-inwestycji {
+			justify-content: center;
+			padding: 0;
+
+			&::before {
+				display: none;
+			}
+
+			&:hover {
+				background: none;
+				border-color: fade(@bialy, 70%);
+			}
+		}
+	}
+
+	@media (max-width: @duzy-ekran) {
+		> h2,
+		.baner-grupy h3 {
+			font-size: 26px;
+		}
+	}
+
+	@media (max-width: (@telefon-duzy - 1px)) {
+		.baner-grupy h3 {
+			font-size: 22px;
+		}
+	}
+}
+
 .brak-ulubionych {
 	.kontener();
 	margin-top: 40px;
@@ -756,10 +825,9 @@
 		box-sizing: border-box;
 	}
 
+	// Makieta miała stałą wysokość grupy (864px, overflow: hidden) - przy większej liczbie lokali
+	// ucinało ostatnie wiersze (np. segment 2D Lake Village). Wysokość wynika z liczby lokali.
 	.strona-wynikow .grupa-wynikow {
-		height: 864px;
-		box-sizing: border-box;
-		overflow: hidden;
 		margin-bottom: 43px;
 	}
 
@@ -988,7 +1056,6 @@
 	}
 
 	.strona-wynikow .grupa-wynikow {
-		height: 45vw;
 		margin-bottom: 2.23958vw;
 	}
 

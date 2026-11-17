@@ -185,6 +185,11 @@
 		</div>
 	</div>
 
+	<!-- ============ PLAN OSIEDLA (domy i segmenty) ============ -->
+	@if($lokal->jestDomem())
+		<x-inwestycje.plan-osiedla :inwestycja="$inwestycja" :wybrany="$lokal" />
+	@endif
+
 	<!-- ============ KALKULATOR RATY I WYKOŃCZENIE ============ -->
 	<div class="kafle sekcja-karta">
 		<div class="row">

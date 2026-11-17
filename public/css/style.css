@@ -5356,6 +5356,13 @@ strong {
     top: 14px;
   }
 }
+.podpowiedz-formularza {
+  margin: -8px 0 19px;
+  color: var(--tekst-na-ciemnym);
+  font-size: 14px;
+  font-weight: 300;
+  opacity: 0.8;
+}
 .zgoda {
   display: flex;
   align-items: flex-start;
@@ -5730,6 +5737,56 @@ strong {
     top: 6.19792vw;
     width: 7.65625vw;
     height: 9.01042vw;
+  }
+}
+.lista-danych li.telefony-biur {
+  padding-right: 0;
+}
+.lista-danych li.telefony-biur .kolumny-telefonow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 30px;
+  margin-top: 12px;
+}
+.lista-danych li.telefony-biur .nazwa-biura {
+  display: block;
+  font-size: 18px;
+  opacity: 0.85;
+}
+.lista-danych li.telefony-biur .numery {
+  display: block;
+  font-weight: 700;
+}
+.lista-danych li.telefony-biur .numery a {
+  color: #DC5C0C;
+  font-size: 24px;
+  line-height: 1.45;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lista-danych li.telefony-biur .numery a:hover {
+  color: #F17A2C;
+}
+@media (min-width: 1025px) and (max-width: 1899.98px) {
+  .lista-danych li.telefony-biur .nazwa-biura {
+    font-size: clamp(14px, 0.9375vw, 18px);
+  }
+  .lista-danych li.telefony-biur .numery a {
+    font-size: clamp(16px, 1.25vw, 24px);
+  }
+}
+@media (max-width: 575px) {
+  .lista-danych li.telefony-biur .ikona-ramka {
+    display: none;
+  }
+  .lista-danych li.telefony-biur .kolumny-telefonow {
+    gap: 10px 16px;
+  }
+  .lista-danych li.telefony-biur .nazwa-biura {
+    font-size: clamp(12px, 3.6vw, 15px);
+  }
+  .lista-danych li.telefony-biur .numery a {
+    font-size: clamp(14px, 4.4vw, 19px);
   }
 }
 .stopka {
@@ -7287,6 +7344,27 @@ body.stopka-odslaniana main {
   .kontakt-gora .karta-formularza {
     margin-top: 3.69792vw;
   }
+}
+.kontakt-formularz {
+  width: 100%;
+  max-width: var(--kontener-maks, 1728px);
+  margin: 0 auto;
+  padding: 0 var(--kontener-wciecie, 24px);
+  padding-bottom: 95px;
+}
+.kontakt-formularz .kontakt-gora {
+  padding-bottom: 0;
+}
+.kontakt-formularz .skrot-kontaktu {
+  margin-top: 40px;
+}
+@media (max-width: 1024px) {
+  .kontakt-formularz {
+    padding-bottom: 60px;
+  }
+}
+.kontakt-wstep-strony {
+  padding-bottom: 0;
 }
 .pojawia-sie {
   opacity: 0;
@@ -8851,6 +8929,14 @@ input[type="range"].tor:focus-visible {
 }
 .karta-inwestycji:hover .zdjecie img {
   transform: scale(1.04);
+}
+.karta-inwestycji.bez-linku:hover .zdjecie img {
+  transform: none;
+}
+.karta-inwestycji .link-zdjecia {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
 }
 @media (max-width: 1024px) {
   .karta-inwestycji .zdjecie {
@@ -12875,6 +12961,64 @@ input[type="range"].tor:focus-visible {
     overflow: visible;
   }
 }
+.pozostale-inwestycje {
+  width: 100%;
+  max-width: var(--kontener-maks, 1728px);
+  margin: 0 auto;
+  padding: 0 var(--kontener-wciecie, 24px);
+  margin-top: 20px;
+  margin-bottom: 60px;
+  color: var(--tekst-na-ciemnym);
+}
+.pozostale-inwestycje > h2 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 700;
+}
+.pozostale-inwestycje > p {
+  margin: 0 0 24px;
+  font-size: 28px;
+  opacity: 0.85;
+}
+.pozostale-inwestycje .baner-grupy {
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+.pozostale-inwestycje .baner-grupy > picture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(37, 37, 58, 0.88) 0%, rgba(37, 37, 58, 0.6) 55%, rgba(37, 37, 58, 0.8) 100%);
+}
+.pozostale-inwestycje .baner-grupy h3 {
+  margin: 0;
+  color: var(--tekst-na-ciemnym);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.21;
+}
+.pozostale-inwestycje .baner-grupy span.przycisk-inwestycji {
+  justify-content: center;
+  padding: 0;
+}
+.pozostale-inwestycje .baner-grupy span.przycisk-inwestycji::before {
+  display: none;
+}
+.pozostale-inwestycje .baner-grupy span.przycisk-inwestycji:hover {
+  background: none;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+@media (max-width: 1024px) {
+  .pozostale-inwestycje > h2,
+  .pozostale-inwestycje .baner-grupy h3 {
+    font-size: 26px;
+  }
+}
+@media (max-width: 575px) {
+  .pozostale-inwestycje .baner-grupy h3 {
+    font-size: 22px;
+  }
+}
 .brak-ulubionych {
   width: 100%;
   max-width: var(--kontener-maks, 1728px);
@@ -12901,9 +13045,6 @@ input[type="range"].tor:focus-visible {
     box-sizing: border-box;
   }
   .strona-wynikow .grupa-wynikow {
-    height: 864px;
-    box-sizing: border-box;
-    overflow: hidden;
     margin-bottom: 43px;
   }
   .strona-wynikow .grupa-wynikow:nth-last-of-type(2) {
@@ -13107,7 +13248,6 @@ input[type="range"].tor:focus-visible {
     min-height: 7.8125vw;
   }
   .strona-wynikow .grupa-wynikow {
-    height: 45vw;
     margin-bottom: 2.23958vw;
   }
   .strona-wynikow .grupa-wynikow:nth-last-of-type(2) {
@@ -16851,6 +16991,171 @@ html.motyw-jasny .tabela-porownania .rzut-porownania {
 }
 html.motyw-jasny .tabela-porownania .przycisk-sprawdz {
   border-color: var(--tekst-na-ciemnym);
+}
+.plan-osiedla {
+  width: 100%;
+  max-width: var(--kontener-maks, 1728px);
+  margin: 0 auto;
+  padding: 0 var(--kontener-wciecie, 24px);
+  padding-top: 80px;
+  padding-bottom: 40px;
+  color: var(--tekst-na-ciemnym);
+}
+.plan-osiedla .tytul-sekcji {
+  margin-bottom: 30px;
+}
+@media (max-width: 1024px) {
+  .plan-osiedla {
+    padding-top: 50px;
+    padding-bottom: 20px;
+  }
+}
+.plan-osiedla-ramka {
+  padding: 30px;
+  border: 1px solid #555565;
+  border-radius: 12px;
+  background: #2C304C;
+}
+.plan-osiedla-ramka svg {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto;
+}
+.plan-osiedla-ramka a {
+  cursor: pointer;
+  text-decoration: none;
+}
+.plan-osiedla-ramka text {
+  fill: #FFFFFF;
+  font-family: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  pointer-events: none;
+}
+@media (max-width: 575px) {
+  .plan-osiedla-ramka {
+    padding: 16px;
+  }
+}
+.segment-planu {
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 2;
+  transition: opacity 0.25s ease;
+}
+.segment-planu.dostepne {
+  fill: #457C52;
+}
+.segment-planu.rezerwacja {
+  fill: #DC5C0C;
+}
+.segment-planu.sprzedane {
+  fill: #AC2B2B;
+}
+a:hover .segment-planu {
+  opacity: 0.8;
+}
+.segment-planu.wybrany {
+  fill: #FFFFFF;
+  stroke: #DC5C0C;
+  stroke-width: 8;
+}
+a[aria-current] text {
+  fill: #25253A;
+}
+.droga-planu {
+  fill: rgba(255, 255, 255, 0.12);
+}
+.legenda-planu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+}
+.legenda-planu li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.legenda-planu .znacznik {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+.legenda-planu .znacznik.dostepne {
+  background: #457C52;
+}
+.legenda-planu .znacznik.rezerwacja {
+  background: #DC5C0C;
+}
+.legenda-planu .znacznik.sprzedane {
+  background: #AC2B2B;
+}
+.legenda-planu .znacznik.wybrany {
+  background: #FFFFFF;
+  border: 3px solid #DC5C0C;
+}
+.uwaga-planu {
+  margin: 14px 0 0;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0.7;
+}
+.plan-ze-zdjecia svg {
+  max-width: none;
+  border-radius: 8px;
+}
+.plan-ze-zdjecia .segment-planu {
+  stroke: #FFFFFF;
+  stroke-width: 1;
+  fill-opacity: 0.55;
+}
+a:hover .plan-ze-zdjecia .segment-planu {
+  opacity: 1;
+  fill-opacity: 0.8;
+}
+.plan-ze-zdjecia .segment-planu.wybrany {
+  fill: #FFFFFF;
+  fill-opacity: 0.6;
+  stroke: #DC5C0C;
+  stroke-width: 3;
+}
+.plan-ze-zdjecia text {
+  font-size: 11px;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.45);
+  stroke-width: 2px;
+}
+.plan-ze-zdjecia a[aria-current] text {
+  fill: #25253A;
+  stroke: none;
+}
+.plan-ze-zdjecia .podpowiedz-planu {
+  display: none;
+  margin: 10px 0 0;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0.7;
+}
+@media (max-width: 767px) {
+  .plan-ze-zdjecia .plan-przewijany {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+  }
+  .plan-ze-zdjecia svg {
+    width: 680px;
+    border-radius: 0;
+  }
+  .plan-ze-zdjecia .podpowiedz-planu {
+    display: block;
+  }
 }
 html.motyw-jasny {
   --tekst-na-ciemnym: #25253A;

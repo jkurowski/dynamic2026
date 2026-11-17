@@ -185,8 +185,9 @@ return [
                     [
                         'zdjecie' => ['jpg' => 'img/kafel-wykonczenie.jpg', 'webp' => 'img/kafel-wykonczenie.webp', 'alt' => ''],
                         'etykieta' => 'WYKOŃCZENIE POD KLUCZ',
-                        'naglowek' => 'Zamieszkaj od razu',
-                        'naglowek_akcent' => 'po odbiorze',
+                        // „Zamieszkaj od razu po odbiorze” sugerowało wykończenie przed odbiorem (uwaga klienta 11-13.11)
+                        'naglowek' => 'Wykończ wnętrze',
+                        'naglowek_akcent' => 'po odbiorze kluczy',
                         'przycisk' => ['tekst' => 'SPRAWDŹ OFERTĘ', 'adres' => '/wykonczenie-pod-klucz'],
                     ],
                 ],
